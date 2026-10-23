@@ -1,0 +1,25 @@
+{
+  // Backend independente: o site continua hospedado no GitHub Pages.
+  "name": "amv-groq-chat",
+  "main": "src/index.js",
+  "compatibility_date": "2026-10-22",
+  "workers_dev": true,
+  "keep_vars": true,
+  "secrets": { "required": ["GROQ_API_KEY"] },
+  "vars": {
+    "ALLOWED_ORIGIN": "https://vizzahck.github.io",
+    "GROQ_MODEL": "openai/gpt-oss-20b"
+  },
+  "ratelimits": [
+    {
+      "name": "AMV_RATE_LIMIT",
+      "namespace_id": "276381",
+      "simple": { "limit": 10, "period": 60 }
+    },
+    {
+      "name": "AMV_GLOBAL_RATE_LIMIT",
+      "namespace_id": "276382",
+      "simple": { "limit": 20, "period": 60 }
+    }
+  ]
+}

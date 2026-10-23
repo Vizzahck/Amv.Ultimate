@@ -1,0 +1,8 @@
+# Nunca enviar chaves ou credenciais locais ao GitHub
+.dev.vars
+.dev.vars.*
+.env
+.env.*
+!.env.example
+node_modules/
+.wrangler/
