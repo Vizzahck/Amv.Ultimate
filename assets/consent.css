@@ -1,0 +1,43 @@
+/* Banner de escolhas de privacidade — AMV Conectar. */
+.amv-cookie-banner {
+  position: fixed;
+  z-index: 100;
+  bottom: 18px;
+  left: 18px;
+  width: min(780px, calc(100% - 36px));
+  display: flex;
+  align-items: center;
+  gap: 18px;
+  padding: 18px 20px;
+  background: #0d1b2e;
+  color: #f5f8fd;
+  border: 1px solid rgba(255,255,255,.16);
+  border-radius: 14px;
+  box-shadow: 0 14px 45px rgba(0,0,0,.26);
+  font-family: "Manrope", system-ui, sans-serif;
+}
+.amv-cookie-banner[hidden] {display:none !important}
+.amv-cookie-copy {flex:1;min-width:0}
+.amv-cookie-title {font-size:14px;font-weight:800;line-height:1.45;margin:0 0 5px;color:#fff}
+.amv-cookie-description {font-size:12.5px;line-height:1.65;margin:0;color:#dce5ef}
+.amv-cookie-description a {color:#ffd39c;text-decoration:underline;text-underline-offset:2px;font-weight:700}
+.amv-cookie-buttons {display:flex;flex-shrink:0;gap:8px}
+.amv-cookie-button {appearance:none;min-width:95px;min-height:42px;padding:10px 13px;border-radius:8px;font-size:12.5px;font-weight:800;cursor:pointer;transition:background-color .16s,color .16s}
+.amv-cookie-reject {color:#fff;background:transparent;border:1px solid #a8b6c5}
+.amv-cookie-reject:hover {background:rgba(255,255,255,.13)}
+.amv-cookie-accept {color:#0b1d30;background:#ffa447;border:1px solid #ffa447}
+.amv-cookie-accept:hover {background:#ffbd72;border-color:#ffbd72}
+.amv-cookie-button:focus-visible,.amv-cookie-manage:focus-visible,.amv-cookie-description a:focus-visible {outline:3px solid #ffc57d;outline-offset:3px}
+.amv-cookie-manage-wrap {margin-top:9px}
+.amv-cookie-manage {padding:4px 0;color:inherit;text-decoration:underline;text-underline-offset:3px;cursor:pointer;font-size:12px;font-weight:600;background:transparent;border:0}
+.amv-cookie-manage:hover {opacity:.8}
+@media (max-width:680px) {
+  .amv-cookie-banner {bottom:12px;left:12px;width:calc(100% - 24px);flex-direction:column;align-items:stretch;gap:12px;padding:16px}
+  .amv-cookie-buttons {width:100%}
+  .amv-cookie-button {flex:1;font-size:13px}
+  .amv-cookie-title {font-size:14px}
+  .amv-cookie-description {font-size:12.5px}
+}
+@media (prefers-reduced-motion: reduce) {
+  .amv-cookie-button {transition:none}
+}
