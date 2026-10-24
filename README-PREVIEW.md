@@ -38,3 +38,12 @@ As páginas institucionais originais, os links para o WhatsApp, o formulário Fo
 - Adicionar métricas de performance e monitoramento com respeito à privacidade, apenas quando necessário.
 
 **Crédito:** Desenvolvimento e design originais do site por Vizza; direitos sobre conteúdos de terceiros permanecem com seus respectivos titulares.
+
+
+## Equipe organizada por áreas — V2
+
+A página `equipe.html` agora usa a mesma organização da V1: **o nome da área aparece acima**, seguido pelas **fotos e nomes** de todos os integrantes daquela área. Não é necessário repetir o cargo em cada cartão. O visual exclusivo da V2 está em `assets/equipe-areas.css`.
+
+As quatro áreas e os dez cartões são **ilustrativos**, até receber a lista real da equipe. Nos ZIPs futuros, o nome do ZIP será a área e o nome do arquivo de imagem será o nome da pessoa. Localize os blocos marcados com `<!-- ÁREA N -->` no HTML para editar os títulos e integrantes. Para inserir fotos, substitua o conteúdo da div `.v2-member-image` por `<img src="assets/equipe/nome.webp" alt="Retrato de Nome Sobrenome" loading="lazy">`, removendo `role="img"` e `aria-label` da div. Só publique fotografias autorizadas.
+
+A V1 (`Vizzahck/AMVCONECTAR2.0`) não foi alterada nesta entrega.
