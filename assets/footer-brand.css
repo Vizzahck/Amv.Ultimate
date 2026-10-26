@@ -13,3 +13,13 @@
 /* Rodapé sem cartões: marcas aplicadas diretamente sobre o azul. */
 footer.bg-brand-panel .amv-footer-brand-row > a,footer.bg-brand-panel .amv-footer-partner{background:transparent!important;padding:0!important;border:0!important;border-radius:0!important;box-shadow:none!important}
 footer.bg-brand-panel .amv-footer-partner img{width:100%;max-width:258px;max-height:100px;object-fit:contain}
+
+
+/* Endereço: abrir pesquisa no Maps sem modificar o endereço publicado. */
+.amv-maps-link{display:inline-flex;align-items:center;gap:.35rem;vertical-align:baseline;white-space:nowrap;margin-left:.35rem;padding:.1rem .4rem;color:var(--brand);font-size:.82rem;font-weight:800;line-height:1.7;text-decoration:underline;text-underline-offset:3px;border-radius:.35rem;transition:color .2s ease,background-color .2s ease}
+.amv-maps-link:hover{color:var(--brand-orange);background-color:rgba(95,152,200,.08)}
+.amv-maps-link:focus-visible{outline:2px solid var(--brand-orange);outline-offset:3px}
+footer.bg-brand-panel .amv-maps-link{color:var(--on-panel)}
+footer.bg-brand-panel .amv-maps-link:hover{color:var(--brand-orange);background-color:rgba(255,255,255,.09)}
+.amv-maps-link svg{flex-shrink:0}
+@media(prefers-reduced-motion:reduce){.amv-maps-link{transition:none}}
