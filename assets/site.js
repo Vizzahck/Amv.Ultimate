@@ -15,7 +15,29 @@ function setAssistant(open){panel.hidden=!open;toggle.setAttribute('aria-expande
 function reset(){Array.from(messages.children).forEach(n=>{if(n!==questions)n.remove();});messages.prepend(welcome.cloneNode(true));const resetButton=questions.querySelector('[data-action="reset"]');if(resetButton)resetButton.remove();messages.scrollTop=0;}
 function addMessage(text,user){const el=document.createElement('div');el.className=user?'ml-auto max-w-[85%] rounded-lg rounded-br-sm bg-primary px-3 py-2 text-sm text-primary-foreground':'max-w-[90%] text-sm leading-6 text-foreground';el.textContent=text;messages.insertBefore(el,questions);return el;}
 function ask(index){const faq=window.AMV_FAQS[index];if(!faq)return;addMessage(faq.q,true);const answer=addMessage(faq.a,false);if(faq.whatsapp){const a=document.createElement('a');a.href='https://wa.me/5598984833670';a.target='_blank';a.rel='noopener noreferrer';a.className='mt-2 inline-flex items-center gap-2 rounded-md bg-brand-orange px-3 py-2 text-sm font-bold text-on-panel';a.textContent='Falar pelo WhatsApp';answer.append(a);}if(!questions.querySelector('[data-action="reset"]')){const b=document.createElement('button');b.type='button';b.dataset.action='reset';b.className='inline-flex items-center gap-2 self-start px-1 py-2 text-sm font-bold text-brand-orange';b.textContent='Voltar ao início';questions.append(b);}answer.scrollIntoView({behavior:'smooth',block:'nearest'});}
-document.addEventListener('click',e=>{const b=e.target.closest('button');if(!b)return; if(b.hasAttribute('data-faq')){ask(Number(b.dataset.faq));return;}switch(b.dataset.action){case'theme':{const dark=document.documentElement.classList.toggle('dark');try{if(localStorage.getItem('amv-cookie-choice')==='accepted'){localStorage.setItem('amv-theme',dark?'dark':'light');}else{localStorage.removeItem('amv-theme');}}catch(e){}syncTheme();break;}case'menu':setMenu(menu.hidden);break;case'assistant-toggle':setAssistant(panel.hidden);break;case'assistant-minimizar':setAssistant(false);toggle.focus({preventScroll:true});break;case'assistant-fechar':setAssistant(false);reset();toggle.focus({preventScroll:true});break;case'reset':reset();break;}});
+
+let themeMotionTimeout;
+function setThemeWithMotion(){
+ const root=document.documentElement;
+ function applyTheme(){
+  const dark=root.classList.toggle('dark');
+  try{
+   if(localStorage.getItem('amv-cookie-choice')==='accepted'){
+    localStorage.setItem('amv-theme',dark?'dark':'light');
+   }else{localStorage.removeItem('amv-theme');}
+  }catch(e){}
+  syncTheme();
+ }
+ if(window.matchMedia&&window.matchMedia('(prefers-reduced-motion: reduce)').matches){applyTheme();return;}
+ if(typeof document.startViewTransition==='function'){
+  try{const vt=document.startViewTransition(applyTheme);vt.finished.catch(()=>{});return;}catch(e){}
+ }
+ root.classList.add('amv-theme-switching');
+ applyTheme();
+ if(themeMotionTimeout)window.clearTimeout(themeMotionTimeout);
+ themeMotionTimeout=window.setTimeout(()=>root.classList.remove('amv-theme-switching'),500);
+}
+document.addEventListener('click',e=>{const b=e.target.closest('button');if(!b)return; if(b.hasAttribute('data-faq')){ask(Number(b.dataset.faq));return;}switch(b.dataset.action){case'theme':{setThemeWithMotion();break;}case'menu':setMenu(menu.hidden);break;case'assistant-toggle':setAssistant(panel.hidden);break;case'assistant-minimizar':setAssistant(false);toggle.focus({preventScroll:true});break;case'assistant-fechar':setAssistant(false);reset();toggle.focus({preventScroll:true});break;case'reset':reset();break;}});
 menu.addEventListener('click',e=>{if(e.target.closest('a'))setMenu(false);});
 document.addEventListener('keydown',e=>{if(e.key==='Escape'){setMenu(false);if(!panel.hidden){setAssistant(false);toggle.focus({preventScroll:true});}}});
 // Envia o formulario ao Formspree. Sem JS, o action/method do HTML continuam funcionando.

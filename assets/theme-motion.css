@@ -1,0 +1,20 @@
+/* Tema: transição iniciada somente ao clicar, sem flash no carregamento. */
+:root{--amv-theme-motion:430ms;--amv-theme-easing:cubic-bezier(.22,1,.36,1)}
+@keyframes amv-theme-leave{from{opacity:1}to{opacity:0}}
+@keyframes amv-theme-enter{from{opacity:0}to{opacity:1}}
+::view-transition-old(root){animation:var(--amv-theme-motion) var(--amv-theme-easing) both amv-theme-leave}
+::view-transition-new(root){animation:var(--amv-theme-motion) var(--amv-theme-easing) both amv-theme-enter}
+/* Fallback para navegadores sem View Transitions. */
+html.amv-theme-switching,html.amv-theme-switching body,
+html.amv-theme-switching body *,html.amv-theme-switching body *::before,
+html.amv-theme-switching body *::after{
+transition-property:background-color,color,border-color,box-shadow,fill,stroke;
+transition-duration:var(--amv-theme-motion);
+transition-timing-function:var(--amv-theme-easing)
+}
+@media(prefers-reduced-motion:reduce){
+::view-transition-old(root),::view-transition-new(root){animation-duration:0.01ms!important}
+html.amv-theme-switching,html.amv-theme-switching body,
+html.amv-theme-switching body *,html.amv-theme-switching body *::before,
+html.amv-theme-switching body *::after{transition-duration:0.01ms!important}
+}
