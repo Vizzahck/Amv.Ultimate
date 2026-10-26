@@ -2,8 +2,8 @@
 .amv-footer-brand-row{display:flex;align-items:center;flex-wrap:wrap;gap:clamp(12px,2.1vw,24px);max-width:100%;margin:0}
 .amv-footer-brand-row>a{display:inline-flex;align-items:center;justify-content:flex-start;flex:0 1 256px;min-width:120px;max-width:100%;text-decoration:none}
 .amv-footer-brand-row>a img{display:block;width:100%;height:auto;max-height:128px;object-fit:contain;object-position:left center}
-.amv-footer-partner{display:flex;align-items:center;justify-content:center;flex:0 1 214px;min-width:126px;max-width:100%;min-height:78px;padding:0;background:transparent;border:0;border-radius:0;box-shadow:none}
-.amv-footer-partner img{display:block;max-width:100%;width:184px;height:auto;max-height:80px;object-fit:contain}
+.amv-footer-partner{display:flex;align-items:center;justify-content:center;flex:0 1 258px;min-width:126px;max-width:100%;min-height:78px;padding:0;background:transparent;border:0;border-radius:0;box-shadow:none}
+.amv-footer-partner img{display:block;max-width:100%;width:244px;height:auto;max-height:80px;object-fit:contain}
 @media(max-width:560px){
 .amv-footer-brand-row{gap:12px}
 .amv-footer-brand-row>a{flex-basis:clamp(136px,47%,230px)}
@@ -12,4 +12,4 @@
 }
 /* Rodapé sem cartões: marcas aplicadas diretamente sobre o azul. */
 footer.bg-brand-panel .amv-footer-brand-row > a,footer.bg-brand-panel .amv-footer-partner{background:transparent!important;padding:0!important;border:0!important;border-radius:0!important;box-shadow:none!important}
-footer.bg-brand-panel .amv-footer-partner img{width:100%;max-width:214px;max-height:100px;object-fit:contain}
+footer.bg-brand-panel .amv-footer-partner img{width:100%;max-width:258px;max-height:100px;object-fit:contain}
