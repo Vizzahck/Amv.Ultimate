@@ -1,0 +1,12 @@
+/* Rodapé: marcas AMV e Senac/Fecomércio/Sesc em uma linha responsiva. */
+.amv-footer-brand-row{display:flex;align-items:center;flex-wrap:wrap;gap:clamp(12px,2.1vw,24px);max-width:100%;margin:0}
+.amv-footer-brand-row>a{display:inline-flex;align-items:center;justify-content:flex-start;flex:0 1 256px;min-width:120px;max-width:100%;text-decoration:none}
+.amv-footer-brand-row>a img{display:block;width:100%;height:auto;max-height:128px;object-fit:contain;object-position:left center}
+.amv-footer-partner{display:flex;align-items:center;justify-content:center;flex:0 1 214px;min-width:126px;max-width:100%;min-height:78px;padding:12px 15px;background:#f8fafc;border:1px solid rgba(255,255,255,.3);border-radius:12px}
+.amv-footer-partner img{display:block;max-width:100%;width:184px;height:auto;max-height:80px;object-fit:contain}
+@media(max-width:560px){
+.amv-footer-brand-row{gap:12px}
+.amv-footer-brand-row>a{flex-basis:clamp(136px,47%,230px)}
+.amv-footer-partner{flex-basis:clamp(136px,47%,200px);min-height:70px;padding:9px}
+.amv-footer-partner img{width:100%}
+}
