@@ -1,0 +1,18 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 375" role="img" aria-labelledby="title description">
+<title id="title">AMV Conectar — monograma minimalista para modo claro</title>
+<desc id="description">Logo vetorial transparente com as letras A, M e V entrelaçadas, sem símbolo lateral; slogan abaixo.</desc>
+<!-- Monograma desenhado como três letras geométricas que compartilham espaço. -->
+<g stroke="#F5F8FC" stroke-width="5" stroke-linejoin="round">
+<!-- A: forma nítida, vazado central -->
+<path fill="#173B59" fill-rule="evenodd" d="M79 274L175 65H236L332 274H268L249 226H161L142 274ZM183 174H226L205 122Z"/>
+<!-- M: conecta-se ao ombro do A e avança para o V -->
+<path fill="#173B59" d="M309 274V65H369L455 173L541 65H601V274H544V146L455 247L366 146V274Z"/>
+<!-- V: acento laranja, integrado à última haste do M -->
+<path fill="#E77624" d="M560 65H634L711 202L788 65H862L744 274H678Z"/>
+</g>
+<!-- Pequenos pontos de encaixe, sem gráfico, seta ou swoosh -->
+<path d="M309 250L309 273" stroke="#E77624" stroke-width="9" stroke-linecap="round"/>
+<path d="M600 73L615 102" stroke="#173B59" stroke-width="4" stroke-linecap="round"/>
+<path d="M79 302H861" stroke="#365D78" stroke-opacity=".23" stroke-width="2"/>
+<text x="469" y="345" text-anchor="middle" font-family="Montserrat,Manrope,Arial,Helvetica,sans-serif" font-size="23" font-weight="700" letter-spacing="1.4" fill="#365D78">CONECTANDO MARKETING E VENDAS COM SUCESSO</text>
+</svg>
