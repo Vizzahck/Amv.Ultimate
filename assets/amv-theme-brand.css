@@ -1,0 +1,22 @@
+/* AMV — imagens oficiais por tema, controladas por .dark no elemento html. */
+.amv-theme-logo{display:block;width:100%;max-width:100%;line-height:0}
+.amv-theme-logo .amv-brand-image{width:100%;height:auto;max-width:100%;object-fit:contain;object-position:center;vertical-align:middle}
+.amv-theme-logo--header{display:block;width:144px;max-width:100%;flex-shrink:0}
+.amv-theme-logo--header .amv-brand-image{max-height:68px}
+.amv-theme-logo--hero{display:block;width:100%;margin-inline:auto}
+.amv-theme-logo--hero .amv-brand-image{width:100%;height:auto;max-height:245px;object-fit:contain}
+.amv-theme-logo--footer{width:100%;max-width:256px}
+.amv-theme-logo--footer .amv-brand-image{max-height:128px;object-position:left center}
+.amv-footer-brand-row > a .amv-theme-logo{width:100%}
+.amv-footer-brand-row > a .amv-theme-logo .amv-brand-image{width:100%;max-height:128px;object-fit:contain;object-position:left center}
+html:not(.dark) .amv-theme-logo .amv-brand-image--dark{display:none!important}
+html:not(.dark) .amv-theme-logo .amv-brand-image--light{display:block!important}
+html.dark .amv-theme-logo .amv-brand-image--light{display:none!important}
+html.dark .amv-theme-logo .amv-brand-image--dark{display:block!important}
+/* A V2 tem um palco no hero: iluminar no modo claro para a logo preta ter contraste. */
+html:not(.dark) .v2-home #inicio .v2-logo-stage{background:radial-gradient(ellipse 65% 80% at 80% 14%,#e4eff7,transparent 82%),linear-gradient(145deg,#fcfdfd,#e1eaf0);border-color:rgba(66,104,137,.22);box-shadow:0 24px 65px rgba(8,38,58,.13)}
+html.dark .v2-home #inicio .v2-logo-stage{background:radial-gradient(ellipse 65% 70% at 84% 19%,#1b3c54 0%,transparent 90%),linear-gradient(145deg,#071827,#112e45)}
+/* O rodapé mantém fundo azul, então a logo escura ganha base clara somente no tema claro. */
+html:not(.dark) .amv-footer-brand-row > a{background:#f8fafc;border-radius:12px;padding:8px 10px}
+html.dark .amv-footer-brand-row > a{background:transparent}
+@media(max-width:600px){.amv-theme-logo--header{width:128px}.amv-theme-logo--footer{max-width:220px}}
