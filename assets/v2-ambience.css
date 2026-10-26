@@ -1,0 +1,32 @@
+/* AMV Ultimate V2 — atmosfera visual editorial. Sem alterar cards da equipe. */
+:root{--v2-bg-glow-a:rgba(66,146,203,.13);--v2-bg-glow-b:rgba(238,149,68,.12);--v2-bg-line:rgba(41,104,152,.062);--v2-bg-wash:rgba(218,235,244,.38)}
+.dark{--v2-bg-glow-a:rgba(63,135,198,.16);--v2-bg-glow-b:rgba(219,112,46,.11);--v2-bg-line:rgba(165,211,245,.042);--v2-bg-wash:rgba(49,86,115,.13)}
+/* Grade sutil, halos e profundidade apenas nos fundos, sem interferir nos conteúdos. */
+.v2-home{background:var(--background)}
+.v2-home #inicio{position:relative;isolation:isolate;overflow:hidden;background:radial-gradient(ellipse 65% 75% at 88% 39%,var(--v2-bg-glow-a),transparent 70%),radial-gradient(ellipse 53% 58% at 9% 84%,var(--v2-bg-glow-b),transparent 77%),linear-gradient(135deg,var(--background) 10%,var(--surface-blue) 97%)}
+.v2-home #inicio:before{content:"";position:absolute;inset:0;pointer-events:none;z-index:0;background-image:linear-gradient(to right,var(--v2-bg-line) 1px,transparent 1px),linear-gradient(to bottom,var(--v2-bg-line) 1px,transparent 1px);background-size:54px 54px;mask-image:linear-gradient(115deg,transparent 7%,#000 60%,transparent 99%);opacity:.8}
+.v2-home #inicio:after{content:"";position:absolute;pointer-events:none;z-index:0;width:min(48vw,650px);aspect-ratio:1;right:-9%;top:19%;border:1px solid rgba(103,167,208,.17);box-shadow:0 0 0 65px rgba(95,156,196,.035),0 0 0 134px rgba(85,163,216,.023),inset 0 0 90px rgba(114,181,218,.07);border-radius:50%}
+.v2-home #inicio > .relative{position:relative;z-index:2}
+.v2-home #sobre{position:relative;background:linear-gradient(112deg,var(--surface-blue) 1%,var(--background) 83%)}
+.v2-home #servicos{position:relative;background:radial-gradient(ellipse 70% 115% at 100% 30%,var(--v2-bg-glow-b),transparent 74%),linear-gradient(180deg,var(--background),var(--surface-blue))}
+.v2-home #projetos{position:relative;background:radial-gradient(ellipse 75% 125% at 3% 25%,var(--v2-bg-glow-a),transparent 82%),linear-gradient(125deg,var(--surface-blue),var(--background))}
+.v2-home #diferenciais{background-image:radial-gradient(ellipse 45% 75% at 93% 8%,rgba(255,178,92,.16),transparent 90%),radial-gradient(ellipse 50% 75% at 6% 95%,rgba(66,159,205,.13),transparent 80%)}
+.v2-home #diferenciais:after{content:"";pointer-events:none;position:absolute;right:-8%;top:-20%;width:48%;aspect-ratio:1;border:1px solid rgba(255,255,255,.09);border-radius:50%;box-shadow:0 0 0 65px rgba(255,255,255,.017),0 0 0 132px rgba(255,255,255,.012)}
+.v2-home #equipe{background:var(--background)}
+.v2-home #contato{background:radial-gradient(ellipse 74% 120% at 92% 15%,var(--v2-bg-glow-a),transparent 78%),linear-gradient(138deg,var(--surface-blue),var(--background))}
+/* Páginas institucionais e de projetos: composição abstrata no fundo, com títulos em destaque. */
+.v2-editorial-page{position:relative;isolation:isolate;background:radial-gradient(ellipse 55% 42% at 100% 8%,var(--v2-bg-glow-a),transparent 86%),radial-gradient(ellipse 52% 35% at 0 70%,var(--v2-bg-glow-b),transparent 86%),var(--background) !important}
+.v2-editorial-page:before{content:"";position:absolute;z-index:-1;pointer-events:none;left:0;right:0;top:0;height:610px;background-image:linear-gradient(to right,var(--v2-bg-line) 1px,transparent 1px),linear-gradient(to bottom,var(--v2-bg-line) 1px,transparent 1px);background-size:56px 56px;mask-image:linear-gradient(180deg,#000 0%,transparent 99%)}
+.v2-editorial-page:after{content:"";position:absolute;z-index:-1;pointer-events:none;right:-110px;top:60px;width:min(520px,53vw);aspect-ratio:1;border:1px solid rgba(109,174,211,.18);box-shadow:0 0 0 60px rgba(107,174,212,.033),0 0 0 120px rgba(107,174,212,.022);border-radius:50%}
+.v2-editorial-page > .v2-inner,.v2-editorial-page > .mx-auto,.v2-editorial-page > section{position:relative;z-index:1}
+.v2-editorial-page .v2-page-hero{position:relative}
+.v2-editorial-page .v2-page-hero:after{content:"";display:block;height:4px;width:74px;background:linear-gradient(90deg,var(--brand-orange),transparent);border-radius:5px;margin-top:26px}
+.v2-editorial-page .v2-panel{box-shadow:0 16px 45px rgba(16,47,76,.055)}
+/* Portfólio: três artes originais em vez dos blocos sem imagem, substituíveis por arquivo. */
+.v2-case-cover.v2-portfolio-cover{height:auto;aspect-ratio:3/2;background:var(--brand-panel);overflow:hidden;position:relative}
+.v2-portfolio-cover img{display:block;width:100%;height:100%;object-fit:cover;transition:transform .45s ease}
+.v2-case:hover .v2-portfolio-cover img{transform:scale(1.045)}
+.v2-case-cover.v2-portfolio-cover:after{content:"";position:absolute;inset:auto 0 0;height:28%;pointer-events:none;background:linear-gradient(transparent,rgba(0,22,41,.18))}
+.v2-case{box-shadow:0 12px 35px rgba(22,55,87,.045)}
+@media(max-width:700px){.v2-home #inicio:after{width:80vw;right:-40%;top:12%}.v2-editorial-page:after{right:-32%;top:100px;width:70vw}.v2-portfolio-cover img{transition:none}}
+@media(prefers-reduced-motion:reduce){.v2-portfolio-cover img{transition:none}.v2-case:hover .v2-portfolio-cover img{transform:none}}
