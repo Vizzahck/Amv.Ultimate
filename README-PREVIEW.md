@@ -47,3 +47,11 @@ A página `equipe.html` agora usa a mesma organização da V1: **o nome da área
 As quatro áreas e os dez cartões são **ilustrativos**, até receber a lista real da equipe. Nos ZIPs futuros, o nome do ZIP será a área e o nome do arquivo de imagem será o nome da pessoa. Localize os blocos marcados com `<!-- ÁREA N -->` no HTML para editar os títulos e integrantes. Para inserir fotos, substitua o conteúdo da div `.v2-member-image` por `<img src="assets/equipe/nome.webp" alt="Retrato de Nome Sobrenome" loading="lazy">`, removendo `role="img"` e `aria-label` da div. Só publique fotografias autorizadas.
 
 A V1 (`Vizzahck/AMVCONECTAR2.0`) não foi alterada nesta entrega.
+
+## Refinamento de fundos e artes ilustrativas — 26/10/2026
+
+A V2 agora carrega `assets/v2-ambience.css` na página inicial, portfólio e páginas institucionais. Os fundos incluem gradientes azul/laranja, grade geométrica suave, halos e contrastes de seção, respeitando o tema claro e o escuro e a preferência por movimento reduzido.
+
+Os três cartões demonstrativos do portfólio exibem arquivos SVG autorais locais em `assets/portfolio/`: `conceito-marca.svg`, `conceito-campanha.svg` e `conceito-digital.svg`. Para substituí-los por fotos reais, altere o atributo `src` do `<img>` correspondente nas páginas `index.html` e `projetos.html`, e atualize o texto alternativo `alt`. Esses exemplos **não representam projetos reais ou trabalhos entregues a clientes**.
+
+**Não foram incluídas fotografias fictícias de integrantes.** A página `equipe.html`, com seus espaços reservados para as fotos reais, e o CSS `assets/equipe-areas.css` permaneceram intactos. A V1 também não foi alterada.
