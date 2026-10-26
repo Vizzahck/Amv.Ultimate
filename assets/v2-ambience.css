@@ -38,10 +38,10 @@ html,body{background-color:var(--background);max-width:100%;overflow-x:clip}
 .v2-home #inicio .v2-hero-copy,.v2-home #inicio .v2-hero-visual{min-width:0;width:100%}
 .v2-home #inicio .v2-hero-copy h1{font-size:clamp(2.8rem,5.45vw,4.65rem);line-height:1.07;letter-spacing:-.048em;max-width:14ch;overflow-wrap:normal}
 .v2-home #inicio .v2-hero-visual{display:flex;justify-content:center;align-items:center;max-width:100%;padding:0 6px}
-.v2-home #inicio .v2-logo-stage{box-sizing:border-box;display:flex;align-items:center;justify-content:center;width:100%;max-width:488px;max-height:320px;padding:clamp(16px,2.5vw,32px);overflow:hidden;isolation:isolate;position:relative;border:1px solid rgba(117,175,208,.2);border-radius:23px;background:radial-gradient(ellipse 65% 70% at 84% 19%,#1b3c54 0%,transparent 90%),linear-gradient(145deg,#071827,#112e45);box-shadow:0 24px 65px rgba(8,24,44,.14)}
-.v2-home #inicio .v2-logo-stage:before{content:"";position:absolute;inset:0;pointer-events:none;border-radius:inherit;box-shadow:inset 0 1px 1px rgba(255,255,255,.09)}
-.v2-home #inicio .v2-current-logo{display:block;width:100%;max-width:100%;height:auto;max-height:245px;object-fit:contain;border:0;background:transparent}
-.dark .v2-home #inicio .v2-current-logo{mix-blend-mode:screen}
+
+
+
+.dark 
 .v2-home #inicio a[href^="https://wa.me/"]{background:color-mix(in srgb,var(--background) 68%,transparent);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px)}
 /* Evita ilhas visualmente brancas entre os fundos editoriais em temas escuros. */
 .v2-editorial-page .v2-note,.v2-editorial-page .v2-panel{background-color:var(--surface-blue)}
@@ -60,7 +60,13 @@ html,body{background-color:var(--background);max-width:100%;overflow-x:clip}
  .v2-home #inicio .v2-hero-grid{gap:22px;padding-top:48px;padding-bottom:55px}
  .v2-home #inicio .v2-hero-copy h1{font-size:clamp(2.45rem,11vw,4rem);max-width:100%}
  .v2-home #inicio .v2-hero-visual{max-width:440px;margin-inline:auto;padding:0}
- .v2-home #inicio .v2-logo-stage{padding:20px;border-radius:17px}
- .v2-home #inicio .v2-logo-stage .v2-current-logo{max-height:170px}
+ 
+ 
 }
-@media(prefers-reduced-motion:reduce){.v2-home #inicio .v2-logo-stage{transition:none}}
+@media(prefers-reduced-motion:reduce){}
+
+/* Logo do topo livre de caixa: o arquivo possui transparência nativa. */
+.v2-home #inicio .v2-hero-visual{background:transparent;border:0;border-radius:0;box-shadow:none;overflow:visible;isolation:auto}
+.v2-home #inicio .v2-hero-visual > .amv-theme-logo--hero{display:block;width:100%;max-width:550px;margin:0;padding:0;border:0;border-radius:0;background:transparent;box-shadow:none;overflow:visible}
+.v2-home #inicio .v2-hero-visual .amv-brand-image{width:100%;height:auto;max-height:300px;object-fit:contain;background:transparent;box-shadow:none;border:0;border-radius:0}
+@media(max-width:1049px){.v2-home #inicio .v2-hero-visual > .amv-theme-logo--hero{margin-inline:auto}}
