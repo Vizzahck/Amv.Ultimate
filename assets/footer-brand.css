@@ -23,3 +23,8 @@ footer.bg-brand-panel .amv-maps-link{color:var(--on-panel)}
 footer.bg-brand-panel .amv-maps-link:hover{color:var(--brand-orange);background-color:rgba(255,255,255,.09)}
 .amv-maps-link svg{flex-shrink:0}
 @media(prefers-reduced-motion:reduce){.amv-maps-link{transition:none}}
+
+/* Crédito do desenvolvedor: terceira marca no rodapé, sem cartão nem moldura. */
+.amv-footer-developer{display:flex;align-items:center;justify-content:flex-start;flex:0 1 188px;min-width:125px;max-width:100%;padding:0;margin:0;background:transparent;border:0;box-shadow:none}
+.amv-footer-developer img{display:block;width:100%;height:auto;max-width:188px;max-height:108px;object-fit:contain;object-position:left center}
+@media(max-width:560px){.amv-footer-developer{flex:0 1 clamp(130px,44%,180px)}.amv-footer-developer img{max-width:180px}}
