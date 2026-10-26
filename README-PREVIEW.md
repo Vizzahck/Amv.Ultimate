@@ -55,3 +55,12 @@ A V2 agora carrega `assets/v2-ambience.css` na página inicial, portfólio e pá
 Os três cartões demonstrativos do portfólio exibem arquivos SVG autorais locais em `assets/portfolio/`: `conceito-marca.svg`, `conceito-campanha.svg` e `conceito-digital.svg`. Para substituí-los por fotos reais, altere o atributo `src` do `<img>` correspondente nas páginas `index.html` e `projetos.html`, e atualize o texto alternativo `alt`. Esses exemplos **não representam projetos reais ou trabalhos entregues a clientes**.
 
 **Não foram incluídas fotografias fictícias de integrantes.** A página `equipe.html`, com seus espaços reservados para as fotos reais, e o CSS `assets/equipe-areas.css` permaneceram intactos. A V1 também não foi alterada.
+
+
+## Nova proposta visual de marca — sem substituição (26/10/2026)
+
+A pedido da equipe, foram criados três arquivos de proposta em `assets/propostas/` (logotipo para fundo escuro, logotipo para fundo claro e isologo geométrico). Eles podem ser avaliados em `proposta-logo.html`, uma página separada que **não aparece na navegação**. Os arquivos originais `assets/amv-logo.png` e `assets/amv-header-symbol.png` continuam em uso no cabeçalho, início e rodapé.
+
+O bloco com a logo atual na página inicial foi reorganizado para evitar excesso de tamanho, elementos duplicados, texto cortado e vazamentos no layout. Foi removida a moldura circular excessiva, e a imagem original passou a aparecer em um palco de tamanho controlado. O CSS `assets/v2-ambience.css?v=2` foi aplicado a todas as páginas relevantes para corrigir fundos/brancos destoantes e melhorar a continuidade entre o modo claro e escuro. A área da equipe ganhou somente fundo editorial; as fotos reservadas e os cartões de integrantes continuam intocados.
+
+Nenhuma logo nova foi adotada em produção e a V1 não recebeu modificações.
