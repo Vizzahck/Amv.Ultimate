@@ -16,7 +16,10 @@ html.dark .amv-theme-logo .amv-brand-image--dark{display:block!important}
 /* A V2 tem um palco no hero: iluminar no modo claro para a logo preta ter contraste. */
 
 
-/* O rodapé mantém fundo azul, então a logo escura ganha base clara somente no tema claro. */
-html:not(.dark) .amv-footer-brand-row > a{background:#f8fafc;border-radius:12px;padding:8px 10px}
-html.dark .amv-footer-brand-row > a{background:transparent}
+
 @media(max-width:600px){.amv-theme-logo--header{width:128px}.amv-theme-logo--footer{max-width:220px}}
+
+/* Rodapé azul nos dois modos: sempre a marca AMV branca, sem base. */
+html footer.bg-brand-panel .amv-footer-brand-row .amv-theme-logo .amv-brand-image--light{display:none!important}
+html footer.bg-brand-panel .amv-footer-brand-row .amv-theme-logo .amv-brand-image--dark{display:block!important}
+html footer.bg-brand-panel .amv-footer-brand-row > a{background:transparent!important;padding:0!important;border:0!important;border-radius:0!important;box-shadow:none!important}
