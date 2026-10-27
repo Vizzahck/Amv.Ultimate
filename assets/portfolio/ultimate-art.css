@@ -1,0 +1,44 @@
+/* AMV Ultimate V2 — novas artes de equipe e portfolio.
+   Texto institucional permanece em HTML para acessibilidade e responsividade. */
+.v2-about-people .v2-graphic{
+  display:flex;flex-direction:column;justify-content:center;
+  min-height:290px;
+  background-color:#09253e;
+  background-image:
+    linear-gradient(90deg,rgba(5,21,39,.96) 0%,rgba(7,28,49,.91) 37%,rgba(9,35,55,.44) 73%,rgba(11,35,52,.21) 100%),
+    url("equipe-ultimate.svg");
+  background-size:cover;
+  background-position:center,center;
+  border:1px solid rgba(194,223,236,.13);
+  box-shadow:0 24px 56px rgba(6,37,68,.14);
+  isolation:isolate;
+}
+.v2-about-people .v2-graphic::after{content:none}
+.v2-about-people .v2-graphic b,
+.v2-about-people .v2-graphic p{position:relative;z-index:1}
+.v2-about-people .v2-graphic b{
+  color:#fff;
+  text-shadow:0 2px 18px rgba(4,15,30,.4);
+  max-width:100%;
+}
+.v2-about-people .v2-graphic p{
+  color:#edf7fc;
+  max-width:360px;
+  text-shadow:0 2px 13px rgba(5,18,37,.55);
+}
+.v2-portfolio-cover img{
+  display:block;
+  width:100%;height:100%;
+  object-fit:cover;object-position:center;
+}
+@media(max-width:640px){
+ .v2-about-people .v2-graphic{
+   min-height:268px;
+   background-position:center,63% center;
+   background-image:
+     linear-gradient(90deg,rgba(5,21,39,.97),rgba(7,28,49,.80) 53%,rgba(7,29,49,.43)),
+     url("equipe-ultimate.svg");
+ }
+ .v2-about-people .v2-graphic p{font-size:13px;line-height:1.75}
+}
+@media(prefers-reduced-motion:reduce){.v2-portfolio-cover img{transition:none}}
