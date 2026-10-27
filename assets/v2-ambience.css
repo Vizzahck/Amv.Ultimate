@@ -67,6 +67,6 @@ html,body{background-color:var(--background);max-width:100%;overflow-x:clip}
 
 /* Logo do topo livre de caixa: o arquivo possui transparência nativa. */
 .v2-home #inicio .v2-hero-visual{background:transparent;border:0;border-radius:0;box-shadow:none;overflow:visible;isolation:auto}
-.v2-home #inicio .v2-hero-visual > .amv-theme-logo--hero{display:block;width:100%;max-width:550px;margin:0;padding:0;border:0;border-radius:0;background:transparent;box-shadow:none;overflow:visible}
+.v2-home #inicio .v2-hero-visual > .amv-theme-logo--hero{display:grid;place-items:center;width:100%;max-width:550px;margin:0;padding:0;border:0;border-radius:0;background:transparent;box-shadow:none;overflow:visible}
 .v2-home #inicio .v2-hero-visual .amv-brand-image{width:100%;height:auto;max-height:300px;object-fit:contain;background:transparent;box-shadow:none;border:0;border-radius:0}
 @media(max-width:1049px){.v2-home #inicio .v2-hero-visual > .amv-theme-logo--hero{margin-inline:auto}}
