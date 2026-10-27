@@ -52,3 +52,16 @@ footer.bg-brand-panel .amv-footer-brand-row .amv-footer-developer img{width:100%
  footer.bg-brand-panel > div.grid > address > span > br{display:none}
  footer.bg-brand-panel > div.grid > address .amv-maps-link{margin-left:.5rem}
 }
+
+/* Logo Senac clicável: preserva a largura e o alinhamento do rodapé. */
+footer.bg-brand-panel .amv-footer-brand-row .amv-footer-partner-link{
+  display:flex;align-items:center;justify-content:center;width:100%;max-width:100%;min-width:0;
+  border:0;background:transparent;text-decoration:none;border-radius:6px;
+}
+footer.bg-brand-panel .amv-footer-brand-row .amv-footer-partner-link img{
+  display:block;width:100%;max-width:178px;height:auto;max-height:76px;object-fit:contain;
+}
+footer.bg-brand-panel .amv-footer-brand-row .amv-footer-partner-link:hover img{opacity:.9}
+footer.bg-brand-panel .amv-footer-brand-row .amv-footer-partner-link:focus-visible{
+  outline:2px solid var(--brand-orange);outline-offset:5px;
+}
