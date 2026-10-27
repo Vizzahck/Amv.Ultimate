@@ -39,3 +39,16 @@ footer.bg-brand-panel .amv-footer-brand-row .amv-footer-partner img{width:100%;m
 footer.bg-brand-panel .amv-footer-brand-row .amv-footer-developer{flex:0 1 104px;min-width:0;max-width:104px;min-height:0;display:flex;align-items:center;justify-content:center}
 footer.bg-brand-panel .amv-footer-brand-row .amv-footer-developer img{width:100%;max-width:104px;max-height:68px;object-fit:contain}
 @media(max-width:560px){footer.bg-brand-panel .amv-footer-brand-row{gap:12px 16px}footer.bg-brand-panel .amv-footer-brand-row>a{flex:0 1 43%;max-width:175px}footer.bg-brand-panel .amv-footer-brand-row .amv-footer-partner{flex:0 1 43%;max-width:165px}footer.bg-brand-panel .amv-footer-brand-row .amv-footer-developer{flex:0 1 92px;max-width:92px}}
+
+
+/* Desktop: endereço em texto corrido, centralizado verticalmente na sua coluna.
+   No celular, mantemos as quebras de linha originais. */
+@media(min-width:768px){
+ footer.bg-brand-panel > div.grid > address{
+  align-self:center;justify-self:center;width:100%;max-width:520px;
+  line-height:1.85
+ }
+ footer.bg-brand-panel > div.grid > address > span{display:block;max-width:100%}
+ footer.bg-brand-panel > div.grid > address > span > br{display:none}
+ footer.bg-brand-panel > div.grid > address .amv-maps-link{margin-left:.5rem}
+}
