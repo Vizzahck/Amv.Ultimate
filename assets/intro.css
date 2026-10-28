@@ -24,8 +24,8 @@ html.amv-intro-leaving .amv-intro {
   opacity: 0;
   transform: translateY(-1.6%);
   pointer-events: none;
-  transition: opacity .47s cubic-bezier(.27,.87,.32,1),
-              transform .47s cubic-bezier(.27,.87,.32,1);
+  transition: opacity .68s cubic-bezier(.27,.87,.32,1),
+              transform .68s cubic-bezier(.27,.87,.32,1);
 }
 .amv-intro::before {
   content: "";
@@ -37,7 +37,7 @@ html.amv-intro-leaving .amv-intro {
     radial-gradient(ellipse 30% 25% at 72% 46%,rgba(237,131,53,.20),transparent 75%),
     radial-gradient(ellipse 33% 36% at 29% 53%,rgba(44,127,188,.25),transparent 75%),
     radial-gradient(ellipse 60% 65% at 50% 65%,rgba(22,53,89,.55),transparent 83%);
-  animation: amv-intro-breathe 1.9s ease-out both;
+  animation: amv-intro-breathe 3.7s ease-out both;
 }
 .amv-intro::after {
   content: "";
@@ -86,19 +86,19 @@ html.amv-intro-leaving .amv-intro {
   stroke-linecap: round;
   stroke-dasharray: 430;
   stroke-dashoffset: 430;
-  animation: amv-intro-connect .86s cubic-bezier(.22,1,.36,1) .12s both;
+  animation: amv-intro-connect 1.45s cubic-bezier(.22,1,.36,1) .22s both;
 }
 .amv-intro-lines path:nth-child(2) {
   stroke: rgba(251,153,80,.78);
   stroke-width: 2;
-  animation-delay: .3s;
+  animation-delay: .55s;
 }
 .amv-intro-lines circle {
   fill: #f59343;
   opacity: 0;
-  animation: amv-intro-dot .3s ease-out .55s forwards;
+  animation: amv-intro-dot .55s ease-out 1.24s forwards;
 }
-.amv-intro-lines circle:nth-last-child(1){animation-delay: .87s}
+.amv-intro-lines circle:nth-last-child(1){animation-delay: 1.75s}
 .amv-intro-eyebrow {
   position: relative;
   font-size: clamp(9px,1.5vw,11px);
@@ -108,7 +108,7 @@ html.amv-intro-leaving .amv-intro {
   color: #ffb478;
   opacity: 0;
   transform: translateY(12px);
-  animation: amv-intro-rise .5s ease-out .18s both;
+  animation: amv-intro-rise .68s ease-out .38s both;
 }
 .amv-intro-logo {
   position: relative;
@@ -117,7 +117,7 @@ html.amv-intro-leaving .amv-intro {
   filter: drop-shadow(0 14px 40px rgba(5,14,34,.52));
   opacity: 0;
   transform: translateY(25px) scale(.91);
-  animation: amv-intro-logo-enter .72s cubic-bezier(.18,1,.24,1) .39s both;
+  animation: amv-intro-logo-enter 1.05s cubic-bezier(.18,1,.24,1) 1.04s both;
 }
 .amv-intro-logo img {
   display: block;
@@ -136,7 +136,7 @@ html.amv-intro-leaving .amv-intro {
   color: #f9fbfe;
   opacity: 0;
   transform: translateY(15px);
-  animation: amv-intro-rise .54s ease-out .7s both;
+  animation: amv-intro-rise .78s ease-out 1.95s both;
 }
 .amv-intro-headline em {
   color: #ff9546;
@@ -150,7 +150,7 @@ html.amv-intro-leaving .amv-intro {
   letter-spacing: .045em;
   line-height: 1.7;
   opacity: 0;
-  animation: amv-intro-fade .65s ease-out .95s both;
+  animation: amv-intro-fade .8s ease-out 2.75s both;
 }
 .amv-intro-progress {
   position: relative;
@@ -161,7 +161,7 @@ html.amv-intro-leaving .amv-intro {
   margin-top: 34px;
   background: rgba(236,247,255,.17);
   opacity: 0;
-  animation: amv-intro-fade .2s ease-out .3s both;
+  animation: amv-intro-fade .3s ease-out .4s both;
 }
 .amv-intro-progress > span {
   display: block;
@@ -170,7 +170,7 @@ html.amv-intro-leaving .amv-intro {
   background: linear-gradient(90deg,#4888b7,#ffa25e);
   transform: scaleX(0);
   transform-origin: left center;
-  animation: amv-intro-progress 1.68s ease-in-out .15s both;
+  animation: amv-intro-progress 4.03s ease-in-out .3s both;
 }
 .amv-intro-skip {
   position: absolute;

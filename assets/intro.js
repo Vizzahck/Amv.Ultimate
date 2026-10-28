@@ -57,7 +57,7 @@
       return;
     }
     root.classList.add("amv-intro-leaving");
-    cleanupTimer = window.setTimeout(() => cleanup(false),530);
+    cleanupTimer = window.setTimeout(() => cleanup(false),710);
   }
 
   if (reduceMotion) {
@@ -70,9 +70,9 @@
   }
   document.addEventListener("keydown",onKeyDown,true);
   document.addEventListener("visibilitychange",onVisibility);
-  autoTimer = window.setTimeout(() => finish(false),1850);
+  autoTimer = window.setTimeout(() => finish(false),4550);
   // Garantia adicional caso a transição de saída seja interrompida.
   window.setTimeout(() => {
     if (intro.isConnected) cleanup(false);
-  },3400);
+  },7900);
 })();
