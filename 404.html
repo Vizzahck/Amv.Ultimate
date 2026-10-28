@@ -26,6 +26,9 @@ body{min-height:100dvh;margin:0;background:var(--background);color:var(--foregro
 .amv-404-panel>*{position:relative;z-index:1}
 .amv-404-brand{display:inline-flex;width:min(245px,70%);align-items:center}
 .amv-404-brand img{max-width:100%;height:auto;display:block}
+.amv-404-brand--dark{display:none!important}
+html.dark .amv-404-brand--light{display:none!important}
+html.dark .amv-404-brand--dark{display:block!important}
 .amv-404-kicker{margin:38px 0 8px;color:var(--brand-orange);font-size:12px;letter-spacing:.17em;text-transform:uppercase;font-weight:900}
 .amv-404 h1{margin:0;color:var(--brand-deep);font-size:clamp(39px,7.2vw,77px);line-height:1.06;letter-spacing:-.065em;font-weight:900;text-wrap:balance}
 .amv-404 p{max-width:570px;margin-top:19px;color:var(--muted-foreground);font-size:clamp(14px,1.7vw,16px);line-height:1.85}
@@ -47,7 +50,7 @@ body{min-height:100dvh;margin:0;background:var(--background);color:var(--foregro
 <main class="amv-404" id="conteudo">
   <div class="amv-404-panel">
     <a class="amv-404-brand" href="https://vizzahck.github.io/Amv.Ultimate/" aria-label="AMV Conectar — voltar ao início">
-      <img src="https://vizzahck.github.io/Amv.Ultimate/assets/isologo-amv-claro.webp" alt="AMV Conectar" width="1000" height="325" decoding="async">
+      <img class="amv-404-brand--light" src="https://vizzahck.github.io/Amv.Ultimate/assets/isologo-amv-claro.webp" alt="AMV Conectar" width="1000" height="325" decoding="async"><img class="amv-404-brand--dark" src="https://vizzahck.github.io/Amv.Ultimate/assets/isologo-amv-escuro.webp" alt="" width="1000" height="329" decoding="async">
     </a>
     <p class="amv-404-kicker">Uma conexão não encontrada · erro 404</p>
     <h1>Essa rota não<br>chegou ao destino.</h1>
