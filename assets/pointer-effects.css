@@ -1,0 +1,15 @@
+/* AMV Ultimate V2: rastro leve e brilhos discretos no clique. */
+.amv-pointer-effects {
+  position: fixed;
+  inset: 0;
+  z-index: 600;
+  width: 100vw;
+  height: 100dvh;
+  pointer-events: none !important;
+  touch-action: auto;
+  overflow: hidden;
+  contain: strict;
+}
+@media (pointer: coarse), (hover: none), (prefers-reduced-motion: reduce) {
+  .amv-pointer-effects { display: none !important; }
+}

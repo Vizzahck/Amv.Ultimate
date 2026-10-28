@@ -2,7 +2,7 @@
    Efeitos progressivos sem bibliotecas: nunca escondem o conteúdo sem JavaScript. */
 :root {
   --amv-accent-ink:var(--brand-orange,#ed8737);
-  --amv-progress:0%;
+  --amv-progress:0;
 }
 /* 1. Transição editorial entre documentos internos */
 html.amv-route-exiting body::before,
@@ -91,6 +91,24 @@ html.amv-search-open .amv-back-top,body:has(#amv-assistant:not([hidden])) .amv-b
 @media(max-width:380px){.amv-search-launch{width:37px;height:37px}.amv-smart-header > div:first-child{gap:6px}.amv-back-top{right:16px}}
 /* 5. Rede digital sensível ao cursor, sem bloquear cliques */
 .v2-home #inicio,.v2-home #contato{isolation:isolate}
+/* CORREÇÃO: v2-flow.css define #contato > * como position:relative.
+   O canvas é filho direto da seção; deve sair do fluxo para não aumentar
+   a altura do contato em ciclos com ResizeObserver. */
+.v2-home #inicio > canvas.amv-cursor-field,
+.v2-home #contato > canvas.amv-cursor-field{
+  position:absolute!important;
+  display:block;
+  inset:0;
+  width:100%;
+  height:100%;
+  min-height:0;
+  z-index:0;
+  pointer-events:none;
+  box-sizing:border-box;
+}
+.v2-home #inicio > canvas.amv-cursor-field{z-index:1}
+.v2-home #contato > .mx-auto{position:relative;z-index:2}
+
 .amv-cursor-field{position:absolute;inset:0;width:100%;height:100%;display:block;z-index:0;pointer-events:none;opacity:.57}
 .v2-home #inicio .amv-cursor-field{z-index:1;opacity:.52}
 .v2-home #inicio > .relative{position:relative;z-index:2}
