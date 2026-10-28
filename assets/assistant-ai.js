@@ -12,12 +12,12 @@
 
   const stylesheet = document.createElement("link");
   stylesheet.rel = "stylesheet";
-  stylesheet.href = "assets/assistant-ai.css?v=20261022-ordem3";
+  stylesheet.href = "assets/assistant-ai.css?v=20261028-5perguntas";
   document.head.appendChild(stylesheet);
 
   const subtitle = panel.querySelector("header p.text-xs");
   if (subtitle) subtitle.textContent = "Pergunte sobre a AMV Conectar";
-  const welcomeText = "Olá! Sou o Assistente AMV com IA. Escreva sua dúvida ou escolha uma das sugestões.";
+  const welcomeText = "Olá! Sou o Assistente AMV. As perguntas prontas têm respostas rápidas; para dúvidas digitadas, você tem até 5 perguntas à IA por dia.";
   if (messages.firstElementChild) messages.firstElementChild.textContent = welcomeText;
 
   const form = document.createElement("form");
@@ -29,13 +29,63 @@
     'autocomplete="off" maxlength="600" required placeholder="Digite sua pergunta..." ' +
     'aria-label="Digite sua pergunta sobre a AMV"/>' +
     '<button class="amv-ai-submit" type="submit">Enviar</button></div>' +
+    '<p class="amv-ai-quota" role="status" aria-live="polite"></p>' +
     '<div class="amv-ai-footer"><span>Não envie senhas ou informações sensíveis.</span>' +
     '<button type="button" class="amv-ai-reset">Nova conversa</button></div>';
   panel.appendChild(form);
 
   const input = form.querySelector("#amv-ai-input");
   const submitButton = form.querySelector(".amv-ai-submit");
+  const quotaDisplay = form.querySelector(".amv-ai-quota");
   const history = [];
+  // Limite por dia e navegador (apenas número de envios, nunca o texto).
+  // O reset do chat NÃO apaga a cota. Uma trava incontornável requer controle no Worker.
+  const QUOTA_KEY = "amv-ai-cota-diaria-v1";
+  const QUOTA_LIMIT = 5;
+  let quotaFallback = {day:"",count:0};
+  function currentDay() {
+    const now = new Date();
+    const pad = n => String(n).padStart(2,"0");
+    return now.getFullYear() + "-" + pad(now.getMonth() + 1) + "-" + pad(now.getDate());
+  }
+  function readUsage() {
+    const day = currentDay();
+    let stored = 0;
+    try {
+      const data = JSON.parse(localStorage.getItem(QUOTA_KEY) || "null");
+      if (data && data.day === day && Number.isInteger(data.count)) {
+        stored = Math.max(0,Math.min(QUOTA_LIMIT,data.count));
+      }
+    } catch (_) { /* Navegação privada pode restringir o armazenamento. */ }
+    const fallback = quotaFallback.day === day ? quotaFallback.count : 0;
+    return Math.max(stored,fallback);
+  }
+  function remaining() {
+    return Math.max(0,QUOTA_LIMIT - readUsage());
+  }
+  function updateQuota() {
+    const left = remaining();
+    quotaDisplay.textContent = left === 0
+      ? "Limite diário atingido (5/5). As perguntas prontas continuam disponíveis."
+      : left === 1
+        ? "Resta 1 pergunta à IA hoje. Perguntas prontas são ilimitadas."
+        : "Restam " + left + " perguntas à IA hoje. Perguntas prontas são ilimitadas.";
+    quotaDisplay.classList.toggle("amv-ai-quota--exhausted", left === 0);
+    input.placeholder = left === 0 ? "Limite diário atingido" : "Digite sua pergunta...";
+    input.disabled = busy || left === 0;
+    submitButton.disabled = busy || left === 0;
+    submitButton.textContent = busy ? "Enviando..." : left === 0 ? "Limite atingido" : "Enviar";
+  }
+  function consumeQuestion() {
+    const count = readUsage();
+    if (count >= QUOTA_LIMIT) return false;
+    const next = {day:currentDay(),count:count + 1};
+    quotaFallback = next;
+    try { localStorage.setItem(QUOTA_KEY,JSON.stringify(next)); }
+    catch (_) { /* Guarda pelo menos nesta página se storage estiver indisponível. */ }
+    updateQuota();
+    return true;
+  }
   let controller = null;
   let busy = false;
   let generation = 0;
@@ -51,12 +101,8 @@
   }
   function setBusy(flag) {
     busy = flag;
-    submitButton.disabled = flag;
-    input.disabled = flag;
-    questions.querySelectorAll("button[data-faq]").forEach(function (button) {
-      button.disabled = flag;
-    });
-    submitButton.textContent = flag ? "Enviando..." : "Enviar";
+    // Perguntas prontas não precisam da IA e seguem disponíveis mesmo durante o envio.
+    updateQuota();
   }
   function restoreWelcome() {
     if (messages.firstElementChild && !messages.firstElementChild.matches(".amv-ai-bubble")) {
@@ -68,15 +114,23 @@
     if (controller) controller.abort();
     controller = null;
     history.length = 0;
-    messages.querySelectorAll(".amv-ai-bubble").forEach(function (node) { node.remove(); });
+    // Limpa tanto mensagens da IA quanto respostas locais do FAQ, sem alterar o limite.
+    const welcomeNode = messages.firstElementChild;
+    Array.from(messages.children).forEach(function(node) {
+      if (node !== questions && node !== welcomeNode) node.remove();
+    });
+    const nativeReset = questions.querySelector('[data-action="reset"]');
+    if (nativeReset) nativeReset.remove();
     input.value = "";
     setBusy(false);
     restoreWelcome();
     messages.scrollTop = 0;
   }
-  async function send(message, faq) {
+  async function send(message) {
     const question = String(message || "").trim().slice(0, 600);
     if (!question || busy) return;
+    // Só mensagens digitadas usam a IA. Cada envio conta uma vez, até 5 por dia.
+    if (!consumeQuestion()) { updateQuota(); return; }
     const prior = history.slice(-8);
     const currentGeneration = ++generation;
     controller = new AbortController();
@@ -109,20 +163,7 @@
       const problem = error.status === 429
         ? "O assistente atingiu o limite de uso por enquanto."
         : "A IA está indisponível neste momento.";
-      if (faq && typeof faq.a === "string") {
-        answer.textContent = problem + " Aqui vai a resposta rápida: " + faq.a;
-        if (faq.whatsapp) {
-          const link = document.createElement("a");
-          link.href = "https://wa.me/5598984833670";
-          link.target = "_blank";
-          link.rel = "noopener noreferrer";
-          link.textContent = " Falar pelo WhatsApp";
-          link.className = "amv-ai-whatsapp";
-          answer.appendChild(link);
-        }
-      } else {
-        answer.textContent = problem + " Você pode tentar novamente ou selecionar uma das perguntas rápidas.";
-      }
+      answer.textContent = problem + " Você pode usar as perguntas prontas ou tentar novamente quando tiver perguntas à IA disponíveis.";
     } finally {
       if (currentGeneration === generation) {
         controller = null;
@@ -135,20 +176,21 @@
   form.addEventListener("submit", function (event) {
     event.preventDefault();
     if (!form.reportValidity()) return;
-    send(input.value, null);
+    send(input.value);
   });
   form.querySelector(".amv-ai-reset").addEventListener("click", resetConversation);
 
-  // O site original trata perguntas rápidas no document (fase bubble).
-  // Interceptar apenas esses botões mantém o menu, tema e Formspree intactos.
-  questions.addEventListener("click", function (event) {
-    const button = event.target.closest("button[data-faq]");
-    if (!button) return;
-    event.preventDefault();
-    event.stopPropagation();
-    const faq = window.AMV_FAQS[Number(button.dataset.faq)];
-    if (faq) send(faq.q, faq);
-  }, true);
+  // O FAQ é atendido exclusivamente pelo site.js, sem chamar o Worker/Groq.
+  // Nunca interceptar os botões [data-faq] em fase de captura.
+
+  window.addEventListener("storage", function (event) {
+    if (event.key === QUOTA_KEY || event.key === null) updateQuota();
+  });
+  document.addEventListener("visibilitychange", function () {
+    if (!document.hidden) updateQuota();
+  });
+  // Atualiza a interface ao iniciar, inclusive após atualizar ou recarregar a página.
+  updateQuota();
 
   document.addEventListener("click", function (event) {
     if (event.target.closest('[data-action="assistant-fechar"]')) {

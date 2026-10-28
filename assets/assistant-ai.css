@@ -36,3 +36,27 @@
   order: 1;
   flex-shrink: 0;
 }
+
+/* Contador de perguntas digitadas à IA; FAQ continua disponível sem limite. */
+.amv-ai-quota{
+  margin:9px 0 1px;
+  padding:8px 10px;
+  border-radius:9px;
+  border:1px solid var(--border,#dce7ee);
+  background:var(--surface-blue,var(--muted,#f2f6fa));
+  color:var(--brand-deep,var(--foreground,#1a3650));
+  font-size:11px;
+  font-weight:750;
+  line-height:1.6
+}
+.amv-ai-quota--exhausted{
+  border-color:color-mix(in srgb,var(--brand-orange,#e78a32) 42%,var(--border,#dce7ee));
+  background:color-mix(in srgb,var(--brand-orange,#e78a32) 9%,var(--background,#ffffff));
+}
+.amv-ai-submit:disabled,.amv-ai-row input:disabled{
+  cursor:not-allowed;opacity:.6;
+}
+.amv-ai-form .amv-ai-submit:focus-visible{
+  outline:2px solid var(--brand-orange,#e78a32);
+  outline-offset:2px
+}
