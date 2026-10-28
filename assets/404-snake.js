@@ -27,6 +27,8 @@
   let best = 0;
   try { best = Math.max(0,Number(sessionStorage.getItem(SAVE_KEY)) || 0); } catch (_) {}
   let snake, food, direction, queuedDirection, score, state = "idle", timer = null;
+  let countdownTimer = null;
+  let countdownValue = 3;
   let turnQueued = false;
   let pointerStart = null;
 
@@ -47,11 +49,12 @@
   function updateControls(){
     scoreLabel.textContent = String(score);
     bestLabel.textContent = String(best);
-    playButton.textContent = state === "running" ? "Jogando..." :
+    playButton.textContent = state === "countdown" ? "Preparando..." :
+      state === "running" ? "Jogando..." :
       state === "paused" ? "Continuar" :
       state === "over" || state === "won" ? "Jogar de novo" : "Jogar";
-    playButton.disabled = state === "running";
-    pauseButton.disabled = state === "idle" || state === "over" || state === "won";
+    playButton.disabled = state === "running" || state === "countdown";
+    pauseButton.disabled = state === "idle" || state === "countdown" || state === "over" || state === "won";
     pauseButton.textContent = state === "paused" ? "Retomar" : "Pausar";
   }
   function saveRecord(){
@@ -70,7 +73,9 @@
   }
   function resetGame(){
     clearTimeout(timer);
+    clearTimeout(countdownTimer);
     timer = null;
+    countdownTimer = null;
     snake = [{x:8,y:9},{x:7,y:9},{x:6,y:9}];
     direction = {x:1,y:0};
     queuedDirection = direction;
@@ -78,6 +83,7 @@
     score = 0;
     placeFood();
     state = "idle";
+    overlay.classList.remove("amv-snake-overlay--countdown");
     setOverlay("Pronto para jogar?","Coma os pontos laranja, cresça e evite bater!");
     setStatus("Use Jogar, as setas ou WASD para começar.");
     updateControls();
@@ -137,12 +143,15 @@
   function scheduleTick(){
     clearTimeout(timer);
     if(state!=="running")return;
-    const delay=Math.max(84,155-Math.floor(score/30)*7);
+    // 260 ms no início (em vez de 155 ms); acelera 10 ms a cada 30 pontos.
+    // A velocidade mínima mantém o jogo responsivo sem ficar impossível.
+    const delay=Math.max(110,260-Math.floor(score/30)*10);
     timer=window.setTimeout(tick,delay);
   }
   function lose(){
     clearTimeout(timer);timer=null;
     state="over";
+    overlay.classList.remove("amv-snake-overlay--countdown");
     saveRecord();
     setOverlay("Fim de jogo!", "Você fez "+score+" pontos. Que tal tentar novamente?");
     setStatus("Fim de jogo! Pontuação: "+score+". Pressione Jogar de novo.");
@@ -174,15 +183,37 @@
     render();
     scheduleTick();
   }
-  function start(){
-    if(state==="running")return;
-    if(state==="over" || state==="won")resetGame();
+  function run(){
     state="running";
+    overlay.classList.remove("amv-snake-overlay--countdown");
     hideOverlay();
     setStatus("Partida em andamento. Boa sorte!");
     updateControls();
     canvas.focus({preventScroll:true});
     scheduleTick();
+  }
+  function countdown(){
+    state="countdown";
+    countdownValue=3;
+    overlay.classList.add("amv-snake-overlay--countdown");
+    setOverlay(String(countdownValue),"Prepare-se! A cobrinha só começa depois da contagem.");
+    setStatus("Preparando a partida: 3, 2, 1...");
+    updateControls();
+    canvas.focus({preventScroll:true});
+    function next(){
+      if(state!=="countdown")return;
+      countdownValue--;
+      if(countdownValue===0){ countdownTimer=null; run(); return; }
+      overlayTitle.textContent=String(countdownValue);
+      countdownTimer=window.setTimeout(next,1000);
+    }
+    countdownTimer=window.setTimeout(next,1000);
+  }
+  function start(){
+    if(state==="running" || state==="countdown")return;
+    if(state==="over" || state==="won")resetGame();
+    if(state==="paused"){run();return;}
+    countdown();
   }
   function pause(){
     if(state==="running"){
@@ -196,7 +227,7 @@
   function steer(dir){
     if(!dir)return;
     if(state==="over"||state==="won")return;
-    if(turnQueued && state==="running")return;
+    if(turnQueued && (state==="running" || state==="countdown"))return;
     if(dir.x === -direction.x && dir.y === -direction.y)return;
     queuedDirection={x:dir.x,y:dir.y};
     turnQueued=true;
@@ -217,7 +248,7 @@
     const target=event.target;
     if(target && (target.matches("input,textarea,select,[contenteditable]")))return;
     const gameFocused=game.contains(document.activeElement);
-    if(!gameFocused && state!=="running")return;
+    if(!gameFocused && state!=="running" && state!=="countdown")return;
     const key=event.key.length===1?event.key.toLowerCase():event.key;
     if(ARROWS[key]){
       event.preventDefault();
@@ -242,7 +273,11 @@
       {x:Math.sign(dx),y:0}:{x:0,y:Math.sign(dy)});
   });
   canvas.addEventListener("pointercancel",()=>{pointerStart=null;});
-  document.addEventListener("visibilitychange",()=>{if(document.hidden && state==="running")pause();});
-  window.addEventListener("blur",()=>{if(state==="running")pause();});
+  function suspendHidden(){
+    if(state==="running")pause();
+    if(state==="countdown")resetGame(); // Não deixa o jogo começar sozinho em segundo plano.
+  }
+  document.addEventListener("visibilitychange",()=>{if(document.hidden)suspendHidden();});
+  window.addEventListener("blur",suspendHidden);
   resetGame();
 })();
