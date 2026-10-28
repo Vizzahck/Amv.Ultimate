@@ -1,0 +1,112 @@
+/* AMV Ultimate V2 | Navegação, busca, leitura e conexões interativas.
+   Efeitos progressivos sem bibliotecas: nunca escondem o conteúdo sem JavaScript. */
+:root {
+  --amv-accent-ink:var(--brand-orange,#ed8737);
+  --amv-progress:0%;
+}
+/* 1. Transição editorial entre documentos internos */
+html.amv-route-exiting body::before,
+html.amv-route-entering body::before {
+  content:"";position:fixed;inset:0;z-index:9990;pointer-events:none;
+  background:linear-gradient(135deg,#07162b 5%,#143b5b 64%,#182b43 100%);
+  opacity:1;
+}
+html.amv-route-exiting body::before {
+  transform:translateY(105%);
+  animation:amv-route-cover .28s cubic-bezier(.5,0,.3,1) both;
+}
+html.amv-route-entering body::before {
+  transform:translateY(0);
+  animation:amv-route-reveal .46s cubic-bezier(.23,.8,.33,1) both;
+}
+@keyframes amv-route-cover {to{transform:translateY(0)}}
+@keyframes amv-route-reveal {to{transform:translateY(-103%)}}
+html.amv-route-exiting main,
+html.amv-route-exiting footer {opacity:.75;transition:opacity .2s ease}
+html.amv-route-entering main {animation:amv-content-enter .5s ease-out both}
+@keyframes amv-content-enter {from{opacity:.73;transform:translateY(9px)}to{opacity:1;transform:none}}
+/* 2. Busca rápida: modal nativo em HTML, resultados locais, uso por teclado */
+.amv-search-launch{
+  width:42px;height:42px;flex:none;display:inline-grid;place-items:center;
+  border:1px solid var(--border);border-radius:10px;
+  background:var(--background);color:var(--brand-deep);
+  cursor:pointer;transition:background .2s ease,border-color .2s ease,transform .2s ease;
+}
+.amv-search-launch:hover{border-color:var(--brand-orange);background:var(--surface-blue);transform:translateY(-1px)}
+.amv-search-launch svg{height:19px;width:19px;stroke:currentColor;stroke-width:1.9;fill:none}
+.amv-search-launch:focus-visible{outline:2px solid var(--brand-orange);outline-offset:3px}
+.amv-search-backdrop{
+  position:fixed;inset:0;z-index:9985;display:flex;align-items:flex-start;justify-content:center;
+  padding:clamp(72px,12vh,135px) 18px 20px;background:rgba(5,15,33,.65);
+  backdrop-filter:blur(9px);-webkit-backdrop-filter:blur(9px);
+  overflow-y:auto;overscroll-behavior:contain;
+}
+.amv-search-backdrop[hidden]{display:none!important}
+html.amv-search-open{overflow:hidden}
+.amv-search-dialog{
+  width:min(100%,640px);overflow:hidden;
+  border-radius:20px;border:1px solid color-mix(in srgb,var(--brand) 20%,var(--border));
+  background:var(--background);color:var(--foreground);
+  box-shadow:0 32px 105px rgba(0,10,30,.32);
+  animation:amv-search-in .25s cubic-bezier(.22,1,.36,1) both;
+}
+@keyframes amv-search-in{from{opacity:0;transform:translateY(-13px) scale(.975)}to{opacity:1;transform:none}}
+.amv-search-heading{display:flex;align-items:center;gap:12px;padding:21px 22px 11px}
+.amv-search-heading h2{font-size:19px;font-weight:900;letter-spacing:-.04em;color:var(--brand-deep);margin:0;flex:1}
+.amv-search-close{width:35px;height:35px;border-radius:9px;border:1px solid var(--border);display:grid;place-items:center;background:var(--surface-blue);font-size:20px;color:var(--brand-deep);cursor:pointer}
+.amv-search-input-wrap{display:flex;gap:10px;align-items:center;margin:6px 20px 15px;padding:0 14px;border:1.5px solid var(--border);border-radius:12px;background:var(--surface-blue)}
+.amv-search-input-wrap:focus-within{border-color:var(--brand-orange);box-shadow:0 0 0 3px color-mix(in srgb,var(--brand-orange) 13%,transparent)}
+.amv-search-input-wrap svg{width:19px;height:19px;flex:none;stroke:var(--brand-orange);stroke-width:2;fill:none}
+.amv-search-input{height:54px;width:100%;border:0!important;outline:0!important;background:transparent!important;color:var(--foreground);font-size:14px}
+.amv-search-input::placeholder{color:var(--muted-foreground)}
+.amv-search-caption{padding:0 22px 9px;font-size:10px;text-transform:uppercase;letter-spacing:.12em;font-weight:900;color:var(--muted-foreground)}
+.amv-search-results{max-height:min(53vh,400px);overflow-y:auto;overscroll-behavior:contain;padding:0 10px 12px}
+.amv-search-result{display:flex;align-items:center;gap:13px;padding:12px;border-radius:11px;text-decoration:none;color:var(--foreground);border:1px solid transparent;transition:background .14s ease,border-color .14s ease}
+.amv-search-result:hover,.amv-search-result[aria-selected="true"],.amv-search-result:focus-visible{background:var(--surface-blue);border-color:color-mix(in srgb,var(--brand-orange) 25%,var(--border));outline:none}
+.amv-search-result-icon{width:37px;height:37px;flex:none;border:1px solid var(--border);border-radius:11px;display:grid;place-items:center;background:var(--background);color:var(--brand-orange);font-size:18px}
+.amv-search-result-copy{flex:1;min-width:0}
+.amv-search-result strong{display:block;color:var(--brand-deep);font-size:13px;font-weight:850}
+.amv-search-result small{display:block;color:var(--muted-foreground);font-size:11px;line-height:1.55;margin-top:3px}
+.amv-search-result-arrow{color:var(--brand-orange);font-size:19px}
+.amv-search-empty{padding:30px 14px;text-align:center;color:var(--muted-foreground);font-size:13px;line-height:1.7}
+.amv-search-help{padding:12px 22px 16px;display:flex;gap:16px;flex-wrap:wrap;border-top:1px solid var(--border);color:var(--muted-foreground);font-size:11px}
+.amv-search-help kbd{padding:2px 5px;border-radius:4px;border:1px solid var(--border);background:var(--surface-blue);font:inherit;font-size:10px;font-weight:850;color:var(--brand-deep)}
+/* 3. Barra de leitura e botão de retorno ao início */
+.amv-reading-track{position:fixed;top:0;left:0;right:0;height:3px;z-index:9970;pointer-events:none;background:transparent}
+.amv-reading-fill{height:100%;width:100%;transform:scaleX(var(--amv-progress));transform-origin:left;will-change:transform;background:linear-gradient(90deg,#3c9bc4,var(--brand-orange));box-shadow:0 0 10px color-mix(in srgb,var(--brand-orange) 36%,transparent)}
+.amv-back-top{
+  position:fixed;bottom:calc(99px + env(safe-area-inset-bottom,0px));right:20px;z-index:85;
+  width:43px;height:43px;display:grid;place-items:center;
+  border:1px solid color-mix(in srgb,var(--border) 70%,var(--brand-orange));
+  border-radius:50%;background:var(--background);color:var(--brand-deep);
+  box-shadow:0 8px 25px rgba(0,17,43,.12);cursor:pointer;
+  opacity:0;transform:translateY(12px);pointer-events:none;
+  transition:opacity .27s ease,transform .27s ease,box-shadow .2s ease;
+}
+.amv-back-top[data-visible="true"]{opacity:1;transform:translateY(0);pointer-events:auto}
+.amv-back-top:is(:hover,:focus-visible){box-shadow:0 10px 32px rgba(0,17,43,.19);color:var(--brand-orange)}
+.amv-back-top:focus-visible{outline:2px solid var(--brand-orange);outline-offset:3px}
+.amv-back-top svg{width:18px;height:18px;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+html.amv-search-open .amv-back-top,body:has(#amv-assistant:not([hidden])) .amv-back-top{opacity:0;pointer-events:none}
+@media(max-width:380px){.amv-search-launch{width:37px;height:37px}.amv-smart-header > div:first-child{gap:6px}.amv-back-top{right:16px}}
+/* 5. Rede digital sensível ao cursor, sem bloquear cliques */
+.v2-home #inicio,.v2-home #contato{isolation:isolate}
+.amv-cursor-field{position:absolute;inset:0;width:100%;height:100%;display:block;z-index:0;pointer-events:none;opacity:.57}
+.v2-home #inicio .amv-cursor-field{z-index:1;opacity:.52}
+.v2-home #inicio > .relative{position:relative;z-index:2}
+.v2-home #contato > .mx-auto{position:relative;z-index:2}
+@media(pointer:coarse),(max-width:767px){
+ .amv-cursor-field{display:none!important}
+ .amv-search-backdrop{padding:65px 12px 12px}
+ .amv-search-heading{padding:17px 16px 9px}
+ .amv-search-input-wrap{margin:6px 14px 13px}
+ .amv-search-result{padding:11px 9px}
+ .amv-back-top{bottom:calc(94px + env(safe-area-inset-bottom,0px))}
+}
+@media(prefers-reduced-motion:reduce){
+ html.amv-route-exiting body::before,html.amv-route-entering body::before{display:none!important;animation:none!important}
+ html.amv-route-entering main{animation:none!important}
+ .amv-search-dialog{animation:none!important}
+ .amv-search-launch,.amv-search-result,.amv-back-top{transition:none!important}
+ .amv-cursor-field{display:none!important}
+}
