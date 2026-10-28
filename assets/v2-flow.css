@@ -1,0 +1,260 @@
+
+/*
+ * AMV ULTIMATE V2 — Continuous Editorial Atmosphere
+ * Seções conectadas, nuances de luz, linhas discretas e elementos de profundidade.
+ * Sem bibliotecas, sem alterar o conteúdo, com temas claro/escuro e movimento reduzido.
+ */
+:root{
+ --amv-theme-motion:670ms;
+ --amv-theme-easing:cubic-bezier(.22,.75,.18,1);
+ --amv-flow-blue:rgba(48,139,199,.085);
+ --amv-flow-orange:rgba(241,139,52,.077);
+ --amv-flow-line:rgba(53,122,172,.14);
+ --amv-flow-ink-shadow:rgba(13,56,89,.095);
+ --amv-flow-panel:color-mix(in srgb,var(--surface-blue) 62%,var(--background));
+}
+html.dark{
+ --amv-flow-blue:rgba(85,156,215,.092);
+ --amv-flow-orange:rgba(247,137,57,.067);
+ --amv-flow-line:rgba(139,193,234,.13);
+ --amv-flow-ink-shadow:rgba(0,4,14,.32);
+ --amv-flow-panel:color-mix(in srgb,var(--surface-blue) 65%,var(--background));
+}
+.v2-home{background:var(--background)}
+/* Abertura e fechamento de cada seção seguem a mesma cor de base,
+   evitando o efeito de blocos/diapositivos empilhados. */
+.v2-home #inicio{
+ background:
+  radial-gradient(ellipse 68% 75% at 88% 36%,var(--amv-flow-blue),transparent 78%),
+  radial-gradient(ellipse 55% 65% at 10% 74%,var(--amv-flow-orange),transparent 83%),
+  linear-gradient(180deg,var(--background) 0%,var(--amv-flow-panel) 53%,var(--background) 100%);
+}
+.v2-home #sobre{
+ border-block:0;
+ background:
+  radial-gradient(ellipse 43% 68% at 9% 55%,var(--amv-flow-blue),transparent 86%),
+  linear-gradient(180deg,var(--background) 0%,var(--amv-flow-panel) 54%,var(--background) 100%);
+}
+.v2-home #servicos{
+ background:
+  radial-gradient(ellipse 62% 70% at 101% 42%,var(--amv-flow-orange),transparent 80%),
+  radial-gradient(ellipse 43% 45% at 2% 76%,var(--amv-flow-blue),transparent 82%),
+  linear-gradient(180deg,var(--background) 0%,var(--amv-flow-panel) 55%,var(--background) 100%);
+}
+.v2-home #projetos{
+ border:0;
+ background:
+  radial-gradient(ellipse 60% 75% at 0% 40%,var(--amv-flow-blue),transparent 83%),
+  radial-gradient(ellipse 58% 70% at 96% 68%,var(--amv-flow-orange),transparent 87%),
+  linear-gradient(180deg,var(--background),var(--amv-flow-panel) 51%,var(--background));
+}
+.v2-home .amv-flow-process{
+ background:
+  radial-gradient(ellipse 44% 64% at 93% 58%,var(--amv-flow-blue),transparent 84%),
+  linear-gradient(180deg,var(--background),var(--amv-flow-panel) 57%,var(--background));
+}
+.v2-home .amv-flow-cta{
+ background:linear-gradient(180deg,var(--background),var(--background));
+}
+.v2-home #equipe{
+ border:0;
+ background:
+  radial-gradient(ellipse 55% 76% at 94% 42%,var(--amv-flow-blue),transparent 80%),
+  radial-gradient(ellipse 40% 65% at 4% 66%,var(--amv-flow-orange),transparent 88%),
+  linear-gradient(180deg,var(--background),var(--amv-flow-panel) 52%,var(--background));
+}
+.v2-home .amv-em-acao{
+ background:
+  radial-gradient(ellipse 54% 79% at 7% 47%,var(--amv-flow-blue),transparent 83%),
+  linear-gradient(180deg,var(--background),var(--amv-flow-panel) 52%,var(--background));
+}
+.v2-home #contato{
+ border:0;
+ background:
+  radial-gradient(ellipse 72% 86% at 94% 35%,var(--amv-flow-blue),transparent 81%),
+  radial-gradient(ellipse 57% 70% at 10% 72%,var(--amv-flow-orange),transparent 88%),
+  linear-gradient(180deg,var(--background),var(--amv-flow-panel) 51%,var(--background));
+}
+/* Faixas de fusão reais entre áreas editoriais claras e o painel de destaque. */
+.v2-home .amv-flow-bridge{
+ display:block;height:clamp(48px,7.5vw,105px);
+ position:relative;pointer-events:none;isolation:isolate;
+}
+.v2-home .amv-flow-bridge--to-dark{
+ background:linear-gradient(to bottom,var(--background),var(--brand-panel));
+}
+.v2-home .amv-flow-bridge--from-dark{
+ background:linear-gradient(to bottom,var(--brand-panel),var(--background));
+}
+.v2-home .amv-flow-bridge--to-footer{
+ height:clamp(45px,7vw,95px);
+ background:linear-gradient(to bottom,var(--background),var(--brand-panel));
+}
+.v2-home #diferenciais{
+ border:0;
+ background-color:var(--brand-panel);
+ background-image:
+   radial-gradient(ellipse 47% 85% at 92% 12%,rgba(255,177,87,.115),transparent 88%),
+   radial-gradient(ellipse 55% 80% at 2% 100%,rgba(66,159,205,.14),transparent 81%),
+   linear-gradient(180deg,var(--brand-panel),
+      color-mix(in srgb,var(--brand-panel) 94%,var(--brand)) 53%,var(--brand-panel));
+}
+/* Linhas de percurso, círculos e pontos de luz que não cobrem os textos. */
+.v2-home #sobre,.v2-home #servicos,.v2-home #projetos,
+.v2-home #equipe,.v2-home .amv-em-acao,.v2-home #contato,
+.v2-home .amv-flow-process{position:relative;isolation:isolate}
+.v2-home #sobre::before,
+.v2-home #servicos::before,
+.v2-home #projetos::before,
+.v2-home .amv-em-acao::before{
+ content:"";position:absolute;pointer-events:none;z-index:0;
+ width:clamp(150px,25vw,360px);aspect-ratio:1;border-radius:50%;
+ border:1px solid var(--amv-flow-line);
+ box-shadow:0 0 0 34px color-mix(in srgb,var(--amv-flow-line) 15%,transparent),
+            0 0 0 95px color-mix(in srgb,var(--amv-flow-line) 9%,transparent);
+ opacity:.7;
+}
+.v2-home #sobre::before{left:-235px;bottom:-100px}
+.v2-home #servicos::before{right:-205px;top:10%}
+.v2-home #projetos::before{left:-230px;bottom:1%}
+.v2-home .amv-em-acao::before{right:-235px;top:-40px}
+.v2-home #sobre > *,
+.v2-home #servicos > *,
+.v2-home #projetos > *,
+.v2-home #equipe > *,
+.v2-home .amv-em-acao > *,
+.v2-home #contato > *{position:relative;z-index:1}
+.v2-home #sobre::after,
+.v2-home .amv-flow-process::after{
+ content:"";position:absolute;pointer-events:none;z-index:0;
+ width:clamp(150px,20vw,300px);height:clamp(120px,22vw,330px);
+ right:3%;bottom:5%;
+ background-image:radial-gradient(circle,var(--amv-flow-line) 1px,transparent 1.4px);
+ background-size:19px 19px;
+ mask-image:radial-gradient(ellipse at center,black 4%,transparent 72%);
+ opacity:.6;
+}
+.v2-home .amv-flow-process::after{right:0;top:6%;bottom:auto}
+.v2-home .amv-flow-process > *{position:relative;z-index:1}
+/* Serviços: em vez de painel quadriculado, coleção editorial com respiro. */
+.v2-home #servicos .mt-14.grid{
+ gap:clamp(12px,1.7vw,22px);
+ overflow:visible;border:0;border-radius:0;background:transparent;
+}
+.v2-home #servicos .mt-14.grid > article{
+ position:relative;overflow:hidden;
+ border:1px solid color-mix(in srgb,var(--border) 82%,transparent);
+ border-radius:18px;
+ background:linear-gradient(148deg,var(--background),var(--amv-flow-panel));
+ box-shadow:0 13px 35px var(--amv-flow-ink-shadow);
+ transition:transform 380ms cubic-bezier(.22,1,.36,1),
+            box-shadow 380ms ease,border-color 380ms ease;
+}
+.v2-home #servicos .mt-14.grid > article::after{
+ content:"";position:absolute;pointer-events:none;
+ right:-39px;top:-47px;width:125px;height:125px;border-radius:50%;
+ border:1px solid color-mix(in srgb,var(--brand-orange) 24%,transparent);
+ box-shadow:0 0 0 25px color-mix(in srgb,var(--brand-orange) 4%,transparent);
+}
+.v2-home #servicos .mt-14.grid > article:hover{
+ transform:translateY(-6px);
+ border-color:color-mix(in srgb,var(--brand-orange) 44%,var(--border));
+ background:linear-gradient(148deg,var(--background),var(--amv-flow-panel));
+ box-shadow:0 22px 48px var(--amv-flow-ink-shadow);
+}
+.v2-home #servicos .mt-14.grid > article > div:first-child > span:first-child{
+ border-radius:14px;
+ background:color-mix(in srgb,var(--brand-soft) 75%,var(--background));
+}
+@media(min-width:1024px){
+ .v2-home #servicos .mt-14.grid > article:nth-child(3n+2){margin-top:14px;margin-bottom:-14px}
+}
+/* Portfólio: relevo discreto e continuidade de cartões sem moldura excessiva. */
+.v2-home #projetos .v2-cards{gap:clamp(15px,2vw,25px)}
+.v2-home #projetos .v2-case{
+ position:relative;border-radius:20px;
+ border-color:color-mix(in srgb,var(--border) 84%,transparent);
+ box-shadow:0 17px 41px var(--amv-flow-ink-shadow);
+ transition:transform 400ms cubic-bezier(.22,1,.36,1),box-shadow 400ms ease;
+}
+.v2-home #projetos .v2-case:hover{
+ transform:translateY(-5px);
+ box-shadow:0 25px 55px var(--amv-flow-ink-shadow);
+}
+.v2-home #projetos .v2-case::before{
+ content:"";position:absolute;z-index:2;pointer-events:none;left:0;right:0;top:0;height:2px;
+ background:linear-gradient(90deg,transparent,var(--brand-orange),transparent);opacity:.52;
+}
+.v2-home #projetos .v2-case-body{padding:clamp(20px,2.4vw,27px)}
+/* Diferenciais: vidros escuros e bordas delicadas; contraste da tipografia preservado. */
+.v2-home #diferenciais .mt-14.grid{gap:clamp(13px,1.8vw,24px)}
+.v2-home #diferenciais .mt-14.grid > article{
+ border:1px solid rgba(210,234,250,.11);
+ border-radius:17px;padding:23px 19px 20px;
+ background:linear-gradient(155deg,rgba(255,255,255,.055),rgba(255,255,255,.014));
+ box-shadow:0 14px 40px rgba(0,0,0,.07);
+}
+/* Caminho contínuo com marcadores suaves e pontos de conexão. */
+.v2-home .amv-flow-process .relative.mt-16 > article > span:first-child{
+ box-shadow:0 0 0 6px color-mix(in srgb,var(--brand) 10%,transparent);
+ transition:box-shadow 360ms ease,transform 360ms ease;
+}
+.v2-home .amv-flow-process .relative.mt-16 > article:hover > span:first-child{
+ transform:scale(1.07);
+ box-shadow:0 0 0 11px color-mix(in srgb,var(--brand) 12%,transparent);
+}
+/* Chamada com brilho interno, preservando as frases e os links. */
+.v2-home .amv-flow-cta > div{
+ border-radius:25px;
+ background:
+  radial-gradient(ellipse 56% 130% at 105% 7%,rgba(243,147,66,.12),transparent 80%),
+  radial-gradient(ellipse 55% 130% at 3% 95%,rgba(85,178,225,.15),transparent 80%),
+  var(--brand-panel);
+ box-shadow:0 28px 64px rgba(8,35,64,.17);
+}
+.v2-home #equipe .v2-facts article,
+.v2-home .amv-em-acao-card,
+.v2-home #contato .amv-contact-option{
+ border-color:color-mix(in srgb,var(--border) 83%,transparent);
+ box-shadow:0 12px 32px var(--amv-flow-ink-shadow);
+}
+.v2-home #equipe .v2-facts article{background:linear-gradient(145deg,var(--background),var(--amv-flow-panel));border-radius:16px}
+.v2-home .amv-em-acao-card{background:linear-gradient(125deg,var(--amv-flow-panel),var(--background));border-radius:23px}
+.v2-home #contato .amv-contact-option{background:linear-gradient(140deg,var(--background),var(--amv-flow-panel))}
+.v2-home #contato input,.v2-home #contato textarea{
+ border-color:color-mix(in srgb,var(--border) 85%,transparent);
+ box-shadow:0 3px 14px color-mix(in srgb,var(--amv-flow-ink-shadow) 25%,transparent);
+}
+.v2-home #contato input:focus-visible,.v2-home #contato textarea:focus-visible{
+ box-shadow:0 0 0 3px color-mix(in srgb,var(--brand) 13%,transparent);
+}
+/* Interior das páginas secundárias recebe o mesmo acabamento. */
+.v2-editorial-page .v2-panel,.v2-editorial-page .v2-note{
+ border-color:color-mix(in srgb,var(--border) 86%,transparent);
+ box-shadow:0 16px 41px var(--amv-flow-ink-shadow);
+}
+.v2-editorial-page .v2-case{
+ box-shadow:0 15px 38px var(--amv-flow-ink-shadow);
+ border-radius:19px;
+}
+@media(max-width:767px){
+ .v2-home .amv-flow-bridge{height:46px}
+ .v2-home .amv-flow-bridge--to-footer{height:51px}
+ .v2-home #sobre::before,.v2-home #servicos::before,.v2-home #projetos::before,
+ .v2-home .amv-em-acao::before{width:170px}
+ .v2-home #sobre::before{left:-135px;bottom:0}
+ .v2-home #servicos::before{right:-120px}
+ .v2-home #projetos::before{left:-132px}
+ .v2-home .amv-em-acao::before{right:-140px}
+ .v2-home #servicos .mt-14.grid > article{border-radius:16px}
+ .v2-home #diferenciais .mt-14.grid > article{padding:18px}
+ .v2-home .amv-flow-cta > div{border-radius:19px}
+}
+@media(prefers-reduced-motion:reduce){
+ :root{--amv-theme-motion:0.01ms}
+ .v2-home #servicos .mt-14.grid > article,.v2-home #projetos .v2-case,
+ .v2-home .amv-flow-process .relative.mt-16 > article > span:first-child{transition:none}
+ .v2-home #servicos .mt-14.grid > article:hover,
+ .v2-home #projetos .v2-case:hover{transform:none}
+ .v2-home .amv-flow-process .relative.mt-16 > article:hover > span:first-child{transform:none}
+}
