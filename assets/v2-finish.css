@@ -1,0 +1,100 @@
+
+/* AMV Ultimate V2 — acabamento, contato integrado e assistente responsivo. */
+:root{color-scheme:light}
+html.dark{color-scheme:dark}
+.v2-home #contato .amv-contact-options{
+  display:grid;grid-template-columns:repeat(2,minmax(0,1fr));
+  gap:11px;margin-top:25px;margin-bottom:20px;
+}
+.v2-home #contato .amv-contact-option{
+  display:flex;align-items:center;gap:12px;min-width:0;
+  padding:16px 15px;border:1px solid var(--border);
+  background:var(--background);border-radius:13px;
+  color:var(--brand-deep);text-decoration:none;
+  transition:border-color .2s,transform .2s,box-shadow .2s;
+}
+.v2-home #contato .amv-contact-option svg{
+  width:22px;height:22px;flex:none;color:var(--brand-orange);
+  stroke:currentColor;fill:none;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round
+}
+.v2-home #contato .amv-contact-option strong{display:block;font-size:14px;font-weight:850}
+.v2-home #contato .amv-contact-option small{
+  display:block;font-size:11px;line-height:1.5;color:var(--muted-foreground);margin-top:3px
+}
+.v2-home #contato .amv-contact-option:hover{
+  transform:translateY(-2px);border-color:var(--brand-orange);
+  box-shadow:0 12px 26px rgba(9,45,81,.08)
+}
+.v2-home #contato .amv-contact-option:focus-visible{
+  outline:2px solid var(--brand-orange);outline-offset:3px
+}
+.v2-home #contato .amv-contact-option--maps{grid-column:1/-1}
+.v2-home #contato .amv-contact-info{
+  border-top:1px solid var(--border);padding-top:15px;
+  margin-top:14px
+}
+.v2-home #contato .amv-contact-form-label{
+  grid-column:1/-1;
+  margin:0 0 2px;font-size:16px;font-weight:850;color:var(--brand-deep)
+}
+.v2-home #contato .amv-contact-form-note{
+  grid-column:1/-1;margin:-1px 0 4px;font-size:12px;
+  line-height:1.7;color:var(--muted-foreground)
+}
+/* Registros somente depois de autorização; sem atividades inventadas. */
+.v2-home .amv-em-acao{position:relative;padding:84px 20px;scroll-margin-top:86px;background:var(--background)}
+.v2-home .amv-em-acao-inner{max-width:1180px;margin-inline:auto}
+.v2-home .amv-em-acao-card{
+  margin-top:25px;display:grid;grid-template-columns:auto minmax(0,1fr);
+  align-items:center;gap:21px;
+  border:1px solid var(--border);border-radius:20px;padding:26px 30px;
+  background:linear-gradient(115deg,var(--surface-blue),var(--background));
+}
+.v2-home .amv-em-acao-symbol{
+  display:grid;place-items:center;width:68px;height:68px;
+  border-radius:16px;background:var(--brand-panel);color:var(--on-panel)
+}
+.v2-home .amv-em-acao-symbol svg{width:29px;height:29px}
+.v2-home .amv-em-acao-card h3{color:var(--brand-deep);font-size:18px;font-weight:850}
+.v2-home .amv-em-acao-card p{
+  max-width:680px;margin-top:5px;color:var(--muted-foreground);
+  font-size:13px;line-height:1.75
+}
+.v2-home .amv-em-acao-card a{
+  display:inline-flex;margin-top:11px;align-items:center;gap:8px;
+  color:var(--brand);font-size:13px;font-weight:850;text-underline-offset:4px
+}
+.v2-home .amv-em-acao-card a:hover{text-decoration:underline}
+/* Ajuste de assistente em smartphone, respeitando as áreas seguras do aparelho. */
+#amv-assistant[hidden]{display:none!important}
+@media(max-width:640px){
+  [data-action="assistant-toggle"]{
+    width:48px!important;height:48px!important;
+    min-width:48px;padding:0!important;
+    display:flex;align-items:center;justify-content:center;
+    border-radius:50%!important;gap:0!important;
+    box-shadow:0 8px 22px rgba(2,18,38,.24)
+  }
+  [data-action="assistant-toggle"] span{display:none!important}
+  [data-action="assistant-toggle"] svg{width:21px!important;height:21px!important}
+  #amv-assistant{
+    position:fixed!important;
+    bottom:calc(72px + env(safe-area-inset-bottom,0px))!important;
+    right:8px!important;left:8px!important;
+    width:auto!important;max-width:none!important;
+    height:min(70dvh,560px)!important;
+    max-height:calc(100dvh - 110px - env(safe-area-inset-bottom,0px))!important;
+    border-radius:15px!important;
+  }
+  #amv-assistant #assistant-messages{min-height:0;overscroll-behavior:contain}
+  .v2-home #contato .amv-contact-options{grid-template-columns:1fr}
+  .v2-home #contato .amv-contact-option--maps{grid-column:auto}
+  .v2-home .amv-em-acao{padding:64px 20px}
+  .v2-home .amv-em-acao-card{grid-template-columns:1fr;gap:16px;padding:21px}
+  .v2-home .amv-em-acao-symbol{width:56px;height:56px}
+}
+@media(max-width:380px){#amv-assistant{height:min(66dvh,480px)!important}}
+@media(prefers-reduced-motion:reduce){
+  .v2-home #contato .amv-contact-option{transition:none}
+  .v2-home #contato .amv-contact-option:hover{transform:none}
+}
