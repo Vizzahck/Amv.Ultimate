@@ -45,10 +45,13 @@ html.dark .amv-404-brand--dark{display:block!important}
 @media(max-width:520px){.amv-404-panel{border-radius:18px;padding:29px 23px}.amv-404-code{font-size:90px;right:27px;bottom:18px}.amv-404 footer{position:relative;z-index:2}}
 @media(prefers-reduced-motion:reduce){.amv-404-buttons a{transition:none}.amv-404-buttons a:hover{transform:none}}
 </style>
+<link rel="stylesheet" href="https://vizzahck.github.io/Amv.Ultimate/assets/404-snake.css?v=1">
 </head>
 <body>
 <main class="amv-404" id="conteudo">
   <div class="amv-404-panel">
+    <div class="amv-404-layout">
+      <div class="amv-404-copy">
     <a class="amv-404-brand" href="https://vizzahck.github.io/Amv.Ultimate/" aria-label="AMV Conectar — voltar ao início">
       <img class="amv-404-brand--light" src="https://vizzahck.github.io/Amv.Ultimate/assets/isologo-amv-claro.webp" alt="AMV Conectar" width="1000" height="325" decoding="async"><img class="amv-404-brand--dark" src="https://vizzahck.github.io/Amv.Ultimate/assets/isologo-amv-escuro.webp" alt="" width="1000" height="329" decoding="async">
     </a>
@@ -60,9 +63,44 @@ html.dark .amv-404-brand--dark{display:block!important}
       <a href="https://vizzahck.github.io/Amv.Ultimate/projetos.html">Explorar projetos</a>
       <a href="https://vizzahck.github.io/Amv.Ultimate/#contato">Entrar em contato</a>
     </nav>
+      </div>
+<section class="amv-snake" id="amv-snake" aria-labelledby="amv-snake-title">
+  <div class="amv-snake-top">
+    <div class="amv-snake-title">
+      <span class="amv-snake-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 5h8a4 4 0 0 1 0 8H9a4 4 0 0 0 0 8h10"/><circle cx="5" cy="5" r="2"/><circle cx="19" cy="21" r="2"/></svg></span>
+      <div><h2 id="amv-snake-title">Cobrinha 404</h2><p>Minijogo da AMV</p></div>
+    </div>
+    <div class="amv-snake-scoreboard">
+      <div class="amv-snake-score"><small>Pontos</small><strong data-snake-score>0</strong></div>
+      <div class="amv-snake-score"><small>Recorde</small><strong data-snake-best>0</strong></div>
+    </div>
+  </div>
+  <div class="amv-snake-board-wrap">
+    <canvas class="amv-snake-canvas" id="amv-snake-canvas" width="432" height="432" tabindex="0" aria-label="Tabuleiro da cobrinha: use as setas, WASD ou controles de toque para direcionar a cobra">Seu navegador precisa oferecer suporte a Canvas para jogar.</canvas>
+    <div class="amv-snake-overlay" data-snake-overlay>
+      <div class="amv-snake-overlay-card"><span class="amv-snake-overlay-icon" aria-hidden="true">🐍</span><h3 data-snake-overlay-title>Pronto para jogar?</h3><p data-snake-overlay-text>Coma os pontos laranja, cresça e evite bater!</p></div>
+    </div>
+  </div>
+  <p class="amv-snake-status" data-snake-status role="status" aria-live="polite">Pressione Jogar para começar.</p>
+  <div class="amv-snake-actions">
+    <button type="button" data-snake-play>Jogar</button>
+    <button type="button" data-snake-pause disabled>Pausar</button>
+    <button type="button" data-snake-reset aria-label="Reiniciar partida do zero">Reiniciar</button>
+  </div>
+  <div class="amv-snake-pad" role="group" aria-label="Controles direcionais da cobrinha">
+    <button type="button" data-snake-dir="up" aria-label="Mover para cima">↑</button>
+    <button type="button" data-snake-dir="left" aria-label="Mover para a esquerda">←</button>
+    <button type="button" data-snake-dir="down" aria-label="Mover para baixo">↓</button>
+    <button type="button" data-snake-dir="right" aria-label="Mover para a direita">→</button>
+  </div>
+  <p class="amv-snake-help"><span data-desktop-hint>Teclado: setas ou WASD · Espaço para pausar. </span>No celular, deslize no tabuleiro ou use os botões. O recorde vale nesta sessão.</p>
+  <noscript><p class="amv-snake-noscript">Ative o JavaScript para jogar a cobrinha.</p></noscript>
+</section>
+    </div>
     <footer>AMV Conectar · Projeto Integrador SENAC Pinheiro — MA</footer>
     <span class="amv-404-code" aria-hidden="true">404</span>
   </div>
 </main>
+<script defer src="https://vizzahck.github.io/Amv.Ultimate/assets/404-snake.js?v=1"></script>
 </body>
 </html>
