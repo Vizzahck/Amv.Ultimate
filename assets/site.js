@@ -40,38 +40,66 @@ function setThemeWithMotion(){
 document.addEventListener('click',e=>{const b=e.target.closest('button');if(!b)return; if(b.hasAttribute('data-faq')){ask(Number(b.dataset.faq));return;}switch(b.dataset.action){case'theme':{setThemeWithMotion();break;}case'menu':setMenu(menu.hidden);break;case'assistant-toggle':setAssistant(panel.hidden);break;case'assistant-minimizar':setAssistant(false);toggle.focus({preventScroll:true});break;case'assistant-fechar':setAssistant(false);reset();toggle.focus({preventScroll:true});break;case'reset':reset();break;}});
 menu.addEventListener('click',e=>{if(e.target.closest('a'))setMenu(false);});
 document.addEventListener('keydown',e=>{if(e.key==='Escape'){setMenu(false);if(!panel.hidden){setAssistant(false);toggle.focus({preventScroll:true});}}});
-// Envia o formulario ao Formspree. Sem JS, o action/method do HTML continuam funcionando.
+// Formulário AMV: HTML5 + honeypot + Formspree, com feedback acessível e sem perder os dados em erro.
 const form=document.getElementById('contact-form');
-if(form)form.addEventListener('submit',async e=>{
-  e.preventDefault();
-  if(!form.checkValidity()){form.reportValidity();return;}
+if(form){
   const status=document.getElementById('contact-status');
   const submit=form.querySelector('button[type="submit"]');
-  const originalLabel=submit.innerHTML;
-  submit.disabled=true;
-  submit.setAttribute('aria-busy','true');
-  status.hidden=false;
-  status.textContent='Enviando sua mensagem...';
-  try{
-    const response=await fetch(form.action,{
-      method:'POST',
-      body:new FormData(form),
-      headers:{'Accept':'application/json'}
-    });
-    if(!response.ok){
-      let errorMessage='Não foi possível enviar sua mensagem. Tente novamente em instantes.';
-      if(response.status===429)errorMessage='Muitas tentativas de envio. Aguarde um pouco e tente novamente.';
-      throw new Error(errorMessage);
-    }
-    status.textContent='Mensagem enviada com sucesso! Agradecemos seu contato.';
-    form.reset();
-  }catch(error){
-    status.textContent=(error.message && (error.message.startsWith('Não foi possível') || error.message.startsWith('Muitas tentativas')))?error.message:'Não foi possível enviar a mensagem. Verifique sua conexão e tente novamente.';
-  }finally{
-    submit.disabled=false;
-    submit.removeAttribute('aria-busy');
-    submit.innerHTML=originalLabel;
+  const defaultLabel=submit.innerHTML;
+  function feedback(state,message){
+    if(!status)return;
+    status.hidden=false;
+    status.dataset.state=state;
+    status.textContent=message;
   }
-});
+  form.addEventListener('submit',async e=>{
+    e.preventDefault();
+    if(!form.checkValidity()){
+      form.reportValidity();
+      feedback('error','Revise os campos obrigatórios e os dados informados antes de enviar.');
+      return;
+    }
+    const trap=form.querySelector('input[name="_gotcha"]');
+    if(trap&&trap.value.trim()){
+      feedback('error','Não foi possível validar o envio. Atualize a página e tente novamente.');
+      return;
+    }
+    submit.disabled=true;
+    submit.setAttribute('aria-busy','true');
+    submit.textContent='Enviando mensagem...';
+    feedback('sending','Enviando sua mensagem com segurança...');
+    try{
+      const response=await fetch(form.action,{
+        method:'POST',
+        body:new FormData(form),
+        headers:{Accept:'application/json'}
+      });
+      if(!response.ok){
+        let problem='Não foi possível enviar agora. Seus dados foram preservados para você tentar novamente.';
+        if(response.status===429)problem='Muitos envios em pouco tempo. Aguarde alguns minutos antes de tentar novamente.';
+        else if(response.status===422||response.status===400)problem='O serviço de contato não aceitou os dados. Confira os campos e tente novamente.';
+        throw new Error(problem);
+      }
+      feedback('success','Mensagem enviada! O formulário recebeu seu contato. A equipe da AMV poderá responder pelo e-mail informado.');
+      form.reset();
+    }catch(error){
+      feedback('error',error&&error.message&&(
+        error.message.startsWith('Não foi possível enviar agora')||
+        error.message.startsWith('Muitos envios')||
+        error.message.startsWith('O serviço de contato')
+      )?error.message:'Falha de conexão. Confira a internet e tente novamente; seus dados foram mantidos.');
+    }finally{
+      submit.disabled=false;
+      submit.removeAttribute('aria-busy');
+      submit.innerHTML=defaultLabel;
+    }
+  });
+  form.addEventListener('input',()=>{
+    if(status&&!status.hidden&&status.dataset.state!=='sending'){
+      status.hidden=true;
+      delete status.dataset.state;
+    }
+  });
+}
 syncTheme();
 })();

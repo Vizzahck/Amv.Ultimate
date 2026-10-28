@@ -1,0 +1,150 @@
+
+/* AMV Ultimate V2 — acabamento editorial e microinterações (sem bibliotecas). */
+:root{--amv-polish-duration:340ms;--amv-polish-ease:cubic-bezier(.22,1,.36,1)}
+/* 1. Cabeçalho responsivo: respeita a altura inicial e recolhe apenas ao rolar. */
+.amv-smart-header{
+  background:color-mix(in srgb,var(--background) 94%,transparent)!important;
+  border-bottom:1px solid color-mix(in srgb,var(--border) 76%,transparent);
+  box-shadow:0 1px 10px rgba(5,22,46,.028);
+  transition:background var(--amv-polish-duration) ease,box-shadow var(--amv-polish-duration) ease,border-color var(--amv-polish-duration) ease;
+}
+@supports(backdrop-filter:blur(10px)){
+ .amv-smart-header{backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px)}
+}
+.amv-smart-header > div:first-child{
+  height:80px;min-height:0;
+  transition:height 420ms var(--amv-polish-ease)
+}
+.amv-smart-header .amv-theme-logo--header{
+  transform-origin:left center;
+  transition:transform 420ms var(--amv-polish-ease);
+}
+.amv-smart-header.amv-header-compact{
+  background:color-mix(in srgb,var(--background) 87%,transparent)!important;
+  box-shadow:0 12px 35px rgba(7,27,48,.075);
+  border-bottom-color:color-mix(in srgb,var(--brand) 15%,var(--border));
+}
+.amv-smart-header.amv-header-compact > div:first-child{height:65px}
+.amv-smart-header.amv-header-compact .amv-theme-logo--header{transform:scale(.88)}
+.amv-smart-header nav[aria-label="Navegação principal"] > a{
+  position:relative;text-decoration:none;
+  transition:color .22s ease
+}
+.amv-smart-header nav[aria-label="Navegação principal"] > a::after{
+  content:"";position:absolute;left:0;right:0;bottom:-6px;height:2px;border-radius:3px;
+  background:var(--brand-orange);transform:scaleX(0);transform-origin:left;
+  transition:transform var(--amv-polish-duration) var(--amv-polish-ease)
+}
+.amv-smart-header nav[aria-label="Navegação principal"] > a:is(:hover,:focus-visible,.amv-nav-active)::after,
+.amv-smart-header nav[aria-label="Navegação principal"] > a[aria-current="page"]::after{
+  transform:scaleX(1)
+}
+.amv-smart-header .amv-nav-active{
+  color:var(--brand-orange)!important
+}
+.amv-smart-header nav[aria-label="Navegação móvel"] a.amv-nav-active{
+  border-left:3px solid var(--brand-orange);padding-left:10px;
+  background:color-mix(in srgb,var(--brand-orange) 6%,transparent)
+}
+/* 2. Menos slides, mais editorial: hierarquia, ritmo de texto e respiro. */
+.v2-home #sobre h2,.v2-home #servicos h2,.v2-home #diferenciais h2,
+.v2-home .amv-flow-process h2,.v2-home #contato h2,
+.v2-home .amv-em-acao h2,.v2-editorial-page .v2-page-hero h1{
+  letter-spacing:-.055em;
+  line-height:1.11;
+  text-wrap:balance
+}
+.v2-home #inicio h1{letter-spacing:-.065em;line-height:1.055}
+.v2-home :is(#sobre,#servicos,#diferenciais,#contato) > div > div:first-child > p:first-child{
+  letter-spacing:.13em
+}
+.v2-home #sobre .relative.border-l-2{
+  border-left-color:var(--brand-orange);
+  padding-top:4px;padding-bottom:4px
+}
+.v2-home #sobre .relative.border-l-2 > p:first-child{
+  text-wrap:pretty;letter-spacing:-.02em
+}
+.v2-home #projetos .v2-heading h2{
+  letter-spacing:-.055em;
+  line-height:1.11;
+  text-wrap:balance
+}
+.v2-home .v2-section{scroll-margin-top:90px}
+/* 3. Movimento pequeno, com estados de foco visíveis. */
+.v2-home .v2-more,.v2-editorial-page .v2-more{
+  text-decoration:none;
+  transition:color var(--amv-polish-duration) ease, gap var(--amv-polish-duration) ease,border-color var(--amv-polish-duration) ease
+}
+.v2-home .v2-more:is(:hover,:focus-visible),.v2-editorial-page .v2-more:is(:hover,:focus-visible){
+  color:var(--brand-orange);gap:16px
+}
+.v2-home .v2-button,.v2-editorial-page .v2-button,
+.v2-home #contato button[type="submit"]{
+  transition:transform var(--amv-polish-duration) var(--amv-polish-ease),
+    box-shadow var(--amv-polish-duration) ease,filter var(--amv-polish-duration) ease
+}
+.v2-home .v2-button:is(:hover,:focus-visible),
+.v2-editorial-page .v2-button:is(:hover,:focus-visible),
+.v2-home #contato button[type="submit"]:is(:hover,:focus-visible){
+  transform:translateY(-2px);
+  box-shadow:0 14px 25px rgba(14,45,77,.16)
+}
+.v2-home #contato button[type="submit"]:disabled{transform:none;opacity:.74;cursor:progress}
+.v2-home .v2-case img{
+  transition:transform 650ms var(--amv-polish-ease)
+}
+.v2-home :is(a,button,input,textarea):focus-visible,
+.v2-editorial-page :is(a,button):focus-visible{
+  outline:2px solid var(--brand-orange);outline-offset:4px
+}
+/* Contato: sinalização acessível, formulário legível e sem caixa padrão do navegador. */
+#contact-form .amv-form-honeypot{
+  position:absolute!important;left:-10000px!important;top:auto!important;
+  width:1px!important;height:1px!important;overflow:hidden!important;opacity:0!important;
+  pointer-events:none!important
+}
+#contact-form input:not([type="hidden"]):user-invalid,
+#contact-form textarea:user-invalid{
+  border-color:#c65d3c;
+}
+#contact-form .amv-form-count{
+  display:block;font-size:11px;line-height:1.5;font-weight:700;
+  color:var(--muted-foreground);text-align:right;margin-top:5px
+}
+#contact-form .amv-form-count--limit{color:var(--brand-orange)}
+#contact-form #contact-status{
+  display:block;flex-basis:100%;width:100%;
+  margin-top:2px;border-radius:12px;padding:13px 16px;
+  font-size:13px;font-weight:700;line-height:1.7;
+  border:1px solid var(--border);background:var(--surface-blue);
+  color:var(--brand-deep)
+}
+#contact-form #contact-status[hidden]{display:none!important}
+#contact-form #contact-status[data-state="success"]{
+  border-color:color-mix(in srgb,#31866e 35%,var(--border));
+  background:color-mix(in srgb,#31866e 8%,var(--background));
+}
+#contact-form #contact-status[data-state="error"]{
+  border-color:color-mix(in srgb,#c45c46 45%,var(--border));
+  background:color-mix(in srgb,#c45c46 8%,var(--background))
+}
+#contact-form #contact-status[data-state="success"]::before{content:"✓";margin-right:8px;color:#21826b}
+#contact-form #contact-status[data-state="error"]::before{content:"!";margin-right:8px;color:#bd5945}
+@media(max-width:767px){
+ .amv-smart-header > div:first-child{height:80px}
+ .amv-smart-header.amv-header-compact > div:first-child{height:69px}
+ .v2-home #inicio h1{letter-spacing:-.05em}
+ .v2-home #sobre .relative.border-l-2{padding-left:20px}
+}
+@media(prefers-reduced-motion:reduce){
+ .amv-smart-header,.amv-smart-header > div:first-child,
+ .amv-smart-header .amv-theme-logo--header,
+ .amv-smart-header nav[aria-label="Navegação principal"] > a::after,
+ .v2-home .v2-more,.v2-editorial-page .v2-more,
+ .v2-home .v2-button,.v2-editorial-page .v2-button,
+ .v2-home #contato button[type="submit"],.v2-home .v2-case img{transition:none!important}
+ .v2-home .v2-button:is(:hover,:focus-visible),
+ .v2-editorial-page .v2-button:is(:hover,:focus-visible),
+ .v2-home #contato button[type="submit"]:is(:hover,:focus-visible){transform:none}
+}
