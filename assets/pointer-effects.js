@@ -19,9 +19,9 @@
 
   const trail = [];
   const glints = [];
-  const TRAIL_AGE = 410;
+  const TRAIL_AGE = 235;
   const GLINT_AGE = 480;
-  const MAX_POINTS = 18;
+  const MAX_POINTS = 10;
   const MAX_GLINTS = 26;
   let width = 0, height = 0, dpr = 1;
   let frame = 0;
@@ -90,8 +90,8 @@
       ctx.beginPath();
       ctx.moveTo(older.x, older.y);
       ctx.lineTo(newer.x, newer.y);
-      ctx.lineWidth = 0.7 + life * 1.05;
-      ctx.strokeStyle = "rgba(77,157,200," + (life * 0.34).toFixed(3) + ")";
+      ctx.lineWidth = 0.45 + life * 0.6;
+      ctx.strokeStyle = "rgba(77,157,200," + (life * 0.24).toFixed(3) + ")";
       ctx.stroke();
     }
 
