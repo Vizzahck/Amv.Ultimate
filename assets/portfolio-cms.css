@@ -1,0 +1,16 @@
+/* Portfólio dinâmico da AMV — usa tipografia/paleta existentes. */
+.amv-cms-project-card{display:flex;flex-direction:column}
+.amv-cms-project-card .v2-case-body{flex:1;display:flex;flex-direction:column}
+.amv-cms-project-button{display:inline-flex;align-items:center;gap:8px;margin-top:auto;padding:18px 0 0;border:0;background:none;color:var(--brand);font:inherit;font-size:13px;font-weight:850;cursor:pointer;text-align:left}
+.amv-cms-project-button:hover{text-decoration:underline}
+.amv-cms-project-button:focus-visible{outline:2px solid var(--brand-orange);outline-offset:3px;border-radius:4px}
+.amv-cms-project-dialog{position:fixed;max-width:min(760px,calc(100vw - 32px));max-height:min(90dvh,960px);overflow:auto;margin:auto;padding:0;border-radius:23px;border:1px solid var(--border);color:var(--foreground);background:var(--background);box-shadow:0 30px 95px rgba(1,16,40,.3)}
+.amv-cms-project-dialog::backdrop{background:rgba(2,15,33,.73);backdrop-filter:blur(7px)}
+.amv-cms-project-dialog-cover{display:block;width:100%;max-height:325px;object-fit:cover;background:var(--surface-blue)}
+.amv-cms-project-dialog-body{padding:clamp(21px,4vw,38px)}
+.amv-cms-project-dialog h2{margin:8px 0 14px;font-weight:900;letter-spacing:-.045em;font-size:clamp(26px,4vw,39px);color:var(--brand-deep)}
+.amv-cms-project-dialog p{margin:12px 0;color:var(--muted-foreground);line-height:1.75;white-space:pre-line;font-size:14px}
+.amv-cms-project-dialog-tag{font-size:11px;color:var(--brand-orange);font-weight:900;letter-spacing:.11em;text-transform:uppercase}
+.amv-cms-project-dialog-close{position:sticky;float:right;top:12px;margin:12px 12px -52px auto;z-index:2;width:42px;height:42px;border:1px solid rgba(255,255,255,.2);border-radius:50%;background:#071e35;color:#fff;font-size:23px;cursor:pointer}
+.amv-cms-project-dialog-close:focus-visible{outline:2px solid var(--brand-orange);outline-offset:2px}
+.amv-cms-project-collection-title{margin-bottom:12px;font-size:12px;color:var(--brand-orange);text-transform:uppercase;letter-spacing:.12em;font-weight:900}

@@ -1,0 +1,127 @@
+<!doctype html>
+<html lang="pt-BR" data-amv-cms-admin>
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="robots" content="noindex,nofollow">
+  <meta name="referrer" content="no-referrer">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self'; img-src 'self' blob: data:; connect-src 'self' https://api.github.com; frame-src 'self'; object-src 'none'; base-uri 'none'; form-action 'self'">
+  <meta name="color-scheme" content="dark">
+  <title>Studio AMV | Administração visual</title>
+  <link rel="icon" href="../assets/favicon.png">
+  <link rel="stylesheet" href="./studio.css?v=1">
+  <script defer src="../assets/cms-runtime.js?v=1"></script>
+  <script defer src="./studio.js?v=1"></script>
+</head>
+<body>
+  <div class="studio-shell">
+    <header class="studio-header">
+      <a href="../index.html" class="studio-brand" aria-label="Voltar ao site AMV"><span class="studio-brand-mark">AMV<span>✦</span></span><span class="studio-brand-divider"></span><span class="studio-brand-copy">STUDIO <small>PAINEL DE EDIÇÃO</small></span></a>
+      <div class="studio-header-actions">
+        <span id="status" class="studio-status" role="status" aria-live="polite">Conecte sua conta para editar</span>
+        <a class="studio-view" href="../index.html" target="_blank" rel="noopener">Ver site ↗</a>
+        <button id="disconnect" type="button" class="studio-quiet" hidden>Desconectar</button>
+      </div>
+    </header>
+
+    <main>
+      <section class="studio-login" id="login">
+        <div class="studio-login-visual" aria-hidden="true"><div class="studio-login-orbit"></div><span>AMV</span><p>IDEIAS QUE SE CONECTAM</p></div>
+        <div class="studio-login-panel">
+          <p class="studio-kicker">Área de administração</p>
+          <h1>Seu site, do seu jeito.</h1>
+          <p>Edite títulos, textos e imagens diretamente na prévia. Cadastre projetos, escolha quando publicar e envie as atualizações ao GitHub sem mexer no código.</p>
+          <form id="login-form">
+            <label for="github-token">Token de acesso do GitHub</label>
+            <div class="studio-token-row"><input id="github-token" type="password" autocomplete="off" autocapitalize="off" spellcheck="false" placeholder="github_pat_..." required><button type="submit" class="studio-primary" id="connect">Entrar no Studio</button></div>
+          </form>
+          <div class="studio-security"><strong>Autorização segura.</strong> O token não fica no código do site nem é salvo no navegador. Ele é usado apenas nesta aba para enviar suas alterações à API do GitHub.</div>
+          <details class="studio-help"><summary>Como criar o token autorizado?</summary><ol><li>Entre no GitHub com sua conta com permissão de editar a AMV.</li><li>Crie um <strong>Fine-grained personal access token</strong> com expiração curta.</li><li>Permita acesso <strong>somente</strong> ao repositório <code>Vizzahck/Amv.Ultimate</code>.</li><li>Em Repository permissions, permita <strong>Contents → Read and write</strong>.</li><li>Cole o token acima <strong>apenas aqui</strong>; nunca o envie por mensagem.</li></ol><a href="https://github.com/settings/personal-access-tokens/new" target="_blank" rel="noopener noreferrer">Criar token no GitHub ↗</a></details>
+        </div>
+      </section>
+
+      <section class="studio-workspace" id="workspace" hidden aria-label="Editor da AMV">
+        <aside class="studio-sidebar">
+          <div class="studio-tabs" role="tablist" aria-label="Tipo de edição">
+            <button type="button" class="is-active" id="tab-pages" role="tab" aria-selected="true" aria-controls="pages-mode">Editar site</button>
+            <button type="button" id="tab-projects" role="tab" aria-selected="false" aria-controls="projects-mode">Portfólio</button>
+          </div>
+          <section id="pages-mode" class="studio-mode" role="tabpanel" aria-labelledby="tab-pages">
+            <label for="page-select">Página para editar</label>
+            <select id="page-select">
+              <option value="index.html">Página inicial</option>
+              <option value="quem-somos.html">Quem Somos</option>
+              <option value="missao.html">Missão</option>
+              <option value="visao.html">Visão</option>
+              <option value="valores.html">Valores</option>
+              <option value="projeto-integrador.html">Projeto Integrador</option>
+              <option value="projetos.html">Projetos</option>
+              <option value="equipe.html">Equipe</option>
+              <option value="privacidade.html">Privacidade</option>
+            </select>
+            <div class="studio-divider"></div>
+            <p class="studio-kicker">Editor visual</p>
+            <p class="studio-tip">Clique em um <strong>título, parágrafo ou imagem</strong> na prévia. Para alterar um texto, clique nele e digite diretamente como em um slide.</p>
+            <div id="selected-empty" class="studio-empty">Selecione algum elemento na prévia para começar.</div>
+            <div id="selected-text" hidden>
+              <label for="text-value">Texto selecionado</label>
+              <textarea id="text-value" rows="6" maxlength="6000" placeholder="Digite o texto..."></textarea>
+              <p class="studio-muted">O campo altera o texto diretamente. Para preservar destaques, edite o elemento na própria prévia.</p>
+              <button type="button" class="studio-secondary" id="clear-selection">Cancelar seleção</button>
+            </div>
+            <div id="selected-image" hidden>
+              <label>Imagem selecionada</label>
+              <img id="image-preview" class="studio-selected-image" alt="Prévia da imagem selecionada">
+              <label for="replace-image" class="studio-upload-label">Trocar imagem (JPG, PNG ou WebP)</label>
+              <input id="replace-image" type="file" accept="image/jpeg,image/png,image/webp">
+              <label for="image-alt">Descrição da imagem</label>
+              <input id="image-alt" type="text" maxlength="180" placeholder="Descrição para acessibilidade">
+              <p class="studio-muted">As imagens são otimizadas para WebP no momento da publicação.</p>
+            </div>
+            <div class="studio-divider"></div>
+            <h3>O que pode editar?</h3>
+            <p class="studio-tip">Textos e fotos do conteúdo das páginas. Navegação, animações, formulários e código permanecem protegidos para não quebrar o site.</p>
+          </section>
+
+          <section id="projects-mode" class="studio-mode" role="tabpanel" aria-labelledby="tab-projects" hidden>
+            <p class="studio-kicker">Portfólio</p>
+            <h2>Gerenciar projetos</h2>
+            <p class="studio-tip">Crie projetos, inclua uma capa e marque como publicado. Projetos em rascunho não aparecem no site, mas os dados salvos ficam no repositório público. Não inclua informações confidenciais.</p>
+            <button id="new-project" type="button" class="studio-secondary studio-wide">+ Novo projeto</button>
+            <div id="project-list" class="studio-project-list"></div>
+            <form id="project-editor" hidden>
+              <div class="studio-divider"></div>
+              <label for="project-title">Nome do projeto *</label><input id="project-title" maxlength="130" required>
+              <label for="project-category">Categoria</label><input id="project-category" maxlength="60" placeholder="Identidade visual, campanha...">
+              <label for="project-description">Resumo</label><textarea id="project-description" maxlength="700" rows="3"></textarea>
+              <label for="project-details">Descrição completa</label><textarea id="project-details" maxlength="6000" rows="5" placeholder="Desafio, processo, resultados documentados..."></textarea>
+              <label for="project-image">Imagem de capa</label><input id="project-image" type="file" accept="image/jpeg,image/png,image/webp">
+              <img id="project-image-preview" class="studio-selected-image" alt="Prévia da capa do projeto" hidden>
+              <label for="project-alt">Descrição da imagem</label><input id="project-alt" maxlength="180">
+              <label class="studio-check"><input type="checkbox" id="project-published"> <span>Publicar este projeto no site</span></label>
+              <div class="studio-project-actions"><button type="submit" class="studio-secondary">Salvar projeto no rascunho</button><button type="button" class="studio-danger" id="delete-project">Excluir</button></div>
+            </form>
+          </section>
+        </aside>
+
+        <div class="studio-main">
+          <div class="studio-toolbar">
+            <div><span class="studio-preview-dot"></span><strong id="preview-title">Prévia ao vivo</strong><small>As mudanças ainda não estão no site público</small></div>
+            <div class="studio-toolbar-actions"><button id="reload-preview" type="button" class="studio-quiet">Recarregar prévia</button><button id="publish" type="button" class="studio-primary">Publicar alterações ↗</button></div>
+          </div>
+          <div id="preview-shell" class="studio-preview-shell">
+            <iframe id="page-frame" title="Visualização editável da página AMV" src="about:blank"></iframe>
+          </div>
+          <div id="projects-dashboard" class="studio-projects-dashboard" hidden>
+            <p class="studio-kicker">Seus trabalhos</p>
+            <h2>Do rascunho à publicação.</h2>
+            <p>Use a coluna ao lado para criar e editar projetos. O botão <strong>Publicar alterações</strong> salva no GitHub e atualiza o portfólio público.</p>
+            <div id="project-preview-cards" class="studio-project-preview-cards"></div>
+          </div>
+        </div>
+      </section>
+    </main>
+    <footer class="studio-footer">Studio AMV · Administração visual da V2 · Desenvolvido por Vizza</footer>
+  </div>
+</body>
+</html>
