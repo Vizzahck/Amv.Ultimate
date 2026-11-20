@@ -117,6 +117,8 @@
       $("github-token").value="";
       login.hidden=true;workspace.hidden=false;$("disconnect").hidden=false;
       select.value=activePage;
+      // Não repetir a abertura cinematográfica dentro do editor visual.
+      try{sessionStorage.setItem("amv-intro-seen-v2-01","1");}catch(_){}
       setStatus("Conectado ao repositório AMV Ultimate.","success");
       frame.src="../"+activePage+"?cmsPreview=1";
       renderProjectList();renderProjectPreview();
@@ -210,6 +212,11 @@
       if(!main)return;
       let node=event.target.closest("img");
       if(!node)node=event.target.closest(editableText);
+      if(node&&node.tagName!=="IMG"&&node.querySelector("a,button,input,textarea,form,img,svg")){
+        event.preventDefault();event.stopImmediatePropagation();
+        setStatus("Esse bloco contém elementos interativos; selecione um título ou texto simples para não quebrar os links.");
+        return;
+      }
       if(!node || !main.contains(node)) {
         // Não permitir navegar ou enviar formulário na prévia.
         if(event.target.closest("a,button,form")){event.preventDefault();event.stopImmediatePropagation();}
