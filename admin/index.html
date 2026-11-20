@@ -9,9 +9,9 @@
   <meta name="color-scheme" content="dark">
   <title>Studio AMV | Administração visual</title>
   <link rel="icon" href="../assets/favicon.png">
-  <link rel="stylesheet" href="./studio.css?v=1">
+  <link rel="stylesheet" href="./studio.css?v=2">
   <script defer src="../assets/cms-runtime.js?v=1"></script>
-  <script defer src="./studio.js?v=1"></script>
+  <script defer src="./studio.js?v=2"></script>
 </head>
 <body>
   <div class="studio-shell">
@@ -45,6 +45,7 @@
           <div class="studio-tabs" role="tablist" aria-label="Tipo de edição">
             <button type="button" class="is-active" id="tab-pages" role="tab" aria-selected="true" aria-controls="pages-mode">Editar site</button>
             <button type="button" id="tab-projects" role="tab" aria-selected="false" aria-controls="projects-mode">Portfólio</button>
+            <button type="button" id="tab-team" role="tab" aria-selected="false" aria-controls="team-mode">Equipe</button>
           </div>
           <section id="pages-mode" class="studio-mode" role="tabpanel" aria-labelledby="tab-pages">
             <label for="page-select">Página para editar</label>
@@ -93,13 +94,47 @@
               <div class="studio-divider"></div>
               <label for="project-title">Nome do projeto *</label><input id="project-title" maxlength="130" required>
               <label for="project-category">Categoria</label><input id="project-category" maxlength="60" placeholder="Identidade visual, campanha...">
+              <label for="project-client">Cliente, empresa ou atividade (opcional)</label><input id="project-client" maxlength="110" placeholder="Projeto acadêmico / nome autorizado">
+              <label for="project-period">Período (opcional)</label><input id="project-period" maxlength="70" placeholder="Ex.: Novembro de 2026">
               <label for="project-description">Resumo</label><textarea id="project-description" maxlength="700" rows="3"></textarea>
-              <label for="project-details">Descrição completa</label><textarea id="project-details" maxlength="6000" rows="5" placeholder="Desafio, processo, resultados documentados..."></textarea>
+              <label for="project-details">Apresentação do projeto</label><textarea id="project-details" maxlength="6000" rows="4" placeholder="Contexto e proposta..."></textarea>
+              <label for="project-challenge">O desafio</label><textarea id="project-challenge" maxlength="3000" rows="3" placeholder="Problema ou necessidade abordada"></textarea>
+              <label for="project-approach">A estratégia / solução</label><textarea id="project-approach" maxlength="3000" rows="3" placeholder="Como a equipe trabalhou"></textarea>
+              <label for="project-results">Resultados e aprendizados</label><textarea id="project-results" maxlength="3000" rows="3" placeholder="Somente informações comprovadas; não invente métricas"></textarea>
               <label for="project-image">Imagem de capa</label><input id="project-image" type="file" accept="image/jpeg,image/png,image/webp">
               <img id="project-image-preview" class="studio-selected-image" alt="Prévia da capa do projeto" hidden>
-              <label for="project-alt">Descrição da imagem</label><input id="project-alt" maxlength="180">
+              <label for="project-alt">Descrição da capa</label><input id="project-alt" maxlength="180">
+              <div class="studio-divider"></div>
+              <div class="studio-section-heading"><h3>Galeria de imagens</h3><span>Fotos das entregas, bastidores e peças</span></div>
+              <label for="gallery-upload">Adicionar imagens à galeria</label>
+              <input type="file" id="gallery-upload" accept="image/jpeg,image/png,image/webp" multiple>
+              <div id="project-gallery-list" class="studio-editor-items"></div>
+              <div class="studio-divider"></div>
+              <div class="studio-section-heading"><h3>Etapas do projeto</h3><span>Passo a passo com descrição e imagem opcional</span></div>
+              <button type="button" class="studio-secondary studio-wide" id="add-project-step">+ Adicionar etapa</button>
+              <div id="project-steps-list" class="studio-editor-items"></div>
               <label class="studio-check"><input type="checkbox" id="project-published"> <span>Publicar este projeto no site</span></label>
               <div class="studio-project-actions"><button type="submit" class="studio-secondary">Salvar projeto no rascunho</button><button type="button" class="studio-danger" id="delete-project">Excluir</button></div>
+            </form>
+          </section>
+          <section id="team-mode" class="studio-mode" role="tabpanel" aria-labelledby="tab-team" hidden>
+            <p class="studio-kicker">Participantes</p>
+            <h2>Equipe e fotografias</h2>
+            <p class="studio-tip">Cadastre participantes por área, altere nomes, funções e imagens. Na V2, as áreas já possuem dez posições iniciais que você pode preencher. Só pessoas marcadas para publicar aparecem como membros confirmados.</p>
+            <label for="team-area">Selecionar área</label>
+            <select id="team-area"></select>
+            <div id="team-member-list" class="studio-project-list"></div>
+            <button type="button" class="studio-secondary studio-wide" id="add-team-member">+ Adicionar participante</button>
+            <form id="team-member-editor" hidden>
+              <div class="studio-divider"></div>
+              <label for="team-member-name">Nome do participante</label><input id="team-member-name" maxlength="100" placeholder="Nome completo ou preferido">
+              <label for="team-member-role">Função ou cargo</label><input id="team-member-role" maxlength="120" placeholder="Ex.: Pesquisa de mercado">
+              <label for="team-member-photo">Fotografia do participante</label><input type="file" id="team-member-photo" accept="image/jpeg,image/png,image/webp">
+              <img id="team-member-photo-preview" class="studio-selected-image" alt="Prévia da foto do participante" hidden>
+              <label for="team-member-alt">Descrição da fotografia</label><input id="team-member-alt" maxlength="180" placeholder="Retrato de...">
+              <label class="studio-check"><input type="checkbox" id="team-member-published"> <span>Exibir participante na página Equipe</span></label>
+              <p class="studio-tip">Publique somente com a autorização da pessoa retratada. O repositório é público.</p>
+              <div class="studio-project-actions"><button type="submit" class="studio-secondary">Salvar participante</button><button type="button" class="studio-danger" id="delete-team-member">Excluir</button></div>
             </form>
           </section>
         </aside>
@@ -117,7 +152,14 @@
             <h2>Do rascunho à publicação.</h2>
             <p>Use a coluna ao lado para criar e editar projetos. O botão <strong>Publicar alterações</strong> salva no GitHub e atualiza o portfólio público.</p>
             <div id="project-preview-cards" class="studio-project-preview-cards"></div>
+            <div id="project-case-preview" class="studio-case-preview"></div>
           </div>
+        <div id="team-dashboard" class="studio-team-dashboard" hidden>
+          <p class="studio-kicker">Sua equipe</p>
+          <h2>As pessoas por trás das conexões.</h2>
+          <p>Selecione uma área e um participante à esquerda, envie a fotografia e publique. O site substituirá as posições demonstrativas pelos integrantes confirmados.</p>
+          <div id="team-preview-cards" class="studio-team-preview-cards"></div>
+        </div>
         </div>
       </section>
     </main>

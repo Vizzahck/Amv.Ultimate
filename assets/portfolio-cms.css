@@ -1,16 +1,33 @@
-/* Portfólio dinâmico da AMV — usa tipografia/paleta existentes. */
+/* Portfólio AMV V2.1 — cards, galeria e etapas no estudo de caso. */
 .amv-cms-project-card{display:flex;flex-direction:column}
 .amv-cms-project-card .v2-case-body{flex:1;display:flex;flex-direction:column}
 .amv-cms-project-button{display:inline-flex;align-items:center;gap:8px;margin-top:auto;padding:18px 0 0;border:0;background:none;color:var(--brand);font:inherit;font-size:13px;font-weight:850;cursor:pointer;text-align:left}
 .amv-cms-project-button:hover{text-decoration:underline}
 .amv-cms-project-button:focus-visible{outline:2px solid var(--brand-orange);outline-offset:3px;border-radius:4px}
-.amv-cms-project-dialog{position:fixed;max-width:min(760px,calc(100vw - 32px));max-height:min(90dvh,960px);overflow:auto;margin:auto;padding:0;border-radius:23px;border:1px solid var(--border);color:var(--foreground);background:var(--background);box-shadow:0 30px 95px rgba(1,16,40,.3)}
+.amv-cms-cover-placeholder{display:grid;place-items:center;width:100%;height:100%;min-height:165px;font-weight:900;letter-spacing:.13em;font-size:12px;color:#e7f2ff;background:linear-gradient(120deg,#0a2948,#17618b)}
+.amv-cms-project-dialog{position:fixed;width:min(790px,calc(100vw - 26px));max-width:none;max-height:min(91dvh,1100px);overflow:auto;margin:auto;padding:0;border-radius:20px;border:1px solid var(--border);color:var(--foreground);background:var(--background);box-shadow:0 30px 95px rgba(1,16,40,.3)}
 .amv-cms-project-dialog::backdrop{background:rgba(2,15,33,.73);backdrop-filter:blur(7px)}
-.amv-cms-project-dialog-cover{display:block;width:100%;max-height:325px;object-fit:cover;background:var(--surface-blue)}
-.amv-cms-project-dialog-body{padding:clamp(21px,4vw,38px)}
-.amv-cms-project-dialog h2{margin:8px 0 14px;font-weight:900;letter-spacing:-.045em;font-size:clamp(26px,4vw,39px);color:var(--brand-deep)}
-.amv-cms-project-dialog p{margin:12px 0;color:var(--muted-foreground);line-height:1.75;white-space:pre-line;font-size:14px}
+.amv-cms-project-dialog-cover{display:block;width:100%;max-height:330px;object-fit:cover;background:var(--surface-blue)}
+.amv-cms-project-dialog-body{padding:clamp(21px,4vw,42px)}
+.amv-cms-project-dialog h2{margin:9px 0 18px;font-weight:900;letter-spacing:-.045em;font-size:clamp(27px,4vw,42px);color:var(--brand-deep);line-height:1.12}
+.amv-cms-project-dialog p{margin:12px 0;color:var(--muted-foreground);line-height:1.8;white-space:pre-line;font-size:14px}
 .amv-cms-project-dialog-tag{font-size:11px;color:var(--brand-orange);font-weight:900;letter-spacing:.11em;text-transform:uppercase}
-.amv-cms-project-dialog-close{position:sticky;float:right;top:12px;margin:12px 12px -52px auto;z-index:2;width:42px;height:42px;border:1px solid rgba(255,255,255,.2);border-radius:50%;background:#071e35;color:#fff;font-size:23px;cursor:pointer}
+.amv-cms-project-dialog-close{position:sticky;float:right;top:12px;margin:12px 12px -52px auto;z-index:2;width:43px;height:43px;border:1px solid rgba(255,255,255,.2);border-radius:50%;background:#071e35;color:#fff;font-size:23px;cursor:pointer}
 .amv-cms-project-dialog-close:focus-visible{outline:2px solid var(--brand-orange);outline-offset:2px}
-.amv-cms-project-collection-title{margin-bottom:12px;font-size:12px;color:var(--brand-orange);text-transform:uppercase;letter-spacing:.12em;font-weight:900}
+.amv-cms-case-meta{display:flex;gap:8px;flex-wrap:wrap;margin:0 0 19px}
+.amv-cms-case-meta>span{display:inline-block;border:1px solid var(--border);background:var(--surface-blue);padding:8px 11px;border-radius:99px;font-size:11px;color:var(--brand-deep);font-weight:750}
+.amv-cms-project-dialog .amv-cms-case-lead{font-size:clamp(15px,2vw,17px);line-height:1.8;color:var(--brand-deep);font-weight:700}
+.amv-cms-case-section{padding-top:22px;margin-top:23px;border-top:1px solid var(--border)}
+.amv-cms-case-section h3{color:var(--brand-deep);font-size:19px;font-weight:900;letter-spacing:-.035em;margin:0 0 12px}
+.amv-cms-case-steps{display:grid;gap:19px;padding:0;margin:14px 0 0;list-style:none}
+.amv-cms-case-steps li{display:grid;grid-template-columns:40px minmax(0,1fr);gap:15px;align-items:start}
+.amv-cms-step-number{font-size:13px;font-weight:900;color:var(--brand-orange);background:var(--surface-blue);border:1px solid var(--border);border-radius:9px;padding:10px;text-align:center}
+.amv-cms-step-body h4{font-size:15px;font-weight:900;color:var(--brand-deep);margin:7px 0 8px}
+.amv-cms-step-body p{margin:0 0 8px}
+.amv-cms-stage-image{width:100%;max-height:380px;object-fit:contain;background:var(--surface-blue);border-radius:12px;margin-top:11px}
+.amv-cms-gallery-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:13px}
+.amv-cms-gallery figure{border:1px solid var(--border);border-radius:11px;overflow:hidden;margin:0;background:var(--surface-blue)}
+.amv-cms-gallery img{display:block;width:100%;aspect-ratio:4/3;object-fit:cover}
+.amv-cms-gallery figcaption{padding:12px;color:var(--muted-foreground);font-size:12px;line-height:1.6}
+@media(max-width:580px){.amv-cms-gallery-grid{grid-template-columns:1fr}.amv-cms-project-dialog-body{padding:22px}.amv-cms-case-steps li{grid-template-columns:31px minmax(0,1fr);gap:10px}.amv-cms-step-number{padding:7px}}
+@media(prefers-reduced-motion:reduce){.amv-cms-project-dialog{scroll-behavior:auto}}

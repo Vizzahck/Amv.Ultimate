@@ -1,0 +1,113 @@
+{
+  "version": 1,
+  "areas": [
+    {
+      "id": "pesquisa-planejamento",
+      "title": "Pesquisa e Planejamento",
+      "description": "Pesquisa de mercado, análise de público e estratégias.",
+      "members": [
+        {
+          "id": "pesquisa-planejamento-1",
+          "name": "",
+          "role": "",
+          "image": "",
+          "alt": "",
+          "published": false
+        },
+        {
+          "id": "pesquisa-planejamento-2",
+          "name": "",
+          "role": "",
+          "image": "",
+          "alt": "",
+          "published": false
+        },
+        {
+          "id": "pesquisa-planejamento-3",
+          "name": "",
+          "role": "",
+          "image": "",
+          "alt": "",
+          "published": false
+        }
+      ]
+    },
+    {
+      "id": "criacao-comunicacao",
+      "title": "Criação e Comunicação",
+      "description": "Identidade visual, conteúdo e campanhas.",
+      "members": [
+        {
+          "id": "criacao-comunicacao-1",
+          "name": "",
+          "role": "",
+          "image": "",
+          "alt": "",
+          "published": false
+        },
+        {
+          "id": "criacao-comunicacao-2",
+          "name": "",
+          "role": "",
+          "image": "",
+          "alt": "",
+          "published": false
+        },
+        {
+          "id": "criacao-comunicacao-3",
+          "name": "",
+          "role": "",
+          "image": "",
+          "alt": "",
+          "published": false
+        }
+      ]
+    },
+    {
+      "id": "marketing-digital",
+      "title": "Marketing Digital",
+      "description": "Estratégias e presença digital.",
+      "members": [
+        {
+          "id": "marketing-digital-1",
+          "name": "",
+          "role": "",
+          "image": "",
+          "alt": "",
+          "published": false
+        },
+        {
+          "id": "marketing-digital-2",
+          "name": "",
+          "role": "",
+          "image": "",
+          "alt": "",
+          "published": false
+        }
+      ]
+    },
+    {
+      "id": "atendimento-vendas",
+      "title": "Atendimento e Vendas",
+      "description": "Relacionamento com o público e processos comerciais.",
+      "members": [
+        {
+          "id": "atendimento-vendas-1",
+          "name": "",
+          "role": "",
+          "image": "",
+          "alt": "",
+          "published": false
+        },
+        {
+          "id": "atendimento-vendas-2",
+          "name": "",
+          "role": "",
+          "image": "",
+          "alt": "",
+          "published": false
+        }
+      ]
+    }
+  ]
+}
