@@ -28,6 +28,7 @@
   };
   const card=(member)=>{
     const article=element("article","v2-member");
+    article.dataset.teamMemberId=String(member.id||"");
     const detail=element("div","v2-member-name");
     detail.append(element("h3","",String(member.name||"").slice(0,100)));
     if(typeof member.role==="string"&&member.role.trim()){

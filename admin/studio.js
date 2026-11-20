@@ -216,6 +216,35 @@
       }
     }
     doc.addEventListener("click",event=>{
+      if(activePage==="equipe.html"){
+        const memberCard=event.target.closest && event.target.closest(".v2-member");
+        if(memberCard){
+          event.preventDefault();
+          event.stopImmediatePropagation();
+          const section=memberCard.closest(".v2-area");
+          const areaId=section&&section.getAttribute("aria-labelledby");
+          const area=team.areas.find(a=>a.id===areaId);
+          let member=null;
+          if(area){
+            const memberId=memberCard.dataset.teamMemberId;
+            if(memberId)member=area.members.find(m=>m.id===memberId);
+            if(!member){
+              const siblings=Array.from(memberCard.parentElement.querySelectorAll(":scope > .v2-member"));
+              member=area.members[siblings.indexOf(memberCard)]||null;
+            }
+          }
+          if(area&&member){
+            teamAreaId=area.id;
+            switchMode("team");
+            showTeamMember(member);
+            renderTeamPreview();
+            setStatus("Participante selecionado. Altere nome, função e fotografia na coluna à esquerda.","success");
+          }else{
+            setStatus("Este cartão ainda não corresponde a um participante. Use a aba Equipe para adicioná-lo.");
+          }
+          return;
+        }
+      }
       if(event.target.closest("#amv-intro,#amv-assistant,.amv-search-backdrop"))return;
       const main=event.target.closest("main#conteudo,main.privacy-main,footer");
       if(!main)return;
