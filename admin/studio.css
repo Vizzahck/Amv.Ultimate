@@ -144,3 +144,16 @@ input[type=file]{display:block;font-size:11px;max-width:100%;margin:7px 0 13px}
 .studio-team-preview-cards article p{font-size:11px;color:#a8becd;margin:6px 0;line-height:1.5}
 .studio-team-preview-cards article small{font-size:10px;color:#f5a765}
 @media(max-width:510px){.studio-tabs button{font-size:11px;padding:6px 2px}.studio-media-controls{justify-content:flex-start}}
+
+
+/* Studio AMV V2 — editor de áreas totalmente gerenciáveis. */
+.studio-add-area{margin-top:11px}
+.studio-area-editor{margin-top:16px;padding:16px 14px;border:1px solid #334e64;border-radius:13px;background:linear-gradient(150deg,#10283a,#0b1e2e)}
+.studio-area-editor>label:first-child{margin-top:0}
+.studio-area-editor .studio-muted{margin-bottom:0}
+.studio-area-actions{display:flex;gap:7px;flex-wrap:wrap;margin-top:15px}
+.studio-area-actions button{font-size:11px;min-height:37px;padding:8px 9px}
+.studio-area-actions button:disabled{opacity:.38}
+.studio-area-editor .studio-danger{padding:9px 11px}
+.studio-team-empty{padding:25px 12px;color:#99b1c4;font-size:12px;line-height:1.6;text-align:center;border:1px dashed #375068;border-radius:12px;background:#0b2132}
+.studio-team-preview-cards .studio-team-empty{grid-column:1/-1}

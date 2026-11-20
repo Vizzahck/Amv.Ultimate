@@ -9,9 +9,9 @@
   <meta name="color-scheme" content="dark">
   <title>Studio AMV | Administração visual</title>
   <link rel="icon" href="../assets/favicon.png">
-  <link rel="stylesheet" href="./studio.css?v=2">
+  <link rel="stylesheet" href="./studio.css?v=3">
   <script defer src="../assets/cms-runtime.js?v=1"></script>
-  <script defer src="./studio.js?v=3"></script>
+  <script defer src="./studio.js?v=4"></script>
 </head>
 <body>
   <div class="studio-shell">
@@ -120,9 +120,24 @@
           <section id="team-mode" class="studio-mode" role="tabpanel" aria-labelledby="tab-team" hidden>
             <p class="studio-kicker">Participantes</p>
             <h2>Equipe e fotografias</h2>
-            <p class="studio-tip">Cadastre participantes por área, altere nomes, funções e imagens. Na V2, as áreas já possuem dez posições iniciais que você pode preencher. Só pessoas marcadas para publicar aparecem como membros confirmados.</p>
-            <label for="team-area">Selecionar área</label>
+            <p class="studio-tip">Crie quantas áreas precisar, renomeie as existentes, edite suas descrições e organize os participantes com fotos e funções. As alterações aparecem no site após clicar em <strong>Publicar alterações</strong>.</p>
+            <label for="team-area">Área selecionada</label>
             <select id="team-area"></select>
+            <button type="button" class="studio-secondary studio-wide studio-add-area" id="add-team-area">+ Criar nova área</button>
+            <div id="team-area-editor" class="studio-area-editor">
+              <label for="team-area-title">Nome da área</label>
+              <input id="team-area-title" type="text" maxlength="100" placeholder="Ex.: Design e Criatividade">
+              <label for="team-area-description">Descrição da área</label>
+              <textarea id="team-area-description" rows="3" maxlength="400" placeholder="Atividades e responsabilidades desta área"></textarea>
+              <div class="studio-area-actions">
+                <button type="button" class="studio-quiet" id="team-area-up">↑ Subir</button>
+                <button type="button" class="studio-quiet" id="team-area-down">↓ Descer</button>
+                <button type="button" class="studio-danger" id="delete-team-area">Excluir área</button>
+              </div>
+              <p class="studio-muted">A ordem acima será a ordem das áreas no site. Excluir uma área também exclui os participantes vinculados a ela.</p>
+            </div>
+            <div class="studio-divider"></div>
+            <h3>Participantes desta área</h3>
             <div id="team-member-list" class="studio-project-list"></div>
             <button type="button" class="studio-secondary studio-wide" id="add-team-member">+ Adicionar participante</button>
             <form id="team-member-editor" hidden>
@@ -157,7 +172,7 @@
         <div id="team-dashboard" class="studio-team-dashboard" hidden>
           <p class="studio-kicker">Sua equipe</p>
           <h2>As pessoas por trás das conexões.</h2>
-          <p>Selecione uma área e um participante à esquerda, envie a fotografia e publique. O site substituirá as posições demonstrativas pelos integrantes confirmados.</p>
+          <p>Na coluna ao lado, crie ou renomeie áreas, organize a ordem e gerencie os participantes. As prévias abaixo mostram as mudanças antes da publicação.</p>
           <div id="team-preview-cards" class="studio-team-preview-cards"></div>
         </div>
         </div>

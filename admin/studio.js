@@ -101,8 +101,7 @@
     const t=JSON.parse(decodeUTF8(teamFile.content));
     team={version:1,areas:Array.isArray(t.areas)?t.areas:[]};
     team.areas.forEach(area=>{if(!Array.isArray(area.members))area.members=[];});
-    if(!team.areas.length)throw new Error("Arquivo da equipe sem áreas cadastradas.");
-    teamAreaId=team.areas[0].id;
+    teamAreaId=team.areas.length?team.areas[0].id:null;
     teamMemberId=null;
     dirtyPages=false;dirtyProjects=false;dirtyTeam=false;
     for(const image of imagesPending.values())URL.revokeObjectURL(image.preview);
@@ -661,16 +660,105 @@
   const getArea=()=>team.areas.find(area=>area.id===teamAreaId)||null;
   const getMember=()=>{const area=getArea();return area&&area.members.find(p=>p.id===teamMemberId)||null;};
   function renderTeamAreas(){
-    const select=$("team-area");select.replaceChildren();
-    team.areas.forEach(area=>{
-      const option=document.createElement("option");option.value=area.id;option.textContent=area.title;select.append(option);
+    const select=$("team-area");
+    select.replaceChildren();
+    team.areas.forEach((area,index)=>{
+      const option=document.createElement("option");
+      option.value=area.id;
+      option.textContent=area.title.trim()||"Área sem nome "+(index+1);
+      select.append(option);
     });
-    if(!teamAreaId||!team.areas.some(a=>a.id===teamAreaId))teamAreaId=team.areas[0].id;
-    select.value=teamAreaId;
+    if(!team.areas.some(a=>a.id===teamAreaId)){
+      teamAreaId=team.areas.length?team.areas[0].id:null;
+      teamMemberId=null;
+      $("team-member-editor").hidden=true;
+    }
+    select.disabled=!team.areas.length;
+    if(teamAreaId)select.value=teamAreaId;
+    renderTeamAreaEditor();
   }
+  function renderTeamAreaEditor(){
+    const area=getArea(),visible=!!area;
+    $("team-area-editor").hidden=!visible;
+    $("add-team-member").disabled=!visible;
+    if(!area)return;
+    $("team-area-title").value=area.title||"";
+    $("team-area-description").value=area.description||"";
+    const index=team.areas.indexOf(area);
+    $("team-area-up").disabled=index<=0;
+    $("team-area-down").disabled=index>=team.areas.length-1;
+  }
+  function changeAreaOrder(direction){
+    const area=getArea();if(!area)return;
+    const index=team.areas.indexOf(area),next=index+direction;
+    if(next<0||next>=team.areas.length)return;
+    [team.areas[index],team.areas[next]]=[team.areas[next],team.areas[index]];
+    changed("team");
+    renderTeamAreas();
+    renderTeamPreview();
+  }
+  $("add-team-area").addEventListener("click",()=>{
+    if(team.areas.length>=60){
+      setStatus("Limite de 60 áreas. Exclua uma área desnecessária antes de adicionar.","error");
+      return;
+    }
+    const area={id:"area-"+freshId(),title:"Nova área",description:"",members:[]};
+    team.areas.push(area);
+    teamAreaId=area.id;teamMemberId=null;
+    $("team-member-editor").hidden=true;
+    changed("team");
+    renderTeamAreas();renderTeamList();renderTeamPreview();
+    $("team-area-title").focus();
+    $("team-area-title").select();
+    setStatus("Área criada! Dê um nome e clique em Publicar alterações quando estiver pronto.");
+  });
+  $("team-area-title").addEventListener("input",()=>{
+    const area=getArea();if(!area)return;
+    area.title=$("team-area-title").value.slice(0,100);
+    const option=$("team-area").selectedOptions[0];
+    if(option)option.textContent=area.title.trim()||"Área sem nome";
+    changed("team");renderTeamPreview();
+  });
+  $("team-area-description").addEventListener("input",()=>{
+    const area=getArea();if(!area)return;
+    area.description=$("team-area-description").value.slice(0,400);
+    changed("team");renderTeamPreview();
+  });
+  $("team-area-up").addEventListener("click",()=>changeAreaOrder(-1));
+  $("team-area-down").addEventListener("click",()=>changeAreaOrder(1));
+  $("delete-team-area").addEventListener("click",()=>{
+    const area=getArea();if(!area)return;
+    const count=area.members.length;
+    const warning="Excluir a área “"+area.title+"” e "+count+
+      " participante(s) vinculado(s)? Essa exclusão só aparece no site quando você publicar.";
+    if(!confirm(warning))return;
+    for(const member of area.members)removePending(pendingKey("team",area.id,member.id));
+    const index=team.areas.indexOf(area);
+    team.areas.splice(index,1);
+    const newIndex=Math.min(index,team.areas.length-1);
+    teamAreaId=newIndex>=0?team.areas[newIndex].id:null;
+    teamMemberId=null;
+    $("team-member-editor").hidden=true;
+    changed("team");
+    renderTeamAreas();renderTeamList();renderTeamPreview();
+  });
   function renderTeamList(){
     const host=$("team-member-list");host.replaceChildren();
-    const area=getArea();if(!area)return;
+    const area=getArea();
+    if(!area){
+      const note=document.createElement("p");
+      note.className="studio-team-empty";
+      note.textContent="Nenhuma área cadastrada. Crie uma área para adicionar participantes.";
+      host.append(note);
+      return;
+    }
+    if(!area.members.length){
+      const note=document.createElement("p");
+      note.className="studio-team-empty";
+      note.textContent="Ainda não há participantes nesta área.";
+      host.append(note);
+      return;
+    }
     area.members.forEach((member,index)=>{
       const button=document.createElement("button");button.type="button";
       if(member.id===teamMemberId)button.className="is-active";
@@ -699,9 +787,26 @@
   }
   function renderTeamPreview(){
     const host=$("team-preview-cards");host.replaceChildren();
-    const area=getArea();if(!area)return;
+    const area=getArea();
     const title=$("team-dashboard").querySelector("h2");
-    if(title)title.textContent=area.title;
+    if(!area){
+      if(title)title.textContent="Nenhuma área cadastrada";
+      const note=document.createElement("p");
+      note.className="studio-team-empty";
+      note.textContent="Crie uma área na coluna à esquerda para começar.";
+      host.append(note);
+      return;
+    }
+    if(title)title.textContent=area.title.trim()||"Área sem nome";
+    const description=$("team-dashboard").querySelector("p:not(.studio-kicker)");
+    if(description)description.textContent=area.description.trim()||"Preencha a descrição da área para apresentá-la no site.";
+    if(!area.members.length){
+      const note=document.createElement("p");
+      note.className="studio-team-empty";
+      note.textContent="Esta área ainda não possui participantes. Use o botão Adicionar participante.";
+      host.append(note);
+      return;
+    }
     for(const member of area.members){
       const card=document.createElement("article");
       const pending=imagesPending.get(pendingKey("team",area.id,member.id));
@@ -799,6 +904,9 @@
     const invalidMember=team.areas.some(area=>(area.members||[]).some(member=>
       member.published&&!String(member.name||"").trim()));
     if(invalidMember){setStatus("Para publicar participantes, preencha o nome de cada pessoa marcada para exibição.","error");return;}
+    if(team.areas.some(a=>!String(a.title||"").trim())){
+      setStatus("Dê um nome a todas as áreas antes de publicar.","error");return;
+    }
     busy=true;updatePublish();
     try{
       // Primeiro as fotos, depois os arquivos JSON que fazem referência a elas.
