@@ -183,3 +183,19 @@ input[type=file]{display:block;font-size:11px;max-width:100%;margin:7px 0 13px}
 .studio-publication-status[data-status=error]{background:#48282b;color:#ffc7c6}
 .studio-preview-shell{position:relative}
 @media(max-width:510px){.studio-brand-editor-body{padding:2px 11px 14px}.studio-toolbar-actions{flex-wrap:wrap}.studio-toolbar-actions button{min-width:135px}}
+
+/* Studio AMV V2 — edição de links, redes sociais e logos extras. */
+.studio-tabs{grid-template-columns:repeat(2,minmax(0,1fr));gap:6px}
+.studio-tabs button{min-width:0;font-size:11px}
+#links-mode h3{font-size:15px;color:#f0f7fd;margin:4px 0 9px}
+#links-mode .studio-muted{overflow-wrap:anywhere}
+#links-mode input{font-size:12px;line-height:1.5}
+#links-mode input:focus-visible{border-color:var(--orange)}
+#links-mode .studio-media-item{background:#0e2538;overflow:hidden;word-break:break-word}
+#links-mode .studio-media-item>label{display:block;margin:10px 0}
+#links-mode .studio-media-item input[type=file]{font-size:11px;max-width:100%}
+#links-mode .studio-media-item .studio-check{margin:13px 0!important}
+#links-mode .studio-section-heading{margin-bottom:10px}
+#links-mode .studio-section-heading h3{margin:0}
+#links-mode .studio-selected-image{max-width:100%;height:115px;object-fit:contain;background:repeating-conic-gradient(#213c51 0 25%,#172c3c 0 50%) 50%/15px 15px}
+@media(max-width:510px){.studio-tabs{gap:4px}.studio-tabs button{font-size:10px;padding:7px 3px}}

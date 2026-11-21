@@ -12,18 +12,19 @@
   const textField=$("text-value"), imageAlt=$("image-alt");
   const projectList=$("project-list");
   const imagesPending=new Map();
-  let token="",pages={version:1,pages:{}},portfolio={version:1,projects:[]},team={version:1,areas:[]},brands={version:1,slots:{}};
-  let activePage="index.html",selected=null,projectId=null,teamMemberId=null,teamAreaId=null,dirtyPages=false,dirtyProjects=false,dirtyTeam=false,dirtyBrands=false,busy=false;
+  let token="",pages={version:1,pages:{}},portfolio={version:1,projects:[]},team={version:1,areas:[]},brands={version:1,slots:{}},links={version:1,...structuredClone(window.AMVLinks.defaults)};
+  let activePage="index.html",selected=null,projectId=null,teamMemberId=null,teamAreaId=null,dirtyPages=false,dirtyProjects=false,dirtyTeam=false,dirtyBrands=false,dirtyLinks=false,busy=false,currentMode="pages";
   let brandSlot="header",brandVariant="light",gridOn=false,snapOn=false,gridSize=20,draggingBrand=null;
   let lastSavedFiles=[];
   const CMS=window.AMVCMS;
   const BRAND=window.AMVBrand;
-  if(!CMS||!BRAND){setStatus("Editor indisponível: recarregue esta página.","error");return;}
+  const LINKS=window.AMVLinks;
+  if(!CMS||!BRAND||!LINKS){setStatus("Editor indisponível: recarregue esta página.","error");return;}
 
   function setStatus(message,type="info"){
     status.textContent=message;status.dataset.type=type;
   }
-  function hasChanges(){return dirtyPages||dirtyProjects||dirtyTeam||dirtyBrands||imagesPending.size>0;}
+  function hasChanges(){return dirtyPages||dirtyProjects||dirtyTeam||dirtyBrands||dirtyLinks||imagesPending.size>0;}
   function updatePublish(){
     const button=$("publish");
     button.disabled=busy||!hasChanges();
@@ -33,6 +34,7 @@
     if(type==="projects")dirtyProjects=true;
     else if(type==="team")dirtyTeam=true;
     else if(type==="brand")dirtyBrands=true;
+    else if(type==="links")dirtyLinks=true;
     else dirtyPages=true;
     updatePublish();
     $("publish-check").hidden=true;
@@ -94,11 +96,12 @@
     return writeFile(path,bytes,description);
   }
   async function loadData(){
-    const [pageFile,portfolioFile,teamFile,brandFile]=await Promise.all([
+    const [pageFile,portfolioFile,teamFile,brandFile,linksFile]=await Promise.all([
       readFile("assets/content-overrides.json"),
       readFile("assets/portfolio-items.json"),
       readFile("assets/team-items.json"),
-      readFile("assets/brand-overrides.json")
+      readFile("assets/brand-overrides.json"),
+      readFile("assets/links-overrides.json")
     ]);
     const p=JSON.parse(decodeUTF8(pageFile.content));
     const q=JSON.parse(decodeUTF8(portfolioFile.content));
@@ -108,10 +111,18 @@
     team={version:1,areas:Array.isArray(t.areas)?t.areas:[]};
     const b=JSON.parse(decodeUTF8(brandFile.content));
     brands={version:1,slots:b&&b.slots&&typeof b.slots==="object"?b.slots:{}};
+    const savedLinks=JSON.parse(decodeUTF8(linksFile.content));
+    links={
+      version:1,
+      footerLinks:{...LINKS.defaults.footerLinks,...(savedLinks.footerLinks||{})},
+      contacts:{...LINKS.defaults.contacts,...(savedLinks.contacts||{})},
+      footerImages:Array.isArray(savedLinks.footerImages)?savedLinks.footerImages:[],
+      extraContacts:Array.isArray(savedLinks.extraContacts)?savedLinks.extraContacts:[]
+    };
     team.areas.forEach(area=>{if(!Array.isArray(area.members))area.members=[];});
     teamAreaId=team.areas.length?team.areas[0].id:null;
     teamMemberId=null;
-    dirtyPages=false;dirtyProjects=false;dirtyTeam=false;dirtyBrands=false;
+    dirtyPages=false;dirtyProjects=false;dirtyTeam=false;dirtyBrands=false;dirtyLinks=false;
     lastSavedFiles=[];
     for(const image of imagesPending.values())URL.revokeObjectURL(image.preview);
     imagesPending.clear();
@@ -139,7 +150,7 @@
       frame.src="../"+activePage+"?cmsPreview=1";
       renderProjectList();renderProjectPreview();
       renderTeamAreas();renderTeamList();renderTeamPreview();
-      renderBrandEditor();updatePublish();
+      renderBrandEditor();renderLinksEditor();updatePublish();
     }catch(err){
       token="";
       setStatus(err.message,"error");
@@ -152,7 +163,7 @@
     login.hidden=false;workspace.hidden=true;$("disconnect").hidden=true;
     clearSelection();
     for(const img of imagesPending.values())URL.revokeObjectURL(img.preview);
-    imagesPending.clear();dirtyPages=false;dirtyProjects=false;dirtyTeam=false;dirtyBrands=false;
+    imagesPending.clear();dirtyPages=false;dirtyProjects=false;dirtyTeam=false;dirtyBrands=false;dirtyLinks=false;
     $("publish-check").hidden=true;
     setStatus("Desconectado. O token não foi salvo.");
     updatePublish();
@@ -476,6 +487,7 @@
     // A prévia mostra os dados do GitHub e todas as mudanças não publicadas.
     CMS.applyToDocument(doc,pages,activePage);
     BRAND.applyToDocument(doc,brands);
+    applyLinksPreview();
     installBrandGrid(doc);
     installBrandDrag(doc);
     for(const item of imagesPending.values()){
@@ -485,6 +497,23 @@
       }
     }
     doc.addEventListener("click",event=>{
+      if(currentMode==="links"){
+        const link=event.target.closest&&event.target.closest("a");
+        if(link){
+          event.preventDefault();event.stopImmediatePropagation();
+          let field=null;
+          if(link.closest(".amv-footer-partner-link"))field="link-footer-senac";
+          else if(link.closest(".amv-footer-brand-row>a"))field="link-footer-amv";
+          else if(link.closest(".amv-footer-developer"))field="link-footer-developer";
+          else if(link.dataset.amvContact==="instagram")field="link-contact-instagram";
+          else if(link.dataset.amvContact==="whatsapp")field="link-contact-whatsapp";
+          else if(link.dataset.amvContact==="email")field="link-contact-email";
+          else if(link.dataset.amvContact==="maps")field="link-contact-maps";
+          if(field)$(field).focus();
+          else setStatus("Edite o link correspondente na coluna à esquerda.");
+          return;
+        }
+      }
       const chosenBrand=BRAND.locate(doc,event.target);
       if(chosenBrand){
         event.preventDefault();
@@ -1159,31 +1188,243 @@
     changed("team");renderTeamList();renderTeamPreview();
   });
 
+  /* Links e rodape: campos existentes, imagens extras e redes configuraveis. */
+  function linksPreviewImages(){
+    const images=new Map();
+    for(const pending of imagesPending.values()){
+      if(pending.kind==="footerImage")images.set(pending.id,pending.preview);
+    }
+    return images;
+  }
+  function applyLinksPreview(){
+    const doc=frame.contentDocument;
+    if(!doc||!doc.body)return;
+    LINKS.applyToDocument(doc,links,{editing:true,previewImages:linksPreviewImages()});
+  }
+  function linksChanged(){
+    changed("links");
+    applyLinksPreview();
+  }
+  const linkFields={
+    "link-footer-amv":["footerLinks","amv"],
+    "link-footer-senac":["footerLinks","senac"],
+    "link-footer-developer":["footerLinks","developer"],
+    "link-contact-whatsapp":["contacts","whatsapp"],
+    "link-contact-email":["contacts","email"],
+    "link-contact-maps":["contacts","maps"],
+    "link-contact-instagram":["contacts","instagram"]
+  };
+  for(const [id,[category,key]] of Object.entries(linkFields)){
+    $(id).addEventListener("input",event=>{
+      links[category][key]=event.target.value.trim().slice(0,1000);
+      linksChanged();
+    });
+  }
+  $("link-contact-instagram").addEventListener("blur",event=>{
+    const normalized=LINKS.normalizeInstagram(event.target.value);
+    if(normalized!==event.target.value.trim()){
+      links.contacts.instagram=normalized;
+      event.target.value=normalized;
+      linksChanged();
+    }
+  });
+  function renderLinksEditor(){
+    for(const [id,[category,key]] of Object.entries(linkFields)){
+      $(id).value=links[category][key]||"";
+    }
+    renderFooterImages();
+    renderExtraLinks();
+    applyLinksPreview();
+  }
+  function linkInput(parent,label,value,callback){
+    const wrap=document.createElement("label");
+    wrap.textContent=label;
+    const field=document.createElement("input");
+    field.type="text";
+    field.maxLength=1000;
+    field.placeholder="https://...";
+    field.spellcheck=false;
+    field.value=value||"";
+    field.addEventListener("input",()=>callback(field.value.trim()));
+    wrap.append(field);parent.append(wrap);
+    return field;
+  }
+  function togglePublished(parent,checked,callback){
+    const label=document.createElement("label");label.className="studio-check";
+    const input=document.createElement("input");input.type="checkbox";input.checked=!!checked;
+    const text=document.createElement("span");text.textContent="Exibir no site público";
+    input.addEventListener("change",()=>callback(input.checked));
+    label.append(input,text);parent.append(label);
+  }
+  function moveItem(list,index,to){
+    if(to<0||to>=list.length)return false;
+    const entry=list.splice(index,1)[0];
+    list.splice(to,0,entry);
+    return true;
+  }
+  function renderFooterImages(){
+    const host=$("footer-image-list");
+    host.replaceChildren();
+    if(!links.footerImages.length){
+      const blank=document.createElement("p");blank.className="studio-team-empty";
+      blank.textContent="Ainda não há imagens adicionais. As marcas AMV, SENAC e VZ continuam acima.";
+      host.append(blank);
+    }
+    links.footerImages.forEach((item,index)=>{
+      const card=document.createElement("article");card.className="studio-media-item";
+      const title=document.createElement("h4");title.textContent="Imagem adicional "+(index+1);
+      card.append(title);
+      const pending=imagesPending.get("footerImage|"+item.id);
+      const src=pending?pending.preview:item.image?"../"+item.image:"";
+      if(src){
+        const preview=document.createElement("img");
+        preview.className="studio-selected-image";
+        preview.src=src;preview.alt=item.alt||item.name||"Imagem adicional";
+        card.append(preview);
+      }
+      field(card,"Nome da marca",item.name||"",value=>{
+        item.name=value.slice(0,100);linksChanged();
+      },{limit:100});
+      const input=document.createElement("input");
+      input.type="file";input.accept="image/jpeg,image/png,image/webp";
+      const label=document.createElement("label");
+      label.textContent=src?"Trocar imagem":"Selecionar imagem";
+      label.append(input);card.append(label);
+      input.addEventListener("change",async()=>{
+        const file=input.files&&input.files[0];if(!file)return;
+        try{
+          const blob=await optimizeImage(file);
+          if(!links.footerImages.some(x=>x.id===item.id))return;
+          addPending("footerImage|"+item.id,{kind:"footerImage",id:item.id,blob});
+          linksChanged();renderFooterImages();
+        }catch(error){setStatus("Não foi possível adicionar a imagem: "+error.message,"error");}
+      });
+      linkInput(card,"Link ao clicar nesta imagem",item.href||"",value=>{
+        item.href=value.slice(0,1000);linksChanged();
+      });
+      field(card,"Descrição acessível",item.alt||"",value=>{
+        item.alt=value.slice(0,180);linksChanged();
+      },{limit:180});
+      togglePublished(card,item.published,value=>{
+        item.published=value;linksChanged();
+      });
+      const controls=document.createElement("div");controls.className="studio-media-controls";
+      function button(label,cb,disabled=false,remove=false){
+        const b=document.createElement("button");b.type="button";b.textContent=label;b.disabled=disabled;
+        if(remove)b.className="delete";
+        b.addEventListener("click",cb);controls.append(b);
+      }
+      button("↑",()=>{moveItem(links.footerImages,index,index-1);linksChanged();renderFooterImages();},index===0);
+      button("↓",()=>{moveItem(links.footerImages,index,index+1);linksChanged();renderFooterImages();},index===links.footerImages.length-1);
+      button("Remover",()=>{
+        if(!confirm("Remover esta imagem do rodapé ao publicar?"))return;
+        removePending("footerImage|"+item.id);
+        links.footerImages.splice(index,1);
+        linksChanged();renderFooterImages();
+      },false,true);
+      card.append(controls);host.append(card);
+    });
+  }
+  $("add-footer-image").addEventListener("click",()=>{
+    if(links.footerImages.length>=35){
+      setStatus("Limite de 35 imagens adicionais no rodapé.","error");return;
+    }
+    links.footerImages.push({
+      id:"logo-"+freshId(),name:"Nova marca",image:"",alt:"",href:"",published:false
+    });
+    linksChanged();renderFooterImages();
+    $("footer-image-list").lastElementChild.scrollIntoView({block:"nearest",behavior:"smooth"});
+  });
+  function renderExtraLinks(){
+    const host=$("extra-link-list");host.replaceChildren();
+    if(!links.extraContacts.length){
+      const p=document.createElement("p");p.className="studio-team-empty";
+      p.textContent="Nenhum link adicional cadastrado.";
+      host.append(p);
+    }
+    links.extraContacts.forEach((item,index)=>{
+      const card=document.createElement("article");card.className="studio-media-item";
+      const title=document.createElement("h4");
+      title.textContent="Contato adicional "+(index+1);card.append(title);
+      field(card,"Nome exibido",item.label||"",value=>{
+        item.label=value.slice(0,65);linksChanged();
+      },{limit:65});
+      linkInput(card,"Endereço de destino",item.href||"",value=>{
+        item.href=value.slice(0,1000);linksChanged();
+      });
+      field(card,"Descrição curta",item.description||"",value=>{
+        item.description=value.slice(0,90);linksChanged();
+      },{limit:90});
+      togglePublished(card,item.published,value=>{
+        item.published=value;linksChanged();
+      });
+      mediaControls(card,()=>{
+        moveItem(links.extraContacts,index,index-1);linksChanged();renderExtraLinks();
+      },()=>{
+        moveItem(links.extraContacts,index,index+1);linksChanged();renderExtraLinks();
+      },()=>{
+        if(!confirm("Remover este link extra?"))return;
+        links.extraContacts.splice(index,1);linksChanged();renderExtraLinks();
+      },index===0,index===links.extraContacts.length-1);
+      host.append(card);
+    });
+  }
+  $("add-extra-link").addEventListener("click",()=>{
+    if(links.extraContacts.length>=35){
+      setStatus("Limite de 35 contatos adicionais.","error");return;
+    }
+    links.extraContacts.push({id:"contato-"+freshId(),label:"Novo link",href:"",description:"",published:false});
+    linksChanged();renderExtraLinks();
+  });
+  $("links-preview-footer").addEventListener("click",()=>{
+    const win=frame.contentWindow;
+    if(win&&win.document&&win.document.body){
+      win.scrollTo({top:win.document.documentElement.scrollHeight,behavior:"smooth"});
+    }
+  });
+
   function switchMode(mode){
-    const isPages=mode==="pages",isProjects=mode==="projects",isTeam=mode==="team";
+    const isPages=mode==="pages",isProjects=mode==="projects",
+          isTeam=mode==="team",isLinks=mode==="links";
+    currentMode=mode;
     $("pages-mode").hidden=!isPages;
     $("projects-mode").hidden=!isProjects;
     $("team-mode").hidden=!isTeam;
-    $("preview-shell").hidden=!isPages;
+    $("links-mode").hidden=!isLinks;
+    $("preview-shell").hidden=!(isPages||isLinks);
     $("projects-dashboard").hidden=!isProjects;
     $("team-dashboard").hidden=!isTeam;
-    for(const [id,active]of [["tab-pages",isPages],["tab-projects",isProjects],["tab-team",isTeam]]){
+    for(const [id,active]of [
+      ["tab-pages",isPages],["tab-projects",isProjects],
+      ["tab-team",isTeam],["tab-links",isLinks]
+    ]){
       $(id).classList.toggle("is-active",active);
       $(id).setAttribute("aria-selected",String(active));
     }
     if(isTeam){renderTeamAreas();renderTeamList();renderTeamPreview();}
     if(isProjects){renderProjectList();renderProjectPreview();}
+    if(isLinks){
+      renderLinksEditor();
+      if(activePage!=="index.html"){
+        activePage="index.html";select.value="index.html";
+        frame.src="../index.html?cmsPreview="+Date.now();
+      }else{
+        applyLinksPreview();
+      }
+    }
   }
   $("tab-pages").addEventListener("click",()=>switchMode("pages"));
   $("tab-projects").addEventListener("click",()=>switchMode("projects"));
   $("tab-team").addEventListener("click",()=>switchMode("team"));
+  $("tab-links").addEventListener("click",()=>switchMode("links"));
 
   /* Verificação real da persistência: primeiro GitHub, depois GitHub Pages. */
   const publishedData={
     "assets/content-overrides.json":()=>pages,
     "assets/portfolio-items.json":()=>portfolio,
     "assets/team-items.json":()=>team,
-    "assets/brand-overrides.json":()=>brands
+    "assets/brand-overrides.json":()=>brands,
+    "assets/links-overrides.json":()=>links
   };
   function publicationMessage(message,kind="warning"){
     const label=$("publish-check");
@@ -1241,6 +1482,30 @@
     if(team.areas.some(a=>!String(a.title||"").trim())){
       setStatus("Dê um nome a todas as áreas antes de publicar.","error");return;
     }
+    links.contacts.instagram=LINKS.normalizeInstagram(links.contacts.instagram);
+    for(const [key,value]of Object.entries({...links.footerLinks,...links.contacts})){
+      if(value&&!LINKS.normalizeUrl(value)){
+        setStatus("Endereço inválido em "+key+". Informe um link HTTPS, e-mail, telefone ou página interna.","error");
+        switchMode("links");return;
+      }
+    }
+    for(const item of links.footerImages){
+      if(!item.published)continue;
+      if(!String(item.name||"").trim()||!LINKS.normalizeUrl(item.href)){
+        setStatus("Complete o nome e um link HTTPS válido de cada imagem publicada no rodapé.","error");
+        switchMode("links");return;
+      }
+      if(!LINKS.safeImage(item.image)&&!imagesPending.has("footerImage|"+item.id)){
+        setStatus("Envie a imagem antes de publicar a marca "+item.name+".","error");
+        switchMode("links");return;
+      }
+    }
+    for(const item of links.extraContacts){
+      if(item.published&&(!String(item.label||"").trim()||!LINKS.normalizeUrl(item.href))){
+        setStatus("Complete o nome e link válido de cada contato adicional publicado.","error");
+        switchMode("links");return;
+      }
+    }
     busy=true;updatePublish();
     try{
       // Primeiro as fotos, depois os arquivos JSON que fazem referência a elas.
@@ -1269,6 +1534,9 @@
         }else if(pending.kind==="brand"){
           const item=slotImage(pending.slot,pending.variant,true);
           if(item){item.src=path;dirtyBrands=true;}
+        }else if(pending.kind==="footerImage"){
+          const item=links.footerImages.find(entry=>entry.id===pending.id);
+          if(item){item.image=path;dirtyLinks=true;}
         }
         // Sucesso no arquivo: não repetir a transferência na próxima tentativa.
         URL.revokeObjectURL(pending.preview);
@@ -1299,11 +1567,17 @@
         await verifyGitHubSave("assets/brand-overrides.json",brands);
         dirtyBrands=false;saved.push("assets/brand-overrides.json");
       }
+      if(dirtyLinks){
+        setStatus("Publicando e verificando links do rodapé e contatos...");
+        await writeJSON("assets/links-overrides.json",links,"cms: atualizar links, contatos e imagens do rodapé");
+        await verifyGitHubSave("assets/links-overrides.json",links);
+        dirtyLinks=false;saved.push("assets/links-overrides.json");
+      }
       lastSavedFiles=saved;
       setStatus("Arquivos gravados e conferidos no GitHub. A publicação pelo Pages pode levar alguns instantes.","success");
       publicationMessage("✓ Salvo no GitHub. O site público pode estar atualizando. Clique em Verificar site ↻ para confirmar a publicação.","warning");
       renderProjectList();renderProjectPreview();renderGallery();renderSteps();
-      renderTeamList();renderTeamPreview();renderBrandEditor();
+      renderTeamList();renderTeamPreview();renderBrandEditor();renderLinksEditor();
       clearSelection();
       frame.src="../"+activePage+"?cmsPreview="+Date.now();
     }catch(err){

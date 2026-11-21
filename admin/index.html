@@ -9,10 +9,11 @@
   <meta name="color-scheme" content="dark">
   <title>Studio AMV | Administração visual</title>
   <link rel="icon" href="../assets/favicon.png">
-  <link rel="stylesheet" href="./studio.css?v=4">
+  <link rel="stylesheet" href="./studio.css?v=5">
   <script defer src="../assets/cms-runtime.js?v=2"></script>
   <script defer src="../assets/brand-runtime.js?v=1"></script>
-  <script defer src="./studio.js?v=5"></script>
+  <script defer src="../assets/links-runtime.js?v=1"></script>
+  <script defer src="./studio.js?v=6"></script>
 </head>
 <body>
   <div class="studio-shell">
@@ -47,6 +48,7 @@
             <button type="button" class="is-active" id="tab-pages" role="tab" aria-selected="true" aria-controls="pages-mode">Editar site</button>
             <button type="button" id="tab-projects" role="tab" aria-selected="false" aria-controls="projects-mode">Portfólio</button>
             <button type="button" id="tab-team" role="tab" aria-selected="false" aria-controls="team-mode">Equipe</button>
+            <button type="button" id="tab-links" role="tab" aria-selected="false" aria-controls="links-mode">Links e rodapé</button>
           </div>
           <section id="pages-mode" class="studio-mode" role="tabpanel" aria-labelledby="tab-pages">
             <label for="page-select">Página para editar</label>
@@ -201,6 +203,41 @@
               <p class="studio-tip">Publique somente com a autorização da pessoa retratada. O repositório é público.</p>
               <div class="studio-project-actions"><button type="submit" class="studio-secondary">Salvar participante</button><button type="button" class="studio-danger" id="delete-team-member">Excluir</button></div>
             </form>
+          </section>
+          <section id="links-mode" class="studio-mode" role="tabpanel" aria-labelledby="tab-links" hidden>
+            <p class="studio-kicker">Links e rodapé</p>
+            <h2>Onde cada clique leva.</h2>
+            <p class="studio-tip">Personalize os links das marcas, contatos e redes sociais. Adicione logos com seus respectivos destinos, sem reprogramar.</p>
+            <button type="button" id="links-preview-footer" class="studio-secondary studio-wide">Ver rodapé na prévia ↓</button>
+            <div class="studio-divider"></div>
+            <h3>Links das imagens existentes</h3>
+            <label for="link-footer-amv">Logo AMV no rodapé</label>
+            <input type="url" id="link-footer-amv" placeholder="index.html ou https://..." spellcheck="false">
+            <label for="link-footer-senac">Logo SENAC</label>
+            <input type="url" id="link-footer-senac" placeholder="https://ma.senac.br/" spellcheck="false">
+            <label for="link-footer-developer">Assinatura VZ Sites Dev</label>
+            <input type="url" id="link-footer-developer" placeholder="https://..." spellcheck="false">
+            <p class="studio-muted">O arquivo da imagem continua editável em Identidade visual. Aqui você altera o destino do clique.</p>
+            <div class="studio-divider"></div>
+            <h3>Contatos e redes sociais</h3>
+            <label for="link-contact-whatsapp">WhatsApp</label>
+            <input type="url" id="link-contact-whatsapp" placeholder="https://wa.me/55..." spellcheck="false">
+            <label for="link-contact-email">E-mail ou Gmail</label>
+            <input type="url" id="link-contact-email" placeholder="mailto:... ou https://mail.google.com/..." spellcheck="false">
+            <label for="link-contact-maps">Google Maps</label>
+            <input type="url" id="link-contact-maps" placeholder="https://maps.app.goo.gl/..." spellcheck="false">
+            <label for="link-contact-instagram">Instagram</label>
+            <input type="text" id="link-contact-instagram" placeholder="@perfil ou https://instagram.com/perfil" spellcheck="false" autocomplete="off">
+            <p class="studio-muted">Ao preencher o Instagram, ele aparecerá nos contatos e no rodapé. Você pode informar @perfil ou o endereço completo.</p>
+            <div class="studio-divider"></div>
+            <div class="studio-section-heading"><h3>Outras imagens no rodapé</h3><span>Uma imagem, um link</span></div>
+            <button id="add-footer-image" type="button" class="studio-secondary studio-wide">+ Adicionar imagem com link</button>
+            <div id="footer-image-list" class="studio-editor-items"></div>
+            <div class="studio-divider"></div>
+            <div class="studio-section-heading"><h3>Mais links de contato</h3><span>Redes, sites ou outros canais</span></div>
+            <button id="add-extra-link" type="button" class="studio-secondary studio-wide">+ Adicionar novo link</button>
+            <div id="extra-link-list" class="studio-editor-items"></div>
+            <p class="studio-tip">Somente links publicados aparecem aos visitantes. Links externos abrem em uma nova aba e endereços inseguros são bloqueados.</p>
           </section>
         </aside>
 

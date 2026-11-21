@@ -1,0 +1,50 @@
+/* Rodapé e canais externos configurados pelo Studio AMV V2.
+   Somente itens publicados; todos os links usam rel=noopener noreferrer. */
+footer.bg-brand-panel .amv-footer-brand-row .amv-footer-developer > a{
+ display:flex;align-items:center;justify-content:center;width:100%;height:auto;min-width:0;
+ text-decoration:none;border-radius:6px;outline-offset:3px;
+}
+footer.bg-brand-panel .amv-footer-brand-row .amv-footer-extra-logo{
+ display:flex;align-items:center;justify-content:center;flex:0 1 120px;
+ min-width:70px;max-width:150px;min-height:50px;
+}
+footer.bg-brand-panel .amv-footer-brand-row .amv-footer-extra-link{
+ display:flex;align-items:center;justify-content:center;min-width:0;
+ width:100%;height:auto;max-width:100%;border-radius:6px;text-decoration:none;
+ background:transparent;outline-offset:4px;transition:opacity .2s ease,transform .2s ease;
+}
+footer.bg-brand-panel .amv-footer-brand-row .amv-footer-extra-link img{
+ width:100%;height:auto;max-width:145px;max-height:78px;object-fit:contain;
+ display:block;filter:none;
+}
+footer.bg-brand-panel .amv-footer-extra-link[href]:hover,
+footer.bg-brand-panel .amv-footer-developer>a:hover{opacity:.86;transform:translateY(-2px)}
+footer.bg-brand-panel .amv-footer-extra-link:not([href]){opacity:.62;cursor:default}
+footer.bg-brand-panel .amv-footer-extra-link span{color:#f4f7fc;font-size:12px;line-height:1.6}
+footer.bg-brand-panel .amv-footer-extra-link:focus-visible,
+footer.bg-brand-panel .amv-footer-developer>a:focus-visible{
+ outline:2px solid var(--brand-orange);outline-offset:4px;
+}
+footer.bg-brand-panel .amv-cms-footer-contact{
+ display:inline-flex;align-items:center;justify-content:center;gap:7px;
+ min-height:36px;padding:7px 12px;border-radius:7px;
+ color:var(--on-panel);text-decoration:none;font-size:12px;font-weight:800;
+ border:1px solid rgba(236,245,255,.25);
+ transition:background .2s ease,color .2s ease,border-color .2s ease;
+}
+footer.bg-brand-panel .amv-cms-footer-contact:hover{
+ background:rgba(255,255,255,.09);border-color:rgba(250,172,101,.65);
+}
+footer.bg-brand-panel .amv-cms-footer-contact svg{flex:none}
+.amv-contact-options .amv-cms-contact{display:flex;align-items:center;gap:13px}
+.amv-contact-options .amv-cms-contact > svg{width:24px;height:24px;flex:none}
+.amv-contact-options .amv-cms-contact span{display:flex;flex-direction:column;gap:3px;font-size:14px;font-weight:850}
+.amv-contact-options .amv-cms-contact small{display:block;font-size:11px;font-weight:500}
+@media(max-width:560px){
+ footer.bg-brand-panel .amv-footer-brand-row .amv-footer-extra-logo{flex:0 1 99px;max-width:110px}
+ footer.bg-brand-panel .amv-footer-brand-row .amv-footer-extra-link img{max-height:64px}
+}
+@media(prefers-reduced-motion:reduce){
+ footer.bg-brand-panel .amv-footer-extra-link,
+ footer.bg-brand-panel .amv-cms-footer-contact{transition:none!important}
+}
