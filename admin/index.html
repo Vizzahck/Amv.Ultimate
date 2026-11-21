@@ -9,9 +9,10 @@
   <meta name="color-scheme" content="dark">
   <title>Studio AMV | Administração visual</title>
   <link rel="icon" href="../assets/favicon.png">
-  <link rel="stylesheet" href="./studio.css?v=3">
-  <script defer src="../assets/cms-runtime.js?v=1"></script>
-  <script defer src="./studio.js?v=4"></script>
+  <link rel="stylesheet" href="./studio.css?v=4">
+  <script defer src="../assets/cms-runtime.js?v=2"></script>
+  <script defer src="../assets/brand-runtime.js?v=1"></script>
+  <script defer src="./studio.js?v=5"></script>
 </head>
 <body>
   <div class="studio-shell">
@@ -60,6 +61,55 @@
               <option value="equipe.html">Equipe</option>
               <option value="privacidade.html">Privacidade</option>
             </select>
+            <details id="brand-editor" class="studio-brand-editor" open>
+              <summary><span>Identidade visual</span><small>Logos, sublogos e alinhamento</small></summary>
+              <div class="studio-brand-editor-body">
+                <label for="brand-slot">Qual imagem deseja editar?</label>
+                <select id="brand-slot">
+                  <option value="header">Isologo do cabeçalho</option>
+                  <option value="hero">Logo da capa (início)</option>
+                  <option value="footer">Logo AMV do rodapé</option>
+                  <option value="senac">Sublogo SENAC</option>
+                  <option value="developer">Assinatura VZ Sites Dev</option>
+                  <option value="intro">Logo da abertura</option>
+                </select>
+                <div id="brand-variant-wrap">
+                  <label for="brand-variant">Versão da imagem</label>
+                  <select id="brand-variant">
+                    <option value="light">Modo claro</option>
+                    <option value="dark">Modo escuro</option>
+                  </select>
+                </div>
+                <div class="studio-brand-thumb-wrap"><img id="brand-preview-image" alt="Prévia da logo selecionada"><span id="brand-preview-caption">Prévia da logo</span></div>
+                <label for="brand-upload">Trocar imagem (JPG, PNG ou WebP)</label>
+                <input id="brand-upload" type="file" accept="image/jpeg,image/png,image/webp">
+                <label for="brand-alt">Descrição da imagem</label>
+                <input id="brand-alt" type="text" maxlength="180">
+                <div class="studio-divider"></div>
+                <strong class="studio-brand-group-heading">Mover e dimensionar</strong>
+                <p class="studio-muted">Arraste a logo na prévia ou ajuste pelos campos. As duas versões compartilham a mesma posição, mesmo após trocar o tema.</p>
+                <div class="studio-brand-coordinates">
+                  <label for="brand-x">Horizontal (px)<input id="brand-x" type="number" min="-180" max="180" step="1" value="0"></label>
+                  <label for="brand-y">Vertical (px)<input id="brand-y" type="number" min="-180" max="180" step="1" value="0"></label>
+                </div>
+                <label for="brand-scale">Tamanho: <output id="brand-scale-value" for="brand-scale">100%</output></label>
+                <input id="brand-scale" type="range" min="60" max="150" step="1" value="100">
+                <div class="studio-brand-actions">
+                  <button id="brand-center" type="button" class="studio-secondary">Centralizar no espaço</button>
+                  <button id="brand-reset" type="button" class="studio-quiet">Zerar posição</button>
+                </div>
+                <div class="studio-divider"></div>
+                <label class="studio-check"><input type="checkbox" id="brand-grid"> <span>Exibir malha quadriculada (só na edição)</span></label>
+                <label class="studio-check"><input type="checkbox" id="brand-snap"> <span>Encaixar na malha ao mover</span></label>
+                <label for="brand-grid-size">Tamanho dos quadrados</label>
+                <select id="brand-grid-size">
+                  <option value="12">12 px · precisão</option>
+                  <option value="20" selected>20 px · padrão</option>
+                  <option value="32">32 px · espaçado</option>
+                </select>
+                <p id="brand-hint" class="studio-tip">Selecione uma logo do cabeçalho, capa ou rodapé diretamente na prévia. A malha é apenas visual e nunca será publicada.</p>
+              </div>
+            </details>
             <div class="studio-divider"></div>
             <p class="studio-kicker">Editor visual</p>
             <p class="studio-tip">Clique em um <strong>título, parágrafo ou imagem</strong> na prévia. Na página <strong>Equipe</strong>, clique no cartão de um participante para abrir a edição do nome e da foto.</p>
@@ -157,8 +207,9 @@
         <div class="studio-main">
           <div class="studio-toolbar">
             <div><span class="studio-preview-dot"></span><strong id="preview-title">Prévia ao vivo</strong><small>As mudanças ainda não estão no site público</small></div>
-            <div class="studio-toolbar-actions"><button id="reload-preview" type="button" class="studio-quiet">Recarregar prévia</button><button id="publish" type="button" class="studio-primary">Publicar alterações ↗</button></div>
+            <div class="studio-toolbar-actions"><button id="reload-preview" type="button" class="studio-quiet">Recarregar prévia</button><button id="verify-live" type="button" class="studio-secondary">Verificar site ↻</button><button id="publish" type="button" class="studio-primary">Publicar alterações ↗</button></div>
           </div>
+<div id="publish-check" class="studio-publication-status" role="status" aria-live="polite" hidden></div>
           <div id="preview-shell" class="studio-preview-shell">
             <iframe id="page-frame" title="Visualização editável da página AMV" src="about:blank"></iframe>
           </div>

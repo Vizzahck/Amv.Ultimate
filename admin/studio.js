@@ -12,15 +12,18 @@
   const textField=$("text-value"), imageAlt=$("image-alt");
   const projectList=$("project-list");
   const imagesPending=new Map();
-  let token="",pages={version:1,pages:{}},portfolio={version:1,projects:[]},team={version:1,areas:[]};
-  let activePage="index.html",selected=null,projectId=null,teamMemberId=null,teamAreaId=null,dirtyPages=false,dirtyProjects=false,dirtyTeam=false,busy=false;
+  let token="",pages={version:1,pages:{}},portfolio={version:1,projects:[]},team={version:1,areas:[]},brands={version:1,slots:{}};
+  let activePage="index.html",selected=null,projectId=null,teamMemberId=null,teamAreaId=null,dirtyPages=false,dirtyProjects=false,dirtyTeam=false,dirtyBrands=false,busy=false;
+  let brandSlot="header",brandVariant="light",gridOn=false,snapOn=false,gridSize=20,draggingBrand=null;
+  let lastSavedFiles=[];
   const CMS=window.AMVCMS;
-  if(!CMS){setStatus("Editor indisponível: recarregue esta página.","error");return;}
+  const BRAND=window.AMVBrand;
+  if(!CMS||!BRAND){setStatus("Editor indisponível: recarregue esta página.","error");return;}
 
   function setStatus(message,type="info"){
     status.textContent=message;status.dataset.type=type;
   }
-  function hasChanges(){return dirtyPages||dirtyProjects||dirtyTeam||imagesPending.size>0;}
+  function hasChanges(){return dirtyPages||dirtyProjects||dirtyTeam||dirtyBrands||imagesPending.size>0;}
   function updatePublish(){
     const button=$("publish");
     button.disabled=busy||!hasChanges();
@@ -29,8 +32,10 @@
   function changed(type){
     if(type==="projects")dirtyProjects=true;
     else if(type==="team")dirtyTeam=true;
+    else if(type==="brand")dirtyBrands=true;
     else dirtyPages=true;
     updatePublish();
+    $("publish-check").hidden=true;
     setStatus("Alterações não publicadas.","info");
   }
   async function api(path,options={}){
@@ -89,10 +94,11 @@
     return writeFile(path,bytes,description);
   }
   async function loadData(){
-    const [pageFile,portfolioFile,teamFile]=await Promise.all([
+    const [pageFile,portfolioFile,teamFile,brandFile]=await Promise.all([
       readFile("assets/content-overrides.json"),
       readFile("assets/portfolio-items.json"),
-      readFile("assets/team-items.json")
+      readFile("assets/team-items.json"),
+      readFile("assets/brand-overrides.json")
     ]);
     const p=JSON.parse(decodeUTF8(pageFile.content));
     const q=JSON.parse(decodeUTF8(portfolioFile.content));
@@ -100,10 +106,13 @@
     portfolio={version:1,projects:Array.isArray(q.projects)?q.projects:[]};
     const t=JSON.parse(decodeUTF8(teamFile.content));
     team={version:1,areas:Array.isArray(t.areas)?t.areas:[]};
+    const b=JSON.parse(decodeUTF8(brandFile.content));
+    brands={version:1,slots:b&&b.slots&&typeof b.slots==="object"?b.slots:{}};
     team.areas.forEach(area=>{if(!Array.isArray(area.members))area.members=[];});
     teamAreaId=team.areas.length?team.areas[0].id:null;
     teamMemberId=null;
-    dirtyPages=false;dirtyProjects=false;dirtyTeam=false;
+    dirtyPages=false;dirtyProjects=false;dirtyTeam=false;dirtyBrands=false;
+    lastSavedFiles=[];
     for(const image of imagesPending.values())URL.revokeObjectURL(image.preview);
     imagesPending.clear();
     updatePublish();
@@ -130,7 +139,7 @@
       frame.src="../"+activePage+"?cmsPreview=1";
       renderProjectList();renderProjectPreview();
       renderTeamAreas();renderTeamList();renderTeamPreview();
-      updatePublish();
+      renderBrandEditor();updatePublish();
     }catch(err){
       token="";
       setStatus(err.message,"error");
@@ -143,7 +152,8 @@
     login.hidden=false;workspace.hidden=true;$("disconnect").hidden=true;
     clearSelection();
     for(const img of imagesPending.values())URL.revokeObjectURL(img.preview);
-    imagesPending.clear();dirtyPages=false;dirtyProjects=false;dirtyTeam=false;
+    imagesPending.clear();dirtyPages=false;dirtyProjects=false;dirtyTeam=false;dirtyBrands=false;
+    $("publish-check").hidden=true;
     setStatus("Desconectado. O token não foi salvo.");
     updatePublish();
   });
@@ -199,6 +209,263 @@
   });
   $("clear-selection").addEventListener("click",clearSelection);
 
+  /* --- Editor de identidade visual, posição global e malha só na prévia --- */
+  const brandDefaults={
+    header:{light:"assets/isologo-amv-claro.webp",dark:"assets/isologo-amv-escuro.webp"},
+    hero:{light:"assets/amv-marca-claro.webp",dark:"assets/amv-marca-escuro.webp"},
+    footer:{light:"assets/amv-marca-claro.webp",dark:"assets/amv-marca-escuro.webp"},
+    senac:{single:"assets/senac-footer-white-orange.png"},
+    developer:{single:"assets/vz-sites-dev-footer.png"},
+    intro:{single:"assets/amv-marca-escuro.webp"}
+  };
+  function slotData(slot=brandSlot,create=false){
+    if(!Object.hasOwn(BRAND.SLOTS,slot))return null;
+    if(!brands.slots[slot]&&create)brands.slots[slot]={images:{},layout:{x:0,y:0,scale:100}};
+    return brands.slots[slot]||null;
+  }
+  function slotLayout(slot=brandSlot){
+    const data=slotData(slot);
+    return BRAND.normalizeLayout(data&&data.layout);
+  }
+  function slotImage(slot=brandSlot,variant=brandVariant,create=false){
+    const data=slotData(slot,create);
+    if(!data)return null;
+    if(!data.images&&create)data.images={};
+    if(!data.images)return null;
+    if(!data.images[variant]&&create)data.images[variant]={src:"",alt:""};
+    return data.images[variant]||null;
+  }
+  function brandImagePreview(slot=brandSlot,variant=brandVariant){
+    const pending=imagesPending.get("brand|"+slot+"|"+variant);
+    if(pending)return pending.preview;
+    const item=slotImage(slot,variant);
+    const value=item&&BRAND.safeImage(item.src)?item.src:brandDefaults[slot]&&brandDefaults[slot][variant];
+    return value?"../"+value:"";
+  }
+  function brandRequiresHome(slot=brandSlot){
+    return slot==="hero"||slot==="intro"||
+      (activePage==="privacidade.html"&&slot!=="hero");
+  }
+  function ensureBrandPage(){
+    const doc=frame.contentDocument;
+    if(!doc||!BRAND.wrapper(doc,brandSlot)){
+      if(activePage!=="index.html"){
+        activePage="index.html";
+        select.value=activePage;
+        clearSelection();
+        frame.src="../index.html?cmsPreview="+Date.now();
+      }
+    }
+  }
+  function updateBrandPreview(){
+    const doc=frame.contentDocument;
+    if(!doc||!doc.querySelector("body"))return;
+    BRAND.applyToDocument(doc,brands);
+    for(const pending of imagesPending.values()){
+      if(pending.kind!=="brand")continue;
+      const image=BRAND.image(doc,pending.slot,pending.variant);
+      if(image)image.src=pending.preview;
+    }
+  }
+  function updateBrandGrid(){
+    const doc=frame.contentDocument;
+    if(!doc||!doc.body)return;
+    const overlay=doc.getElementById("amv-studio-grid");
+    if(!overlay)return;
+    overlay.hidden=!gridOn;
+    overlay.style.setProperty("--studio-grid-size",gridSize+"px");
+    overlay.classList.toggle("amv-studio-grid-snapping",snapOn);
+    $("brand-grid").checked=gridOn;
+    $("brand-snap").checked=snapOn;
+    $("brand-grid-size").value=String(gridSize);
+  }
+  function installBrandGrid(doc){
+    if(doc.getElementById("amv-studio-grid"))return;
+    const style=doc.createElement("style");
+    style.textContent=
+      "#amv-studio-grid{position:fixed!important;inset:0!important;z-index:2147483000!important;"+
+      "pointer-events:none!important;user-select:none!important;overflow:hidden!important;"+
+      "background-image:linear-gradient(rgba(246,145,61,.26) 1px,transparent 1px),"+
+      "linear-gradient(90deg,rgba(246,145,61,.26) 1px,transparent 1px)!important;"+
+      "background-size:var(--studio-grid-size,20px) var(--studio-grid-size,20px)!important}"+
+      "#amv-studio-grid[hidden]{display:none!important}"+
+      "#amv-studio-grid::before,#amv-studio-grid::after{content:'';position:absolute;pointer-events:none}"+
+      "#amv-studio-grid::before{left:50%;top:0;width:1px;height:100%;background:rgba(54,159,220,.55)}"+
+      "#amv-studio-grid::after{top:50%;left:0;height:1px;width:100%;background:rgba(54,159,220,.55)}"+
+      ".amv-studio-brand-active{outline:2px dashed #ffae60!important;outline-offset:4px!important;"+
+      "cursor:grab!important}"+
+      ".amv-studio-brand-active:active{cursor:grabbing!important}"+
+      "html.amv-studio-footer-light footer.bg-brand-panel .amv-theme-logo--footer .amv-brand-image--light{"+
+      "opacity:1!important;visibility:visible!important}"+
+      "html.amv-studio-footer-light footer.bg-brand-panel .amv-theme-logo--footer .amv-brand-image--dark{"+
+      "opacity:0!important;visibility:hidden!important}";
+    doc.head.append(style);
+    const overlay=doc.createElement("div");
+    overlay.id="amv-studio-grid";
+    overlay.setAttribute("aria-hidden","true");
+    overlay.hidden=true;
+    doc.body.append(overlay);
+    updateBrandGrid();
+  }
+  function syncPreviewTheme(){
+    const doc=frame.contentDocument;
+    if(!doc||!doc.documentElement)return;
+    const isPair=BRAND.SLOTS[brandSlot]&&BRAND.SLOTS[brandSlot].mode==="pair";
+    if(isPair)doc.documentElement.classList.toggle("dark",brandVariant==="dark");
+    doc.documentElement.classList.toggle("amv-studio-footer-light",brandSlot==="footer"&&brandVariant==="light");
+    doc.querySelectorAll(".amv-studio-brand-active").forEach(node=>node.classList.remove("amv-studio-brand-active"));
+    const target=BRAND.wrapper(doc,brandSlot);
+    if(target)target.classList.add("amv-studio-brand-active");
+  }
+  function renderBrandEditor(){
+    const definition=BRAND.SLOTS[brandSlot];
+    if(!definition)return;
+    $("brand-slot").value=brandSlot;
+    const pair=definition.mode==="pair";
+    $("brand-variant-wrap").hidden=!pair;
+    if(!pair)brandVariant="single";
+    else if(brandVariant!=="light"&&brandVariant!=="dark")brandVariant="light";
+    $("brand-variant").value=brandVariant;
+    const preview=$("brand-preview-image");
+    const src=brandImagePreview();
+    preview.hidden=!src;
+    if(src)preview.src=src;
+    $("brand-preview-caption").textContent=definition.label+(pair?" · "+(brandVariant==="dark"?"modo escuro":"modo claro"):"");
+    const item=slotImage();
+    $("brand-alt").value=item&&item.alt||"";
+    const layout=slotLayout();
+    $("brand-x").value=String(layout.x);
+    $("brand-y").value=String(layout.y);
+    $("brand-scale").value=String(layout.scale);
+    $("brand-scale-value").textContent=layout.scale+"%";
+    $("brand-upload").value="";
+    $("brand-hint").textContent=brandSlot==="intro"
+      ?"A logo da abertura só aparece na tela de entrada. Use a miniatura e os controles para ajustá-la. A malha não aparece no site publicado."
+      :brandSlot==="footer"?
+      "O rodapé do site usa a arte escura nos dois temas para manter contraste. No Studio, você pode pré-visualizar e trocar também a versão clara. A posição é sempre compartilhada."
+      :"Arraste a logo na prévia ou ajuste os valores. Posição e escala são compartilhadas entre claro e escuro. A malha é só do editor.";
+    updateBrandPreview();
+    syncPreviewTheme();
+    updateBrandGrid();
+  }
+  function setBrandSlot(slot,variant){
+    if(!Object.hasOwn(BRAND.SLOTS,slot))return;
+    brandSlot=slot;
+    brandVariant=BRAND.variants(slot).includes(variant)?variant:BRAND.variants(slot)[0];
+    $("brand-editor").open=true;
+    renderBrandEditor();
+    ensureBrandPage();
+  }
+  function changeBrandLayout(patch){
+    const data=slotData(brandSlot,true);
+    data.layout=BRAND.normalizeLayout({...slotLayout(),...patch});
+    changed("brand");
+    updateBrandPreview();
+    $("brand-x").value=data.layout.x;
+    $("brand-y").value=data.layout.y;
+    $("brand-scale").value=data.layout.scale;
+    $("brand-scale-value").textContent=data.layout.scale+"%";
+  }
+  $("brand-slot").addEventListener("change",event=>setBrandSlot(event.target.value,BRAND.variants(event.target.value)[0]));
+  $("brand-variant").addEventListener("change",event=>setBrandSlot(brandSlot,event.target.value));
+  $("brand-alt").addEventListener("input",event=>{
+    const item=slotImage(brandSlot,brandVariant,true);
+    item.alt=event.target.value.slice(0,180);
+    changed("brand");
+    updateBrandPreview();
+  });
+  $("brand-upload").addEventListener("change",async event=>{
+    const file=event.target.files&&event.target.files[0];
+    if(!file)return;
+    const slot=brandSlot,variant=brandVariant;
+    try{
+      const blob=await optimizeImage(file);
+      addPending("brand|"+slot+"|"+variant,{kind:"brand",slot,variant,blob});
+      slotImage(slot,variant,true);
+      changed("brand");
+      renderBrandEditor();
+    }catch(err){setStatus("Imagem não aceita: "+err.message,"error");}
+  });
+  ["brand-x","brand-y"].forEach(id=>{
+    $(id).addEventListener("input",()=>{
+      const value=Number($(id).value);
+      if(Number.isFinite(value))changeBrandLayout({[id==="brand-x"?"x":"y"]:value});
+    });
+  });
+  $("brand-scale").addEventListener("input",event=>changeBrandLayout({scale:Number(event.target.value)}));
+  $("brand-grid").addEventListener("change",event=>{
+    gridOn=event.target.checked;
+    updateBrandGrid();
+  });
+  $("brand-snap").addEventListener("change",event=>{
+    snapOn=event.target.checked;
+    if(snapOn)gridOn=true;
+    updateBrandGrid();
+  });
+  $("brand-grid-size").addEventListener("change",event=>{
+    gridSize=[12,20,32].includes(Number(event.target.value))?Number(event.target.value):20;
+    updateBrandGrid();
+  });
+  $("brand-center").addEventListener("click",()=>{
+    const doc=frame.contentDocument,target=doc&&BRAND.wrapper(doc,brandSlot);
+    if(!target){setStatus("Abra a página com essa logo para centralizar pela prévia.");return;}
+    const parent=brandSlot==="developer"?target:target.parentElement;
+    if(!parent)return;
+    const rect=target.getBoundingClientRect(),pRect=parent.getBoundingClientRect();
+    if(!rect.width||!pRect.width)return;
+    const x=Math.round((pRect.left+pRect.width/2)-(rect.left+rect.width/2));
+    const y=Math.round((pRect.top+pRect.height/2)-(rect.top+rect.height/2));
+    const layout=slotLayout();
+    changeBrandLayout({x:layout.x+x,y:layout.y+y});
+  });
+  $("brand-reset").addEventListener("click",()=>changeBrandLayout({x:0,y:0,scale:100}));
+
+  function installBrandDrag(doc){
+    doc.addEventListener("pointerdown",event=>{
+      if(event.button!==0||!event.isPrimary)return;
+      const spot=BRAND.locate(doc,event.target);
+      if(!spot)return;
+      event.preventDefault();
+      event.stopImmediatePropagation();
+      setBrandSlot(spot.slot,spot.variant);
+      const wrapper=BRAND.wrapper(doc,spot.slot);
+      if(!wrapper)return;
+      const rect=wrapper.getBoundingClientRect();
+      const current=slotLayout(spot.slot);
+      draggingBrand={
+        pointerId:event.pointerId,slot:spot.slot,
+        x:current.x,y:current.y,
+        clientX:event.clientX,clientY:event.clientY,
+        centerX:rect.left+rect.width/2,centerY:rect.top+rect.height/2,
+        moved:false
+      };
+      if(event.target.setPointerCapture){
+        try{event.target.setPointerCapture(event.pointerId);}catch(_){}
+      }
+    },true);
+    doc.addEventListener("pointermove",event=>{
+      const drag=draggingBrand;
+      if(!drag||drag.pointerId!==event.pointerId||drag.slot!==brandSlot)return;
+      const dx=event.clientX-drag.clientX,dy=event.clientY-drag.clientY;
+      if(Math.abs(dx)+Math.abs(dy)<2&&!drag.moved)return;
+      drag.moved=true;
+      let changeX=dx,changeY=dy;
+      if(snapOn&&gridOn){
+        changeX=Math.round((drag.centerX+dx)/gridSize)*gridSize-drag.centerX;
+        changeY=Math.round((drag.centerY+dy)/gridSize)*gridSize-drag.centerY;
+      }
+      changeBrandLayout({x:Math.round(drag.x+changeX),y:Math.round(drag.y+changeY)});
+      event.preventDefault();event.stopImmediatePropagation();
+    },true);
+    const stop=event=>{
+      if(draggingBrand&&draggingBrand.pointerId===event.pointerId){
+        draggingBrand=null;
+      }
+    };
+    doc.addEventListener("pointerup",stop,true);
+    doc.addEventListener("pointercancel",stop,true);
+  }
+
   function installFrameEditor(){
     const doc=frame.contentDocument;
     if(!doc||!doc.body)return;
@@ -206,8 +473,11 @@
     const style=doc.createElement("style");
     style.textContent=".amv-admin-selected{outline:2px solid #f59b46!important;outline-offset:5px!important;border-radius:4px;cursor:text!important}.amv-admin-selected:is(img){cursor:pointer!important}.amv-admin-selected:focus{background:rgba(255,164,83,.065)!important}";
     doc.head.append(style);
-    // A prévia mostra exatamente as alterações atuais, inclusive não publicadas.
+    // A prévia mostra os dados do GitHub e todas as mudanças não publicadas.
     CMS.applyToDocument(doc,pages,activePage);
+    BRAND.applyToDocument(doc,brands);
+    installBrandGrid(doc);
+    installBrandDrag(doc);
     for(const item of imagesPending.values()){
       if(item.kind==="page"&&item.page===activePage){
         const node=doc.querySelector(item.selector);
@@ -215,6 +485,13 @@
       }
     }
     doc.addEventListener("click",event=>{
+      const chosenBrand=BRAND.locate(doc,event.target);
+      if(chosenBrand){
+        event.preventDefault();
+        event.stopImmediatePropagation();
+        setBrandSlot(chosenBrand.slot,chosenBrand.variant);
+        return;
+      }
       if(activePage==="equipe.html"){
         const memberCard=event.target.closest && event.target.closest(".v2-member");
         if(memberCard){
@@ -273,6 +550,9 @@
       if(event.key==="Escape"&&selected){event.preventDefault();clearSelection();}
     },true);
     $("preview-title").textContent="Prévia ao vivo · "+select.selectedOptions[0].textContent;
+    updateBrandPreview();
+    syncPreviewTheme();
+    updateBrandGrid();
   }
   frame.addEventListener("load",()=>{
     if(!token)return;
@@ -281,7 +561,8 @@
   select.addEventListener("change",()=>{
     activePage=select.value;
     clearSelection();
-    frame.src="../"+activePage+"?cmsPreview=1";
+    draggingBrand=null;
+    frame.src="../"+activePage+"?cmsPreview="+Date.now();
   });
   $("reload-preview").addEventListener("click",()=>{clearSelection();frame.src="../"+activePage+"?cmsPreview="+Date.now();});
 
@@ -897,6 +1178,59 @@
   $("tab-projects").addEventListener("click",()=>switchMode("projects"));
   $("tab-team").addEventListener("click",()=>switchMode("team"));
 
+  /* Verificação real da persistência: primeiro GitHub, depois GitHub Pages. */
+  const publishedData={
+    "assets/content-overrides.json":()=>pages,
+    "assets/portfolio-items.json":()=>portfolio,
+    "assets/team-items.json":()=>team,
+    "assets/brand-overrides.json":()=>brands
+  };
+  function publicationMessage(message,kind="warning"){
+    const label=$("publish-check");
+    label.hidden=false;
+    label.dataset.status=kind;
+    label.textContent=message;
+  }
+  async function verifyGitHubSave(path,value){
+    const stored=JSON.parse(decodeUTF8((await readFile(path)).content));
+    if(JSON.stringify(stored)!==JSON.stringify(value)){
+      throw new Error("O GitHub não confirmou o conteúdo salvo em "+path+".");
+    }
+  }
+  async function verifyLiveFiles(){
+    if(!token)return;
+    if(hasChanges()){
+      publicationMessage("Há mudanças não publicadas. Clique primeiro em Publicar alterações para conferir a versão mais recente.","warning");
+      return;
+    }
+    const button=$("verify-live");
+    button.disabled=true;
+    const files=lastSavedFiles.length?lastSavedFiles:Object.keys(publishedData);
+    publicationMessage("Consultando arquivos do site público, sem usar cache...");
+    try{
+      const outcomes=await Promise.all(files.map(async path=>{
+        const response=await fetch("../"+path+"?amvVerify="+Date.now(),{cache:"no-store"});
+        if(!response.ok)return {path,ok:false,code:response.status};
+        const actual=await response.json();
+        const expected=publishedData[path]();
+        return {path,ok:JSON.stringify(actual)===JSON.stringify(expected)};
+      }));
+      const remaining=outcomes.filter(item=>!item.ok);
+      if(remaining.length){
+        publicationMessage("Alterações salvas no GitHub, mas ainda não estão disponíveis no site público ("+
+          remaining.map(item=>item.path.split("/").pop()).join(", ")+
+          "). Aguarde a conclusão do GitHub Pages e clique em Verificar site novamente.","warning");
+        setStatus("GitHub Pages ainda está atualizando. Suas alterações não se perderam.");
+      }else{
+        publicationMessage("✓ Publicação confirmada: os arquivos novos já estão no site público. Abra o site e recarregue para ver as mudanças.","ok");
+        setStatus("Site público atualizado e conferido.","success");
+      }
+    }catch(err){
+      publicationMessage("Não foi possível conferir o site agora: "+err.message,"error");
+    }finally{button.disabled=false;}
+  }
+  $("verify-live").addEventListener("click",verifyLiveFiles);
+
   $("publish").addEventListener("click",async()=>{
     if(!token||!hasChanges()||busy)return;
     const invalid=portfolio.projects.find(p=>p.published&&!String(p.title||"").trim());
@@ -932,29 +1266,46 @@
           const area=team.areas.find(item=>item.id===pending.areaId);
           const person=area&&area.members.find(item=>item.id===pending.memberId);
           if(person){person.image=path;dirtyTeam=true;}
+        }else if(pending.kind==="brand"){
+          const item=slotImage(pending.slot,pending.variant,true);
+          if(item){item.src=path;dirtyBrands=true;}
         }
         // Sucesso no arquivo: não repetir a transferência na próxima tentativa.
         URL.revokeObjectURL(pending.preview);
         imagesPending.delete(key);
       }
+      const saved=[];
       if(dirtyPages){
-        setStatus("Publicando alterações de textos e imagens...");
+        setStatus("Publicando e verificando textos e imagens...");
         await writeJSON("assets/content-overrides.json",pages,"cms: atualizar conteúdos visuais da AMV");
-        dirtyPages=false;
+        await verifyGitHubSave("assets/content-overrides.json",pages);
+        dirtyPages=false;saved.push("assets/content-overrides.json");
       }
       if(dirtyProjects){
-        setStatus("Publicando portfólio...");
+        setStatus("Publicando e verificando portfólio...");
         await writeJSON("assets/portfolio-items.json",portfolio,"cms: atualizar projetos do portfólio AMV");
-        dirtyProjects=false;
+        await verifyGitHubSave("assets/portfolio-items.json",portfolio);
+        dirtyProjects=false;saved.push("assets/portfolio-items.json");
       }
       if(dirtyTeam){
-        setStatus("Publicando participantes e fotografias da Equipe...");
+        setStatus("Publicando e verificando participantes...");
         await writeJSON("assets/team-items.json",team,"cms: atualizar equipe da AMV");
-        dirtyTeam=false;
+        await verifyGitHubSave("assets/team-items.json",team);
+        dirtyTeam=false;saved.push("assets/team-items.json");
       }
-      setStatus("Alterações gravadas no GitHub! Aguarde a publicação do GitHub Pages.","success");
+      if(dirtyBrands){
+        setStatus("Publicando e verificando logos e posições...");
+        await writeJSON("assets/brand-overrides.json",brands,"cms: identidade visual e alinhamento de logos");
+        await verifyGitHubSave("assets/brand-overrides.json",brands);
+        dirtyBrands=false;saved.push("assets/brand-overrides.json");
+      }
+      lastSavedFiles=saved;
+      setStatus("Arquivos gravados e conferidos no GitHub. A publicação pelo Pages pode levar alguns instantes.","success");
+      publicationMessage("✓ Salvo no GitHub. O site público pode estar atualizando. Clique em Verificar site ↻ para confirmar a publicação.","warning");
       renderProjectList();renderProjectPreview();renderGallery();renderSteps();
-      renderTeamList();renderTeamPreview();
+      renderTeamList();renderTeamPreview();renderBrandEditor();
+      clearSelection();
+      frame.src="../"+activePage+"?cmsPreview="+Date.now();
     }catch(err){
       setStatus("Publicação interrompida: "+err.message,"error");
     }finally{

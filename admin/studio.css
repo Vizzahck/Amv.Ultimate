@@ -157,3 +157,29 @@ input[type=file]{display:block;font-size:11px;max-width:100%;margin:7px 0 13px}
 .studio-area-editor .studio-danger{padding:9px 11px}
 .studio-team-empty{padding:25px 12px;color:#99b1c4;font-size:12px;line-height:1.6;text-align:center;border:1px dashed #375068;border-radius:12px;background:#0b2132}
 .studio-team-preview-cards .studio-team-empty{grid-column:1/-1}
+
+/* Studio V2 — controles da identidade visual. A malha nao vai ao site publico. */
+.studio-brand-editor{border:1px solid #365a70;background:linear-gradient(155deg,#112f43,#0b2130);border-radius:15px;overflow:hidden;margin:20px 0 0}
+.studio-brand-editor>summary{padding:14px 14px;cursor:pointer;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:4px;list-style:none;border-bottom:1px solid transparent}
+.studio-brand-editor>summary::-webkit-details-marker{display:none}
+.studio-brand-editor[open]>summary{border-bottom-color:#2e5367}
+.studio-brand-editor>summary span{font-weight:950;color:#f6bd83;font-size:13px}
+.studio-brand-editor>summary small{color:#a6bed2;font-size:10px}
+.studio-brand-editor-body{padding:2px 15px 17px}
+.studio-brand-editor label{font-size:11px}
+.studio-brand-thumb-wrap{background:repeating-conic-gradient(#30465d 0 25%,#1a3145 0 50%) 50% / 16px 16px;border:1px solid #40576c;border-radius:12px;min-height:116px;display:flex;align-items:center;justify-content:center;flex-direction:column;gap:9px;padding:14px;margin:13px 0}
+.studio-brand-thumb-wrap img{display:block;max-height:114px;max-width:100%;object-fit:contain}
+.studio-brand-thumb-wrap span{font-size:10px;color:#c4d6e5;text-align:center;text-shadow:0 1px 4px #000}
+.studio-brand-coordinates{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.studio-brand-coordinates input{display:block;margin-top:6px}
+.studio-brand-editor input[type=range]{width:100%;accent-color:#f7a35b;cursor:ew-resize;height:26px}
+.studio-brand-group-heading{display:block;font-size:12px;color:#e8f3fc;margin:1px 0 6px}
+.studio-brand-actions{display:flex;flex-wrap:wrap;gap:8px;margin-top:12px}
+.studio-brand-actions button{flex:1;font-size:11px;white-space:normal;min-height:40px}
+.studio-brand-editor .studio-check{padding:10px;margin:9px 0!important;font-size:11px}
+.studio-publication-status{border-bottom:1px solid #2a475c;background:#0e3341;padding:13px 21px;font-size:12px;line-height:1.65;color:#cde9f3}
+.studio-publication-status[data-status=ok]{background:#0c3531;color:#a7edce}
+.studio-publication-status[data-status=warning]{background:#3b3020;color:#ffe0ab}
+.studio-publication-status[data-status=error]{background:#48282b;color:#ffc7c6}
+.studio-preview-shell{position:relative}
+@media(max-width:510px){.studio-brand-editor-body{padding:2px 11px 14px}.studio-toolbar-actions{flex-wrap:wrap}.studio-toolbar-actions button{min-width:135px}}

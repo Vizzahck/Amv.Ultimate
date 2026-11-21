@@ -3,7 +3,7 @@
   "use strict";
   const PAGE = location.pathname.endsWith("/") ? "index.html" : location.pathname.split("/").pop();
   const SAFE_TAGS = new Set(["B","STRONG","EM","I","BR","SPAN","U","MARK","SMALL"]);
-  const ALLOWED_ROOT = /^(?:main#conteudo|main\\.privacy-main|footer)(?:\s*>|$)/;
+  const ALLOWED_ROOT = /^(?:main#conteudo|main\.privacy-main|footer)(?:\s*>|$)/;
   const VALID_IMAGE = /^(?:assets\/[\w./-]+\.(?:png|jpe?g|webp|gif|avif)|https:\/\/[^\s"'<>]+)$/i;
   function sanitizeHTML(html, doc=document) {
     const shell=doc.createElement("div");
