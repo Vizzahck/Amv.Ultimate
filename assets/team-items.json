@@ -108,6 +108,21 @@
           "published": false
         }
       ]
+    },
+    {
+      "id": "area-959c737b-e881-4010-b329-b80324e2b990",
+      "title": "Apoiadores",
+      "description": "",
+      "members": [
+        {
+          "id": "fa62f240-26ab-4dce-bcfa-93d4562ef530",
+          "name": "Ekko",
+          "role": "Apoio Emocional ",
+          "image": "assets/uploads/1795386608635-u9i7y9iw.webp",
+          "alt": "",
+          "published": false
+        }
+      ]
     }
   ]
 }
