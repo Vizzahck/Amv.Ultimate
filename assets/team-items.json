@@ -68,6 +68,29 @@
           "published": true
         }
       ]
+    },
+    {
+      "id": "area-d0caa1a3-68d9-43e3-95fb-069705226333",
+      "title": "Pesquisa e Inteligencia de Mercado",
+      "description": "Pesquisa de publico, Concorrentes, Mercado e Oportunidades",
+      "members": [
+        {
+          "id": "1d3169c4-ba3a-463a-b1b5-57b240aca877",
+          "name": "Maria Isadora",
+          "role": "Analista de Mercado",
+          "image": "assets/uploads/1795563700652-z3280lsg.webp",
+          "alt": "",
+          "published": true
+        },
+        {
+          "id": "387706ac-8e25-4692-8cc7-2378446e5c38",
+          "name": "",
+          "role": "",
+          "image": "",
+          "alt": "",
+          "published": false
+        }
+      ]
     }
   ]
 }
