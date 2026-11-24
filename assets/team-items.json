@@ -91,6 +91,29 @@
           "published": true
         }
       ]
+    },
+    {
+      "id": "area-13c375ab-57e7-41d9-9cbd-a891b4378cba",
+      "title": "Metricas e Resultados",
+      "description": "Acompanha Indicadores e Resultados das Ações",
+      "members": [
+        {
+          "id": "53d5609a-8b6a-43f1-8108-f52d703178e6",
+          "name": "Alef Sá",
+          "role": "Analista de Marketing",
+          "image": "assets/uploads/1795564009996-32wjgy1v.webp",
+          "alt": "",
+          "published": true
+        },
+        {
+          "id": "63288c94-fd86-451a-9bf7-374c8f5b243e",
+          "name": "",
+          "role": "",
+          "image": "",
+          "alt": "",
+          "published": false
+        }
+      ]
     }
   ]
 }
