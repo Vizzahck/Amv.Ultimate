@@ -53,11 +53,11 @@
       "members": [
         {
           "id": "atendimento-vendas-1",
-          "name": "",
+          "name": "Christhian Luandson",
           "role": "",
-          "image": "",
+          "image": "assets/uploads/1795562994979-g5a81j8p.webp",
           "alt": "",
-          "published": false
+          "published": true
         },
         {
           "id": "atendimento-vendas-2",
