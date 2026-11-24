@@ -1,4 +1,13 @@
 {
   "version": 1,
-  "slots": {}
+  "slots": {
+    "developer": {
+      "images": {},
+      "layout": {
+        "x": 20,
+        "y": -6,
+        "scale": 100
+      }
+    }
+  }
 }
