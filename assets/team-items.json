@@ -61,11 +61,11 @@
         },
         {
           "id": "atendimento-vendas-2",
-          "name": "",
+          "name": "Sara Rakely",
           "role": "",
-          "image": "",
+          "image": "assets/uploads/1795563096484-qj146hlj.webp",
           "alt": "",
-          "published": false
+          "published": true
         }
       ]
     }
