@@ -107,11 +107,11 @@
         },
         {
           "id": "63288c94-fd86-451a-9bf7-374c8f5b243e",
-          "name": "",
-          "role": "",
-          "image": "",
+          "name": "Ana Gabriella",
+          "role": "Analista de Marketing",
+          "image": "assets/uploads/1795564069716-3hn84rvh.webp",
           "alt": "",
-          "published": false
+          "published": true
         }
       ]
     }
