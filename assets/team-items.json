@@ -3,30 +3,14 @@
   "areas": [
     {
       "id": "pesquisa-planejamento",
-      "title": "Pesquisa e Planejamento",
-      "description": "Pesquisa de mercado, análise de público e estratégias.",
+      "title": "Diretor de Marketing",
+      "description": "Cargo executivo que lidera as atividades de marketing",
       "members": [
         {
           "id": "pesquisa-planejamento-1",
-          "name": "",
-          "role": "",
-          "image": "",
-          "alt": "",
-          "published": false
-        },
-        {
-          "id": "pesquisa-planejamento-2",
-          "name": "",
-          "role": "",
-          "image": "",
-          "alt": "",
-          "published": false
-        },
-        {
-          "id": "pesquisa-planejamento-3",
-          "name": "",
-          "role": "",
-          "image": "",
+          "name": "Emerson Ferreira",
+          "role": "Diretor de Marketing",
+          "image": "assets/uploads/1795561960651-1b6sfruf.webp",
           "alt": "",
           "published": false
         }
