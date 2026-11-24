@@ -33,24 +33,16 @@
     },
     {
       "id": "marketing-digital",
-      "title": "Marketing Digital",
-      "description": "Estratégias e presença digital.",
+      "title": "Mídias Sociais",
+      "description": "Responsável pela presença digital dos clientes ou marcas nas redes sociais",
       "members": [
         {
           "id": "marketing-digital-1",
-          "name": "",
-          "role": "",
-          "image": "",
+          "name": "Pietra Almeida",
+          "role": "Analista de Mídias Sociais",
+          "image": "assets/uploads/1795562620043-gdzh33v5.webp",
           "alt": "",
-          "published": false
-        },
-        {
-          "id": "marketing-digital-2",
-          "name": "",
-          "role": "",
-          "image": "",
-          "alt": "",
-          "published": false
+          "published": true
         }
       ]
     },
