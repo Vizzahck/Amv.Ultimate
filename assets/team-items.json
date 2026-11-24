@@ -18,16 +18,16 @@
     },
     {
       "id": "criacao-comunicacao",
-      "title": "Criação e Comunicação",
-      "description": "Identidade visual, conteúdo e campanhas.",
+      "title": "Gerência de Marketing",
+      "description": "Cargo executivo que  garante a eficiência do departamento ao implantar campanhas liderando a equipe para alcançar os resultados desejados",
       "members": [
         {
           "id": "criacao-comunicacao-1",
-          "name": "",
-          "role": "",
-          "image": "",
+          "name": "Luis Davi",
+          "role": "Gerente de Marketing",
+          "image": "assets/uploads/1795562314771-a8bzc4o1.webp",
           "alt": "",
-          "published": false
+          "published": true
         },
         {
           "id": "criacao-comunicacao-2",
