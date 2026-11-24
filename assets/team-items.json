@@ -84,11 +84,11 @@
         },
         {
           "id": "387706ac-8e25-4692-8cc7-2378446e5c38",
-          "name": "",
-          "role": "",
-          "image": "",
+          "name": "João Mizo",
+          "role": "Analista de Mercado",
+          "image": "assets/uploads/1795563778836-4mqjybam.webp",
           "alt": "",
-          "published": false
+          "published": true
         }
       ]
     }
