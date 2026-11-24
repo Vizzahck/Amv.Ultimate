@@ -4,9 +4,25 @@
     "developer": {
       "images": {},
       "layout": {
-        "x": 20,
-        "y": -6,
+        "x": 36,
+        "y": -8,
         "scale": 143
+      }
+    },
+    "footer": {
+      "images": {},
+      "layout": {
+        "x": -7,
+        "y": 6,
+        "scale": 100
+      }
+    },
+    "senac": {
+      "images": {},
+      "layout": {
+        "x": 1,
+        "y": 6,
+        "scale": 100
       }
     }
   }
