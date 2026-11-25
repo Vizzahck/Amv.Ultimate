@@ -137,6 +137,37 @@
           "published": true
         }
       ]
+    },
+    {
+      "id": "area-184a7ba8-dae0-45e5-92f3-1d0ef080538e",
+      "title": "Design e Criatividade",
+      "description": "Desenvolver Identidade Visual e Peças de Comunicação",
+      "members": [
+        {
+          "id": "db9b1c26-b48a-4448-8728-c5ec9101e4c8",
+          "name": "Ingrid Vitoria",
+          "role": "Design",
+          "image": "assets/uploads/1795565242989-v6gvs4qn.webp",
+          "alt": "",
+          "published": true
+        },
+        {
+          "id": "6e599d1b-d91f-47f7-b3e8-408dd25824d9",
+          "name": "Rayllan Marcio",
+          "role": "Design",
+          "image": "assets/uploads/1795565245231-mzops9xx.webp",
+          "alt": "",
+          "published": true
+        },
+        {
+          "id": "a05ad94d-35af-481a-8ed5-fae7611a3841",
+          "name": "",
+          "role": "",
+          "image": "",
+          "alt": "",
+          "published": false
+        }
+      ]
     }
   ]
 }
