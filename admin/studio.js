@@ -593,7 +593,7 @@
     draggingBrand=null;
     frame.src="../"+activePage+"?cmsPreview="+Date.now();
   });
-  $("reload-preview").addEventListener("click",()=>{clearSelection();frame.src="../"+activePage+"?cmsPreview="+Date.now();});
+  $("reload-preview").addEventListener("click",()=>{if(currentMode==="projects"){$("company-preview-frame").contentWindow.location.reload();return;}clearSelection();frame.src="../"+activePage+"?cmsPreview="+Date.now();});
 
   async function optimizeImage(file){
     if(!file||!["image/jpeg","image/png","image/webp"].includes(file.type))throw new Error("Use uma imagem JPG, PNG ou WebP.");
@@ -653,22 +653,17 @@
 
   /* Projetos: dados e fotos editáveis, rascunhos visíveis só ao administrador. */
   function renderCompanyPreview(){
- const host=$("company-live-preview");if(!host)return;host.replaceChildren();
- const el=(tag,cls,value)=>{const n=document.createElement(tag);if(cls)n.className=cls;if(value)n.textContent=value;return n;};
- const companies=portfolio.companies||[];
- if(!companies.length)return;
- host.append(el("h2","","Prévia ao vivo · Empresas"),el("p","","As alterações aparecem aqui antes da publicação."));
- const cards=el("div","studio-project-preview-cards");host.append(cards);
- const photo=(c,item)=>{const pending=imagesPending.get("company|"+c.id+"|"+(item===c?"logo":item.id));if(!pending&&!item.image)return null;const image=el("img","company-preview-image");image.src=pending?pending.preview:"../"+item.image;image.alt=item.title||c.name||"Imagem da empresa";return image;};
- for(const c of companies){
- const card=el("article",""),body=el("div",""),logo=photo(c,c);if(logo)card.append(logo);
- body.append(el("small","",c.category||"Empresa"),el("strong","",c.name||"Nova empresa"),el("p","",c.description||"Sem descrição"),el("em","",c.published?"Marcada para publicação":"Rascunho oculto"));card.append(body);cards.append(card);
- const detail=el("article","company-preview-detail");detail.append(el("small","","Página individual"),el("h2","",c.name||"Nova empresa"));const image=photo(c,c);if(image)detail.append(image);detail.append(el("p","",c.description||"Sobre a empresa"));
- if(c.contactUrl){const btn=el("span","company-preview-contact",c.contactLabel||"Entrar em contato ↗");detail.append(btn);}
- const grid=el("div","company-preview-grid");for(const [key,label] of [["mission","Missão"],["vision","Visão"],["values","Valores"]]){const part=el("section","");part.append(el("h3","",label),el("p","",c[key]||"Ainda não preenchido"));grid.append(part);}detail.append(grid,el("h3","","Nosso trabalho"));
- const works=el("div","company-preview-grid");for(const w of c.works||[]){const part=el("section",""),img=photo(c,w);if(img)part.append(img);part.append(el("h3","",w.title||"Novo trabalho"),el("p","",w.description||"Sem descrição"));works.append(part);}if(!works.children.length)works.append(el("p","","Nenhum trabalho cadastrado."));detail.append(works);host.append(detail);
+ const f=$("company-preview-frame"),select=$("company-preview-select");if(!f||!select)return;
+ const companies=portfolio.companies||[],selected=select.value;select.replaceChildren(new Option("Página da empresa…",""));
+ for(const c of companies)select.add(new Option(c.name||"Nova empresa",c.id));
+ if(companies.some(c=>c.id===selected))select.value=selected;
+ if(f.getAttribute("src")==="about:blank")f.src="../portfolio.html?studioPreview=1";
+ const data={companies:companies.map(c=>({...c,image:imagesPending.get("company|"+c.id+"|logo")?.preview||c.image,works:(c.works||[]).map(w=>({...w,image:imagesPending.get("company|"+c.id+"|"+w.id)?.preview||w.image}))}))};
+ f.contentWindow?.postMessage({type:"amv-company-preview",data},location.origin);
  }
- }
+ $("company-preview-list").onclick=()=>{$("company-preview-select").value="";$("company-preview-frame").src="../portfolio.html?studioPreview=1";};
+ $("company-preview-select").onchange=()=>{const id=$("company-preview-select").value;$("company-preview-frame").src=id?"../empresa.html?studioPreview=1&id="+encodeURIComponent(id):"../portfolio.html?studioPreview=1";};
+ window.addEventListener("message",e=>{if(e.origin===location.origin&&e.source===$("company-preview-frame").contentWindow&&e.data?.type==="amv-company-ready")renderCompanyPreview();});
  function renderCompanies(){
  renderCompanyPreview();
  const host=$("company-editor-area"); host.replaceChildren();
