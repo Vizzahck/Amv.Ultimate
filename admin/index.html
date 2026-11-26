@@ -9,11 +9,11 @@
   <meta name="color-scheme" content="dark">
   <title>Studio AMV | Administração visual</title>
   <link rel="icon" href="../assets/favicon.png">
-  <link rel="stylesheet" href="./studio.css?v=6">
+  <link rel="stylesheet" href="./studio.css?v=7">
   <script defer src="../assets/cms-runtime.js?v=2"></script>
   <script defer src="../assets/brand-runtime.js?v=1"></script>
   <script defer src="../assets/links-runtime.js?v=1"></script>
-  <script defer src="./studio.js?v=8"></script>
+  <script defer src="./studio.js?v=9"></script>
 </head>
 <body>
   <div class="studio-shell">
@@ -140,7 +140,7 @@
             <p class="studio-kicker">Portfólio</p>
             <h2>Gerenciar projetos</h2>
             <p class="studio-tip">Crie projetos, inclua uma capa e marque como publicado. Projetos em rascunho não aparecem no site, mas os dados salvos ficam no repositório público. Não inclua informações confidenciais.</p>
-            <div id="company-editor-area"></div><div class="studio-divider"></div><button id="new-project" type="button" class="studio-secondary studio-wide">+ Novo projeto</button>
+            <div class="studio-toolbar-actions"><button type="button" id="company-preview-list" class="studio-secondary">Ver portfólio</button><select id="company-preview-select" aria-label="Visualizar página da empresa"></select></div><div id="company-editor-area"></div><div class="studio-divider"></div><button id="new-project" type="button" class="studio-secondary studio-wide">+ Novo projeto</button>
             <div id="project-list" class="studio-project-list"></div>
             <form id="project-editor" hidden>
               <div class="studio-divider"></div>
@@ -251,11 +251,8 @@
             <iframe id="page-frame" title="Visualização editável da página AMV" src="about:blank"></iframe>
           </div>
           <div id="projects-dashboard" class="studio-projects-dashboard" hidden>
-            <p class="studio-kicker">Seus trabalhos</p>
-            <h2>Do rascunho à publicação.</h2>
-            <p>Use a coluna ao lado para criar e editar projetos. O botão <strong>Publicar alterações</strong> salva no GitHub e atualiza o portfólio público.</p>
-            <section id="company-live-preview" aria-label="Prévia das empresas"><div class="studio-toolbar-actions"><button type="button" id="company-preview-list" class="studio-secondary">Portfólio</button><select id="company-preview-select" aria-label="Visualizar página da empresa"></select></div><iframe id="company-preview-frame" title="Página real do portfólio" style="width:100%;height:75vh;border:0;border-radius:12px" src="about:blank"></iframe></section><div id="project-preview-cards" class="studio-project-preview-cards"></div>
-            <div id="project-case-preview" class="studio-case-preview"></div>
+            <section id="company-live-preview" aria-label="Prévia das empresas"><iframe id="company-preview-frame" title="Página real do portfólio" src="about:blank"></iframe></section><div hidden id="project-preview-cards" class="studio-project-preview-cards"></div>
+            <div hidden id="project-case-preview" class="studio-case-preview"></div>
           </div>
         <div id="team-dashboard" class="studio-team-dashboard" hidden>
           <p class="studio-kicker">Sua equipe</p>

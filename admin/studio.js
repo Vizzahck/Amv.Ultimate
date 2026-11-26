@@ -1435,7 +1435,7 @@
       $(id).setAttribute("aria-selected",String(active));
     }
     if(isTeam){renderTeamAreas();renderTeamList();renderTeamPreview();}
-    if(isProjects){renderProjectList();renderProjectPreview();}
+    if(isProjects){$("preview-title").textContent="Prévia ao vivo · Portfólio";renderProjectList();renderProjectPreview();}
     if(isLinks){
       renderLinksEditor();
       if(activePage!=="index.html"){
