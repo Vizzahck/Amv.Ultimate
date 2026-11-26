@@ -652,12 +652,30 @@
   });
 
   /* Projetos: dados e fotos editáveis, rascunhos visíveis só ao administrador. */
-  function renderCompanies(){
+  function renderCompanyPreview(){
+ const host=$("company-live-preview");if(!host)return;host.replaceChildren();
+ const el=(tag,cls,value)=>{const n=document.createElement(tag);if(cls)n.className=cls;if(value)n.textContent=value;return n;};
+ const companies=portfolio.companies||[];
+ if(!companies.length)return;
+ host.append(el("h2","","Prévia ao vivo · Empresas"),el("p","","As alterações aparecem aqui antes da publicação."));
+ const cards=el("div","studio-project-preview-cards");host.append(cards);
+ const photo=(c,item)=>{const pending=imagesPending.get("company|"+c.id+"|"+(item===c?"logo":item.id));if(!pending&&!item.image)return null;const image=el("img","company-preview-image");image.src=pending?pending.preview:"../"+item.image;image.alt=item.title||c.name||"Imagem da empresa";return image;};
+ for(const c of companies){
+ const card=el("article",""),body=el("div",""),logo=photo(c,c);if(logo)card.append(logo);
+ body.append(el("small","",c.category||"Empresa"),el("strong","",c.name||"Nova empresa"),el("p","",c.description||"Sem descrição"),el("em","",c.published?"Marcada para publicação":"Rascunho oculto"));card.append(body);cards.append(card);
+ const detail=el("article","company-preview-detail");detail.append(el("small","","Página individual"),el("h2","",c.name||"Nova empresa"));const image=photo(c,c);if(image)detail.append(image);detail.append(el("p","",c.description||"Sobre a empresa"));
+ if(c.contactUrl){const btn=el("span","company-preview-contact",c.contactLabel||"Entrar em contato ↗");detail.append(btn);}
+ const grid=el("div","company-preview-grid");for(const [key,label] of [["mission","Missão"],["vision","Visão"],["values","Valores"]]){const part=el("section","");part.append(el("h3","",label),el("p","",c[key]||"Ainda não preenchido"));grid.append(part);}detail.append(grid,el("h3","","Nosso trabalho"));
+ const works=el("div","company-preview-grid");for(const w of c.works||[]){const part=el("section",""),img=photo(c,w);if(img)part.append(img);part.append(el("h3","",w.title||"Novo trabalho"),el("p","",w.description||"Sem descrição"));works.append(part);}if(!works.children.length)works.append(el("p","","Nenhum trabalho cadastrado."));detail.append(works);host.append(detail);
+ }
+ }
+ function renderCompanies(){
+ renderCompanyPreview();
  const host=$("company-editor-area"); host.replaceChildren();
  const title=document.createElement("h2");title.textContent="Empresas do portfólio";host.append(title);
  const tip=document.createElement("p");tip.textContent="Cadastre empresas e trabalhos autorizados. Rascunhos ficam no repositório público.";host.append(tip);
  const button=(parent,label,fn)=>{const el=document.createElement("button");el.type="button";el.className="studio-secondary";el.textContent=label;el.onclick=fn;parent.append(el);};
- const change=()=>changed("projects");
+ const change=()=>{changed("projects");renderCompanyPreview();};
  button(host,"+ Nova empresa",()=>{portfolio.companies.push({id:freshId(),name:"",works:[],published:false});change();renderCompanies();});
  const upload=(parent,c,item,label)=>{const key="company|"+c.id+"|"+(item===c?"logo":item.id);const src=imagesPending.get(key)?.preview||(item.image?"../"+item.image:"");if(src){const img=document.createElement("img");img.src=src;img.alt="Prévia";img.className="studio-selected-image";parent.append(img);}
  const wrap=document.createElement("label");wrap.textContent=label;const input=document.createElement("input");input.type="file";input.accept="image/jpeg,image/png,image/webp";wrap.append(input);parent.append(wrap);
@@ -715,6 +733,7 @@
     });
   }
   function renderProjectPreview(){
+ renderCompanyPreview();
     const host=$("project-preview-cards");host.replaceChildren();
     for(const p of portfolio.projects){
       const item=document.createElement("article");
