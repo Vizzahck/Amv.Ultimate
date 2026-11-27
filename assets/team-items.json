@@ -28,6 +28,14 @@
           "image": "assets/uploads/1795632021320-wwc9qa8j.webp",
           "alt": "",
           "published": true
+        },
+        {
+          "id": "atendimento-vendas-2",
+          "name": "Sara Rakely",
+          "role": "Gerente de Produção Audovisual",
+          "image": "assets/uploads/1795563096484-qj146hlj.webp",
+          "alt": "",
+          "published": true
         }
       ]
     },
@@ -59,14 +67,6 @@
       "title": "Comercial e Vendas",
       "description": "Relacionamento com o público e processos comerciais.",
       "members": [
-        {
-          "id": "atendimento-vendas-2",
-          "name": "Sara Rakely",
-          "role": "",
-          "image": "assets/uploads/1795563096484-qj146hlj.webp",
-          "alt": "",
-          "published": true
-        },
         {
           "id": "a05ad94d-35af-481a-8ed5-fae7611a3841",
           "name": "Luma Bianca",
