@@ -24,7 +24,7 @@
         {
           "id": "criacao-comunicacao-1",
           "name": "Luis Davi",
-          "role": "Gerente de Marketing",
+          "role": "Gerente de Marketing e Vendas",
           "image": "assets/uploads/1795632021320-wwc9qa8j.webp",
           "alt": "",
           "published": true
@@ -65,6 +65,14 @@
           "name": "Ingrid Vitoria",
           "role": "Fotografo(a)  Publicitária",
           "image": "assets/uploads/1795565242989-v6gvs4qn.webp",
+          "alt": "",
+          "published": true
+        },
+        {
+          "id": "e040ff72-ecc5-41cb-b7c1-54f849d90a6c",
+          "name": "Nátaly Lohany",
+          "role": "Analista de Dados e Perfomance",
+          "image": "assets/uploads/1795564919037-oex2g6a3.webp",
           "alt": "",
           "published": true
         }
@@ -125,12 +133,6 @@
       ]
     },
     {
-      "id": "area-13c375ab-57e7-41d9-9cbd-a891b4378cba",
-      "title": "Metricas e Resultados",
-      "description": "Acompanha Indicadores e Resultados das Ações",
-      "members": []
-    },
-    {
       "id": "area-3ea4abd7-ef96-4e14-9596-ee925025f0a8",
       "title": "Atendimento",
       "description": "Faz a ponte com o Cliente e Organiza o Briefing e Demandas",
@@ -140,14 +142,6 @@
           "name": "Emilly Ferreira",
           "role": "Executivo(a) de atendimento",
           "image": "assets/uploads/1795564736820-ngncodvq.webp",
-          "alt": "",
-          "published": true
-        },
-        {
-          "id": "e040ff72-ecc5-41cb-b7c1-54f849d90a6c",
-          "name": "Nátaly Lohany",
-          "role": "Analista de Dados e Perfomance",
-          "image": "assets/uploads/1795564919037-oex2g6a3.webp",
           "alt": "",
           "published": true
         }
