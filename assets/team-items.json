@@ -53,18 +53,18 @@
           "published": true
         },
         {
-          "id": "bb7cfda9-dfc4-4222-9ae3-3874fadda15e",
-          "name": "Franciane Rodrigues",
-          "role": "Analista de Mídias Sociais",
-          "image": "assets/uploads/1795565465645-lwtnyq27.webp",
-          "alt": "",
-          "published": true
-        },
-        {
           "id": "53d5609a-8b6a-43f1-8108-f52d703178e6",
           "name": "Alef Sá",
           "role": "Copywriting e Gestão de Trafego Pago",
           "image": "assets/uploads/1795564009996-32wjgy1v.webp",
+          "alt": "",
+          "published": true
+        },
+        {
+          "id": "db9b1c26-b48a-4448-8728-c5ec9101e4c8",
+          "name": "Ingrid Vitoria",
+          "role": "Fotografo(a)  Publicitária",
+          "image": "assets/uploads/1795565242989-v6gvs4qn.webp",
           "alt": "",
           "published": true
         }
@@ -88,6 +88,14 @@
           "name": "Ana Gabriella",
           "role": "Consultora de Vendas",
           "image": "assets/uploads/1795564069716-3hn84rvh.webp",
+          "alt": "",
+          "published": true
+        },
+        {
+          "id": "bb7cfda9-dfc4-4222-9ae3-3874fadda15e",
+          "name": "Franciane Rodrigues",
+          "role": "Gerente Comercial",
+          "image": "assets/uploads/1795565465645-lwtnyq27.webp",
           "alt": "",
           "published": true
         }
@@ -150,14 +158,6 @@
       "title": "Design e Criatividade",
       "description": "Desenvolver Identidade Visual e Peças de Comunicação",
       "members": [
-        {
-          "id": "db9b1c26-b48a-4448-8728-c5ec9101e4c8",
-          "name": "Ingrid Vitoria",
-          "role": "Design",
-          "image": "assets/uploads/1795565242989-v6gvs4qn.webp",
-          "alt": "",
-          "published": true
-        },
         {
           "id": "6e599d1b-d91f-47f7-b3e8-408dd25824d9",
           "name": "Rayllan Marcio",
