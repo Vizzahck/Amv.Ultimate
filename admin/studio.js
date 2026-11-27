@@ -658,7 +658,7 @@
  for(const c of companies)select.add(new Option(c.name||"Nova empresa",c.id));
  if(companies.some(c=>c.id===selected))select.value=selected;
  if(f.getAttribute("src")==="about:blank")f.src="../portfolio.html?studioPreview=1";
- const data={companies:companies.map(c=>({...c,image:imagesPending.get("company|"+c.id+"|logo")?.preview||c.image,works:(c.works||[]).map(w=>({...w,image:imagesPending.get("company|"+c.id+"|"+w.id)?.preview||w.image}))}))};
+ const data={companies:companies.map(c=>({...c,image:imagesPending.get("company|"+c.id+"|logo")?.preview||c.image,works:(c.works||[]).map(w=>({...w,mediaType:imagesPending.get("company|"+c.id+"|"+w.id)?.mediaType||w.mediaType,image:imagesPending.get("company|"+c.id+"|"+w.id)?.preview||w.image}))}))};
  f.contentWindow?.postMessage({type:"amv-company-preview",data},location.origin);
  }
  $("company-preview-list").onclick=()=>{$("company-preview-select").value="";$("company-preview-frame").src="../portfolio.html?studioPreview=1";};
@@ -672,16 +672,16 @@
  const button=(parent,label,fn)=>{const el=document.createElement("button");el.type="button";el.className="studio-secondary";el.textContent=label;el.onclick=fn;parent.append(el);};
  const change=()=>{changed("projects");renderCompanyPreview();};
  button(host,"+ Nova empresa",()=>{portfolio.companies.push({id:freshId(),name:"",works:[],published:false});change();renderCompanies();});
- const upload=(parent,c,item,label)=>{const key="company|"+c.id+"|"+(item===c?"logo":item.id);const src=imagesPending.get(key)?.preview||(item.image?"../"+item.image:"");if(src){const img=document.createElement("img");img.src=src;img.alt="Prévia";img.className="studio-selected-image";parent.append(img);}
- const wrap=document.createElement("label");wrap.textContent=label;const input=document.createElement("input");input.type="file";input.accept="image/jpeg,image/png,image/webp";wrap.append(input);parent.append(wrap);
- input.onchange=async()=>{try{if(!input.files[0])return;const blob=await optimizeImage(input.files[0]);if(!portfolio.companies.includes(c)||(item!==c&&!c.works.includes(item)))return;addPending(key,{kind:"company",id:c.id,itemId:item===c?null:item.id,blob});change();renderCompanies();}catch(e){setStatus(e.message,"error");}};
- button(parent,"Remover imagem",()=>{removePending(key);item.image="";change();renderCompanies();});};
+ const upload=(parent,c,item,label)=>{const key="company|"+c.id+"|"+(item===c?"logo":item.id);const src=imagesPending.get(key)?.preview||(item.image?"../"+item.image:"");if(src){const video=imagesPending.get(key)?.mediaType==="video"||(!imagesPending.has(key)&&(item.mediaType==="video"||/\.(mp4|webm)$/i.test(item.image||"")));const img=document.createElement(video?"video":"img");img.src=src;if(video){img.controls=true;img.preload="metadata";img.playsInline=true;}else img.alt="Prévia";img.className="studio-selected-image";parent.append(img);}
+ const wrap=document.createElement("label");wrap.textContent=label;const input=document.createElement("input");input.type="file";input.accept=item===c?"image/jpeg,image/png,image/webp":"image/jpeg,image/png,image/webp,video/mp4,video/webm";wrap.append(input);parent.append(wrap);
+ input.onchange=async()=>{try{if(!input.files[0])return;const file=input.files[0],video=item!==c&&["video/mp4","video/webm"].includes(file.type);if(video&&file.size>20*1024*1024)throw Error("Vídeo acima de 20 MB. Comprima o arquivo antes de enviar.");const blob=video?file:await optimizeImage(file);if(!portfolio.companies.includes(c)||(item!==c&&!c.works.includes(item)))return;addPending(key,{kind:"company",id:c.id,itemId:item===c?null:item.id,blob,mediaType:video?"video":"image",extension:video?(file.type==="video/webm"?"webm":"mp4"):"webp"});change();renderCompanies();}catch(e){setStatus(e.message,"error");}};
+ button(parent,"Remover mídia",()=>{removePending(key);item.image="";item.mediaType="image";change();renderCompanies();});};
  for(const c of portfolio.companies){if(!Array.isArray(c.works))c.works=[];const box=document.createElement("details");box.open=true;const summary=document.createElement("summary");summary.textContent=c.name||"Nova empresa";box.append(summary);host.append(box);
  for(const [key,label] of [["name","Nome"],["category","Segmento"],["description","Sobre a empresa"],["mission","Missão"],["vision","Visão"],["values","Valores"],["contactLabel","Texto do botão de contato"],["contactUrl","Link de contato (HTTPS, mailto: ou tel:)"]])field(box,label,c[key],v=>{c[key]=v;if(key==="name")summary.textContent=v||"Nova empresa";change();},{multiline:["description","mission","vision","values"].includes(key),limit:3000});
  upload(box,c,c,"Logo / imagem da empresa");
  const check=document.createElement("label"),cb=document.createElement("input");cb.type="checkbox";cb.checked=!!c.published;cb.onchange=()=>{c.published=cb.checked;change();};check.append(cb," Publicar empresa");box.append(check);
  button(box,"+ Adicionar trabalho",()=>{c.works.push({id:freshId(),title:"",description:""});change();renderCompanies();});
- for(const w of c.works){const part=document.createElement("div");part.className="studio-editor-items";box.append(part);field(part,"Título do trabalho",w.title,v=>{w.title=v;change();});field(part,"Descrição do trabalho",w.description,v=>{w.description=v;change();},{multiline:true,limit:6000});upload(part,c,w,"Imagem do trabalho");button(part,"Excluir trabalho",()=>{removePending("company|"+c.id+"|"+w.id);c.works=c.works.filter(x=>x!==w);change();renderCompanies();});}
+ for(const w of c.works){const part=document.createElement("div");part.className="studio-editor-items";box.append(part);field(part,"Título do trabalho",w.title,v=>{w.title=v;change();});field(part,"Descrição do trabalho",w.description,v=>{w.description=v;change();},{multiline:true,limit:6000});upload(part,c,w,"Imagem ou vídeo do trabalho (MP4/WebM, até 20 MB)");button(part,"Excluir trabalho",()=>{removePending("company|"+c.id+"|"+w.id);c.works=c.works.filter(x=>x!==w);change();renderCompanies();});}
  button(box,"Excluir empresa",()=>{if(!confirm("Excluir esta empresa?"))return;for(const key of imagesPending.keys())if(key.startsWith("company|"+c.id+"|"))removePending(key);portfolio.companies=portfolio.companies.filter(x=>x!==c);change();renderCompanies();});}
  }
  function getProject(){return portfolio.projects.find(p=>p.id===projectId)||null;}
@@ -1546,14 +1546,14 @@
       const currentImages=Array.from(imagesPending.entries());
       for(const [key,pending] of currentImages){
         setStatus("Enviando imagens ao GitHub...");
-        const filename=Date.now()+"-"+Math.random().toString(36).slice(2,10)+".webp";
+        const filename=Date.now()+"-"+Math.random().toString(36).slice(2,10)+"."+(pending.extension||"webp");
         const path="assets/uploads/"+filename;
         await writeFile(path,new Uint8Array(await pending.blob.arrayBuffer()),"cms: adicionar imagem "+filename);
         if(pending.kind==="page"){
           const current=pages.pages[pending.page]&&pages.pages[pending.page][pending.selector];
           if(current&&current.type==="image")current.value=path;
           dirtyPages=true;
-        }else if(pending.kind==="company"){const c=portfolio.companies.find(x=>x.id===pending.id);const item=c&&(pending.itemId?c.works.find(x=>x.id===pending.itemId):c);if(item){item.image=path;dirtyProjects=true;}}else if(pending.kind==="project"){
+        }else if(pending.kind==="company"){const c=portfolio.companies.find(x=>x.id===pending.id);const item=c&&(pending.itemId?c.works.find(x=>x.id===pending.itemId):c);if(item){item.image=path;item.mediaType=pending.mediaType||"image";dirtyProjects=true;}}else if(pending.kind==="project"){
           const p=portfolio.projects.find(item=>item.id===pending.id);
           if(p){p.image=path;dirtyProjects=true;}
         }else if(pending.kind==="gallery" || pending.kind==="step"){
