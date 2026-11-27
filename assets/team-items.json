@@ -59,6 +59,14 @@
           "image": "assets/uploads/1795565465645-lwtnyq27.webp",
           "alt": "",
           "published": true
+        },
+        {
+          "id": "53d5609a-8b6a-43f1-8108-f52d703178e6",
+          "name": "Alef Sá",
+          "role": "Copywriting e Gestão de Trafego Pago",
+          "image": "assets/uploads/1795564009996-32wjgy1v.webp",
+          "alt": "",
+          "published": true
         }
       ]
     },
@@ -112,16 +120,7 @@
       "id": "area-13c375ab-57e7-41d9-9cbd-a891b4378cba",
       "title": "Metricas e Resultados",
       "description": "Acompanha Indicadores e Resultados das Ações",
-      "members": [
-        {
-          "id": "53d5609a-8b6a-43f1-8108-f52d703178e6",
-          "name": "Alef Sá",
-          "role": "Analista de Marketing",
-          "image": "assets/uploads/1795564009996-32wjgy1v.webp",
-          "alt": "",
-          "published": true
-        }
-      ]
+      "members": []
     },
     {
       "id": "area-3ea4abd7-ef96-4e14-9596-ee925025f0a8",
