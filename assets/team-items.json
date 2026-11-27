@@ -82,6 +82,14 @@
           "image": "assets/uploads/1795565294509-yfhxgeji.webp",
           "alt": "",
           "published": true
+        },
+        {
+          "id": "63288c94-fd86-451a-9bf7-374c8f5b243e",
+          "name": "Ana Gabriella",
+          "role": "Consultora de Vendas",
+          "image": "assets/uploads/1795564069716-3hn84rvh.webp",
+          "alt": "",
+          "published": true
         }
       ]
     },
@@ -118,14 +126,6 @@
           "name": "Alef Sá",
           "role": "Analista de Marketing",
           "image": "assets/uploads/1795564009996-32wjgy1v.webp",
-          "alt": "",
-          "published": true
-        },
-        {
-          "id": "63288c94-fd86-451a-9bf7-374c8f5b243e",
-          "name": "Ana Gabriella",
-          "role": "Analista de Marketing",
-          "image": "assets/uploads/1795564069716-3hn84rvh.webp",
           "alt": "",
           "published": true
         }
