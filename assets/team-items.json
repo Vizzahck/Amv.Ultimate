@@ -75,6 +75,14 @@
           "image": "assets/uploads/1795564919037-oex2g6a3.webp",
           "alt": "",
           "published": true
+        },
+        {
+          "id": "387706ac-8e25-4692-8cc7-2378446e5c38",
+          "name": "João Mizo",
+          "role": "Analista de Dados e Performance",
+          "image": "assets/uploads/1795563778836-4mqjybam.webp",
+          "alt": "",
+          "published": true
         }
       ]
     },
@@ -119,14 +127,6 @@
           "name": "Maria Isadora",
           "role": "Analista de Pesquisa de Mercado",
           "image": "assets/uploads/1795563700652-z3280lsg.webp",
-          "alt": "",
-          "published": true
-        },
-        {
-          "id": "387706ac-8e25-4692-8cc7-2378446e5c38",
-          "name": "João Mizo",
-          "role": "Analista de Mercado",
-          "image": "assets/uploads/1795563778836-4mqjybam.webp",
           "alt": "",
           "published": true
         }
