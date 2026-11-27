@@ -13,7 +13,7 @@
   <script defer src="../assets/cms-runtime.js?v=2"></script>
   <script defer src="../assets/brand-runtime.js?v=1"></script>
   <script defer src="../assets/links-runtime.js?v=1"></script>
-  <script defer src="./studio.js?v=10"></script>
+  <script defer src="./studio.js?v=11"></script>
 </head>
 <body>
   <div class="studio-shell">
@@ -195,7 +195,7 @@
             <form id="team-member-editor" hidden>
               <div class="studio-divider"></div>
               <label for="team-member-name">Nome do participante</label><input id="team-member-name" maxlength="100" placeholder="Nome completo ou preferido">
-              <label for="team-member-role">Função ou cargo</label><input id="team-member-role" maxlength="120" placeholder="Ex.: Pesquisa de mercado">
+              <label for="team-member-destination">Mover para outra área</label><select id="team-member-destination"></select><button type="button" id="move-team-member" class="studio-secondary">Mover participante</button><label for="team-member-role">Função ou cargo</label><input id="team-member-role" maxlength="120" placeholder="Ex.: Pesquisa de mercado">
               <label for="team-member-photo">Fotografia do participante</label><input type="file" id="team-member-photo" accept="image/jpeg,image/png,image/webp">
               <img id="team-member-photo-preview" class="studio-selected-image" alt="Prévia da foto do participante" hidden>
               <label for="team-member-alt">Descrição da fotografia</label><input id="team-member-alt" maxlength="180" placeholder="Retrato de...">

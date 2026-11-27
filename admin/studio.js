@@ -1115,6 +1115,7 @@
     });
   }
   function showTeamMember(member){
+    const destination=$("team-member-destination");destination.replaceChildren(new Option("Selecione a área de destino",""));for(const area of team.areas){if(area.id!==teamAreaId)destination.add(new Option(area.title||"Área sem nome",area.id));}destination.disabled=destination.options.length<=1;$("move-team-member").disabled=true;
     teamMemberId=member.id;
     $("team-member-editor").hidden=false;
     $("team-member-name").value=member.name||"";
@@ -1128,6 +1129,21 @@
     preview.hidden=!src;if(src)preview.src=src;
     renderTeamList();
   }
+  $("team-member-destination").addEventListener("change",()=>{$("move-team-member").disabled=!$("team-member-destination").value;});
+  $("move-team-member").addEventListener("click",()=>{
+    if(busy)return;
+    const source=getArea(),member=getMember(),target=team.areas.find(a=>a.id===$("team-member-destination").value);
+    if(!source||!member||!target||source===target)return;
+    if(target.members.length>=80){setStatus("A área de destino atingiu o limite de 80 integrantes.","error");return;}
+    if(target.members.some(m=>m.id===member.id)){setStatus("Já existe um participante com este identificador na área de destino.","error");return;}
+    syncTeamMember();
+    const oldKey=pendingKey("team",source.id,member.id),pending=imagesPending.get(oldKey);
+    if(pending){imagesPending.delete(oldKey);pending.areaId=target.id;imagesPending.set(pendingKey("team",target.id,member.id),pending);}
+    source.members=source.members.filter(m=>m!==member);target.members.push(member);
+    teamAreaId=target.id;teamMemberId=member.id;
+    changed("team");renderTeamAreas();showTeamMember(member);renderTeamPreview();
+    setStatus("Participante movido para "+target.title+". Continue editando e publique quando estiver pronto.");
+  });
   function renderTeamPreview(){
     const host=$("team-preview-cards");host.replaceChildren();
     const area=getArea();
@@ -1179,7 +1195,7 @@
   $("team-area").addEventListener("change",()=>{
     teamAreaId=$("team-area").value;
     teamMemberId=null;$("team-member-editor").hidden=true;
-    renderTeamList();renderTeamPreview();
+    renderTeamAreaEditor();renderTeamList();renderTeamPreview();
   });
   $("add-team-member").addEventListener("click",()=>{
     const area=getArea();if(!area)return;
@@ -1198,12 +1214,11 @@
   $("team-member-photo").addEventListener("change",async event=>{
     const member=getMember(),file=event.target.files&&event.target.files[0];
     if(!member||!file)return;
-    const areaId=teamAreaId;
     try{
       setStatus("Otimizando fotografia...");
       const blob=await optimizeImage(file);
-      const area=team.areas.find(a=>a.id===areaId);
-      if(!area||!area.members.some(m=>m.id===member.id))return;
+      const area=team.areas.find(a=>a.members.includes(member));
+      if(!area)return;const areaId=area.id;
       addPending(pendingKey("team",areaId,member.id),{
         kind:"team",areaId,memberId:member.id,blob
       });
