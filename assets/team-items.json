@@ -74,6 +74,14 @@
           "image": "assets/uploads/1795563096484-qj146hlj.webp",
           "alt": "",
           "published": true
+        },
+        {
+          "id": "a05ad94d-35af-481a-8ed5-fae7611a3841",
+          "name": "Luma Bianca",
+          "role": "Consultora de vendas",
+          "image": "assets/uploads/1795565294509-yfhxgeji.webp",
+          "alt": "",
+          "published": true
         }
       ]
     },
@@ -164,14 +172,6 @@
           "name": "Rayllan Marcio",
           "role": "Design",
           "image": "assets/uploads/1795565245231-mzops9xx.webp",
-          "alt": "",
-          "published": true
-        },
-        {
-          "id": "a05ad94d-35af-481a-8ed5-fae7611a3841",
-          "name": "Luma Bianca",
-          "role": "Design",
-          "image": "assets/uploads/1795565294509-yfhxgeji.webp",
           "alt": "",
           "published": true
         }
