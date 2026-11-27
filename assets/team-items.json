@@ -60,14 +60,6 @@
       "description": "Relacionamento com o público e processos comerciais.",
       "members": [
         {
-          "id": "atendimento-vendas-1",
-          "name": "Christhian Luandson",
-          "role": "",
-          "image": "assets/uploads/1795562994979-g5a81j8p.webp",
-          "alt": "",
-          "published": true
-        },
-        {
           "id": "atendimento-vendas-2",
           "name": "Sara Rakely",
           "role": "",
@@ -172,6 +164,21 @@
           "name": "Rayllan Marcio",
           "role": "Design",
           "image": "assets/uploads/1795565245231-mzops9xx.webp",
+          "alt": "",
+          "published": true
+        }
+      ]
+    },
+    {
+      "id": "area-2512f992-0f31-4740-985e-76719ec160d7",
+      "title": "Gestão Estrategica",
+      "description": "",
+      "members": [
+        {
+          "id": "atendimento-vendas-1",
+          "name": "Christhian Luandson",
+          "role": "Analista De Planejamento Estrategico",
+          "image": "assets/uploads/1795562994979-g5a81j8p.webp",
           "alt": "",
           "published": true
         }
